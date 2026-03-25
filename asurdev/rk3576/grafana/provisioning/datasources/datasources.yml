@@ -1,0 +1,26 @@
+# Grafana Datasource Provisioning
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    isDefault: true
+    database: asurdev
+    user: ${INFLUX_USER}
+    secureJsonData:
+      password: ${INFLUX_PASSWORD}
+    jsonData:
+      timeInterval: 10s
+      httpMode: GET
+
+  - name: MQTT Alerts
+    type: redirabot-mqtt-datasource
+    access: proxy
+    url: http://mqtt:1883
+    isDefault: false
+    jsonData:
+      topics:
+        - asurdev/#
+      qos: 1

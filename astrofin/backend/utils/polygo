@@ -1,0 +1,233 @@
+"""
+Polygon.io client for AstroFin.
+Manual lifecycle management + TTL-based caching.
+"""
+
+import os
+import asyncio
+import hashlib
+from datetime import datetime, timedelta
+from typing import Optional, Any
+
+import httpx
+
+
+class PolygonClient:
+    """
+    Polygon.io HTTP client с manual lifecycle и TTL-кэшированием.
+    
+    Usage:
+        client = PolygonClient()  # or PolygonClient(api_key="...")
+        await client.initialize()  # start session
+        data = await client.get_aggs("AAPL", "1D", "2024-01-01", "2024-03-01")
+        await client.close()  # cleanup session
+    """
+    
+    BASE_URL = "https://api.polygon.io/v2"
+    
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or os.getenv("POLYGON_API_KEY", "")
+        self._client: Optional[httpx.AsyncClient] = None
+        self._cache: dict[str, tuple[Any, datetime]] = {}
+        self._cache_ttl: dict[str, timedelta] = {}
+        self._lock = asyncio.Lock()
+    
+    async def initialize(self) -> None:
+        """Start HTTP session. Call once at app startup."""
+        if self._client is None:
+            self._client = httpx.AsyncClient(
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                timeout=30.0,
+            )
+            print("[PolygonClient] Session started")
+    
+    async def close(self) -> None:
+        """Close HTTP session. Call at app shutdown."""
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None
+            self._cache.clear()
+            print("[PolygonClient] Session closed, cache cleared")
+    
+    def _cache_key(self, endpoint: str, params: dict) -> str:
+        """Generate cache key from endpoint + params."""
+        raw = f"{endpoint}:{sorted(params.items())}"
+        return hashlib.md5(raw.encode()).hexdigest()
+    
+    def _is_expired(self, key: str) -> bool:
+        """Check if cache entry is expired."""
+        if key not in self._cache_ttl:
+            return True
+        _, stored_at = self._cache[key]
+        return datetime.now() > stored_at + self._cache_ttl[key]
+    
+    async def _get_cached(self, key: str) -> Optional[Any]:
+        """Get value from cache if exists and not expired."""
+        if key in self._cache and not self._is_expired(key):
+            return self._cache[key][0]
+        return None
+    
+    async def _set_cached(self, key: str, value: Any, ttl: timedelta) -> None:
+        """Store value in cache with TTL."""
+        async with self._lock:
+            self._cache[key] = (value, datetime.now())
+            self._cache_ttl[key] = ttl
+    
+    def clear_cache(self) -> None:
+        """Manually clear all cache."""
+        self._cache.clear()
+        self._cache_ttl.clear()
+        print("[PolygonClient] Cache cleared")
+    
+    async def _request(
+        self,
+        endpoint: str,
+        params: Optional[dict] = None,
+        cache_ttl: timedelta = timedelta(hours=1),
+    ) -> dict:
+        """
+        Make GET request with automatic caching.
+        
+        Args:
+            endpoint: API endpoint path
+            params: Query parameters
+            cache_ttl: How long to cache the response
+        """
+        if self._client is None:
+            await self.initialize()
+        
+        params = params or {}
+        cache_k = self._cache_key(endpoint, params)
+        
+        # Check cache first
+        cached = await self._get_cached(cache_k)
+        if cached is not None:
+            return cached
+        
+        # Make request
+        url = f"{self.BASE_URL}/{endpoint.lstrip('/')}"
+        resp = await self._client.get(url, params=params)
+        resp.raise_for_status()
+        data = resp.json()
+        
+        # Cache result
+        await self._set_cached(cache_k, data, cache_ttl)
+        
+        return data
+    
+    async def get_aggs(
+        self,
+        ticker: str,
+        multiplier: str,
+        timespan: str,
+        from_date: str,
+        to_date: str,
+        cache_ttl: timedelta = timedelta(hours=24),
+    ) -> dict:
+        """
+        Get aggregated OHLCV data.
+        
+        Args:
+            ticker: Stock ticker (e.g., "AAPL")
+            multiplier: Size of the time multiplier (e.g., "1")
+            timespan: Time unit (e.g., "day", "hour", "minute")
+            from_date: Start date (YYYY-MM-DD)
+            to_date: End date (YYYY-MM-DD)
+            cache_ttl: How long to cache (default 24h for daily data)
+        """
+        params = {
+            "adjusted": "true",
+            "sort": "asc",
+            "limit": 50000,
+        }
+        endpoint = f"/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from_date}/{to_date}"
+        return await self._request(endpoint, params, cache_ttl)
+    
+    async def get_unusual_activity(
+        self,
+        date: str,
+        cache_ttl: timedelta = timedelta(hours=1),
+    ) -> dict:
+        """
+        Get unusual options activity for a given date.
+        
+        Args:
+            date: Trading date (YYYY-MM-DD)
+            cache_ttl: Short TTL (default 1h) — data changes frequently
+        """
+        params = {"date": date, "limit": 50}
+        endpoint = "/options/uspca/unusual_activity"
+        return await self._request(endpoint, params, cache_ttl)
+    
+    async def get_option_contract(
+        self,
+        underlying: str,
+        expiration: str,
+        strike: float,
+        option_type: str,  # "call" or "put"
+        cache_ttl: timedelta = timedelta(hours=6),
+    ) -> dict:
+        """
+        Get specific option contract details.
+        
+        Args:
+            underlying: Underlying ticker (e.g., "AAPL")
+            expiration: Expiration date (YYYY-MM-DD)
+            strike: Strike price
+            option_type: "call" or "put"
+            cache_ttl: Medium TTL (default 6h)
+        """
+        params = {"underlying": underlying, "expiration": expiration, "strike": strike, "type": option_type}
+        endpoint = f"/options/contracts/{underlying}"
+        return await self._request(endpoint, params, cache_ttl)
+    
+    async def get_prev_day_ohlc(
+        self,
+        ticker: str,
+        cache_ttl: timedelta = timedelta(minutes=30),
+    ) -> dict:
+        """
+        Get previous day closing price.
+        Short cache — updated once per trading day.
+        """
+        endpoint = f"/aggs/ticker/{ticker}/prev"
+        return await self._request(endpoint, {}, cache_ttl)
+    
+    async def get_quote(
+        self,
+        ticker: str,
+        cache_ttl: timedelta = timedelta(minutes=5),
+    ) -> dict:
+        """
+        Get last quote for ticker.
+        Very short cache — real-time-ish data.
+        """
+        endpoint = f"/quotes/{ticker}/last"
+        return await self._request(endpoint, {}, cache_ttl)
+
+
+# ─── Global singleton ────────────────────────────────────────────────────────
+
+_client: Optional[PolygonClient] = None
+
+
+def get_polygon_client() -> PolygonClient:
+    """Get or create global PolygonClient instance."""
+    global _client
+    if _client is None:
+        _client = PolygonClient()
+    return _client
+
+
+async def init_polygon() -> None:
+    """Initialize client at app startup."""
+    client = get_polygon_client()
+    await client.initialize()
+
+
+async def close_polygon() -> None:
+    """Close client at app shutdown."""
+    global _client
+    if _client is not None:
+        await _client.close()
+        _client = None

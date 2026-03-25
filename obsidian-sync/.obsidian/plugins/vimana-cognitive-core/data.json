@@ -1,0 +1,18 @@
+{
+  "vimanaCoreUrl": "http://localhost:11434",
+  "privateGptUrl": "http://localhost:9091",
+  "ollamaModel": "qwen2.5:7b",
+  "privateGptModel": "local",
+  "primaryAiEngine": "cognitive-stack",
+  "fallbackEnabled": true,
+  "semanticThreshold": 0.4,
+  "contextWindow": 4096,
+  "temperature": 0.2,
+  "autoAnalyzeNewNotes": true,
+  "enableSemanticConnections": false,
+  "enableKnowledgeGraph": true,
+  "enableAutoTagging": false,
+  "batchSize": 4,
+  "requestTimeout": 45000,
+  "maxRetries": 3
+}

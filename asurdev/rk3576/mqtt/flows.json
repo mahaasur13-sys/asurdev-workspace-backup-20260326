@@ -1,0 +1,139 @@
+[
+  {
+    "id": "astro-alert-flow",
+    "type": "tab",
+    "label": "asurdev Alert Flows",
+    "disabled": false,
+    "info": "Alert processing flows for asurdev Sentinel",
+    "nodes": [
+      {
+        "id": "mqtt-in-alerts",
+        "type": "mqtt in",
+        "z": "astro-alert-flow",
+        "name": "MQTT Alerts In",
+        "topic": "asurdev/alerts/#",
+        "qos": "2",
+        "broker": "mqtt-broker",
+        "inputs": 0,
+        "outputs": 1,
+        "x": 100,
+        "y": 100,
+        "wires": [["alert-filter", "telegram-alert"]]
+      },
+      {
+        "id": "alert-filter",
+        "type": "switch",
+        "z": "astro-alert-flow",
+        "name": "Filter by Severity",
+        "property": "payload.severity",
+        "propertyType": "msg",
+        "rules": [
+          {"t": "eq", "v": "critical", "ton": "critical-alert"},
+          {"t": "eq", "v": "warning", "ton": "warning-alert"},
+          {"t": "eq", "v": "info", "ton": "info-alert"}
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 300,
+        "y": 100,
+        "wires": [["critical-alert"], ["warning-alert"], ["info-alert"]]
+      },
+      {
+        "id": "critical-alert",
+        "type": "function",
+        "z": "astro-alert-flow",
+        "name": "Format Critical",
+        "func": "msg.payload = {\n  symbol: msg.payload.symbol,\n  signal: msg.payload.signal,\n  confidence: msg.payload.confidence,\n  agents: msg.payload.agents,\n  timestamp: new Date().toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 500,
+        "y": 50,
+        "wires": [["telegram-critical"]]
+      },
+      {
+        "id": "warning-alert",
+        "type": "function",
+        "z": "astro-alert-flow",
+        "name": "Format Warning",
+        "func": "msg.payload = {\n  symbol: msg.payload.symbol,\n  signal: msg.payload.signal,\n  confidence: msg.payload.confidence,\n  timestamp: new Date().toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 500,
+        "y": 100,
+        "wires": [["telegram-warning"]]
+      },
+      {
+        "id": "info-alert",
+        "type": "debug",
+        "z": "astro-alert-flow",
+        "name": "Info Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostring": false,
+        "targetType": "msg",
+        "x": 500,
+        "y": 150,
+        "wires": []
+      },
+      {
+        "id": "telegram-critical",
+        "type": "http request",
+        "z": "astro-alert-flow",
+        "name": "Telegram Critical",
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "data": "{\n  \"chat_id\": \"{{TELEGRAM_CHAT_ID}}\",\n  \"text\": \"🔴 CRITICAL: {{payload.symbol}} — {{payload.signal}} ({{payload.confidence}}%)\\n\\nAgents:\\n{{#payload.agents}}• {{@key}}: {{signal}}\\n{{/payload.agents}}\",\n  \"parse_mode\": \"Markdown\"\n}",
+        "dataType": "json",
+        "outputs": 0,
+        "x": 700,
+        "y": 50,
+        "wires": []
+      },
+      {
+        "id": "telegram-warning",
+        "type": "http request",
+        "z": "astro-alert-flow",
+        "name": "Telegram Warning",
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{TELEGRAM_BOT_TOKEN}}/sendMessage",
+        "data": "{\n  \"chat_id\": \"{{TELEGRAM_CHAT_ID}}\",\n  \"text\": \"🟡 SIGNAL: {{payload.symbol}} — {{payload.signal}} ({{payload.confidence}}%)\",\n  \"parse_mode\": \"Markdown\"\n}",
+        "dataType": "json",
+        "outputs": 0,
+        "x": 700,
+        "y": 100,
+        "wires": []
+      },
+      {
+        "id": "telegram-alert",
+        "type": "debug",
+        "z": "astro-alert-flow",
+        "name": "Raw Alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostring": false,
+        "targetType": "msg",
+        "x": 300,
+        "y": 200,
+        "wires": []
+      },
+      {
+        "id": "mqtt-broker",
+        "type": "mqtt-broker",
+        "z": "astro-alert-flow",
+        "name": "asurdev MQTT",
+        "broker": "mqtt",
+        "port": "1883",
+        "clientid": "nodered-astro",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "asurdev/system/nodered",
+        "birthPayload": "{\"status\": \"online\"}",
+        "birthQos": "0",
+        "birthRetain": "true"
+      }
+    ]
+  }
+]

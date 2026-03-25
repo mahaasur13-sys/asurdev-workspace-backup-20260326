@@ -1,0 +1,366 @@
+"""
+Conductor Agent — Главный оркестратор AstroFin AgentOrchestra.
+Заменяет AstroCouncilAgent. Использует MCPManager для динамических инструментов.
+"""
+
+from __future__ import annotations
+
+import asyncio
+from datetime import datetime
+from typing import Dict, Any, List, Optional
+
+import structlog
+
+from ..base_agent import BaseAgent, AgentResponse, Signal
+from .planner import PlanningAgent, OrchestrationPlan
+from .mcp_manager import MCPManager, ToolMetadata
+
+logger = structlog.get_logger(name="conductor")
+
+
+class ConductorAgent(BaseAgent):
+    """
+    Conductor Agent — Новый главный агент AstroFin.
+
+    Использование:
+        conductor = ConductorAgent()
+        result = await conductor.analyze({
+            "query": "Проанализируй BTC на LONG",
+            "symbol": "BTC",
+            "timeframe": "1d",
+            "price": 67000
+        })
+    """
+
+    # Веса агентов (сумма = 100%)
+    WEIGHTS = {
+        # Астрология
+        "AstroCouncil": 0.25,
+        # Фундаментал + Макро
+        "Fundamental": 0.15,
+        "Macro": 0.10,
+        "BullResearcher": 0.025,
+        "BearResearcher": 0.025,
+        # Quant + ML
+        "Quant": 0.10,
+        "Predictor": 0.10,
+        # Flow + Sentiment
+        "OptionsFlow": 0.08,
+        "Sentiment": 0.07,
+        # Technical
+        "Technical": 0.05,
+        # Risk
+        "Risk": 0.05,
+    }
+
+    def __init__(self):
+        super().__init__(
+            name="Conductor",
+            system_prompt=(
+                "Ты — главный дирижёр AstroFin AgentOrchestra. "
+                "Координируй всех агентов для создания сильного торгового сигнала."
+            ),
+        )
+        self._agents: Dict[str, BaseAgent] = {}
+        self._planner = PlanningAgent()
+        self._mcp = MCPManager()
+
+    @property
+    def astro_council(self) -> BaseAgent:
+        from ..astro_council.agent import AstroCouncilAgent
+        return self._get_or_create_agent("astro_council", AstroCouncilAgent)
+
+    @property
+    def fundamental(self) -> BaseAgent:
+        from ..fundamental_agent import FundamentalAgent
+        return self._get_or_create_agent("fundamental", FundamentalAgent)
+
+    @property
+    def macro(self) -> BaseAgent:
+        from ..macro_agent import MacroAgent
+        return self._get_or_create_agent("macro", MacroAgent)
+
+    @property
+    def quant(self) -> BaseAgent:
+        from ..quant_agent import QuantAgent
+        return self._get_or_create_agent("quant", QuantAgent)
+
+    @property
+    def predictor(self) -> BaseAgent:
+        from ..predictor_agent import PredictorAgent
+        return self._get_or_create_agent("predictor", PredictorAgent)
+
+    @property
+    def options_flow(self) -> BaseAgent:
+        from ..options_flow_agent import OptionsFlowAgent
+        return self._get_or_create_agent("options_flow", OptionsFlowAgent)
+
+    @property
+    def sentiment(self) -> BaseAgent:
+        from ..sentiment_agent import SentimentAgent
+        return self._get_or_create_agent("sentiment", SentimentAgent)
+
+    @property
+    def technical(self) -> BaseAgent:
+        from ..technical_agent import TechnicalAgent
+        return self._get_or_create_agent("technical", TechnicalAgent)
+
+    @property
+    def risk(self) -> BaseAgent:
+        from ..risk_agent import RiskAgent
+        return self._get_or_create_agent("risk", RiskAgent)
+
+    @property
+    def bull(self) -> BaseAgent:
+        from ..bull_researcher import BullResearcher
+        return self._get_or_create_agent("bull", BullResearcher)
+
+    @property
+    def bear(self) -> BaseAgent:
+        from ..bear_researcher import BearResearcher
+        return self._get_or_create_agent("bear", BearResearcher)
+
+    def _get_or_create_agent(self, key: str, agent_cls) -> BaseAgent:
+        if key not in self._agents:
+            self._agents[key] = agent_cls()
+        return self._agents[key]
+
+    async def analyze(self, context: Dict[str, Any]) -> AgentResponse:
+        """
+        Анализ через оркестрацию агентов.
+
+        Использует MCPManager для динамических инструментов и
+        PlanningAgent для оптимального порядка выполнения.
+        """
+        query = context.get("query", "")
+        symbol = context.get("symbol", "BTC")
+        price = context.get("price", 50000)
+        timeframe = context.get("timeframe", "1d")
+
+        self.logger.info("conductor_started", query=query, symbol=symbol)
+
+        # 1. Создание плана через PlanningAgent
+        plan = await self._planner.create_plan(query, context)
+        self.logger.info("plan_created", strategy=plan.strategy, tasks=len(plan.tasks))
+
+        # 2. Параллельное выполнение агентов
+        agent_tasks = []
+
+        for task in plan.tasks:
+            # MCP: получение/создание инструмента для задачи
+            tool = await self._mcp.get_or_create_tool(
+                task_description=task.description,
+                required_capabilities=task.required_tools,
+            )
+
+            # Выбор агента на основе task.type
+            agent = self._select_agent_for_task(task)
+            if agent:
+                agent_tasks.append(self._run_agent_with_mcp(agent, task, context, tool))
+
+        # 3. Параллельный запуск
+        if plan.strategy == "PARALLEL":
+            results = await asyncio.gather(*agent_tasks, return_exceptions=True)
+        else:
+            results = []
+            for task in agent_tasks:
+                try:
+                    result = await task
+                    results.append(result)
+                except Exception as e:
+                    self.logger.error("task_failed", error=str(e))
+
+        # 4. Фильтрация результатов
+        valid_responses = [r for r in results if isinstance(r, AgentResponse)]
+
+        if not valid_responses:
+            return AgentResponse(
+                agent_name="Conductor",
+                signal="NEUTRAL",
+                confidence=30,
+                summary="Не удалось получить данные от агентов",
+                reasoning="All agents failed",
+            )
+
+        # 5. Синтез финального сигнала
+        final_signal = self._synthesize_signal(symbol, price, valid_responses)
+
+        # 6. MCP: обновление статистики инструментов
+        for task, result in zip(plan.tasks, results):
+            if isinstance(result, AgentResponse):
+                await self._mcp.update_tool_performance(
+                    task.description[:32], success=(result.confidence > 50)
+                )
+
+        return AgentResponse(
+            agent_name="Conductor",
+            signal=final_signal["direction"],
+            confidence=final_signal["confidence"],
+            summary=f"{final_signal['direction']} {final_signal['confidence']}%",
+            reasoning=final_signal["reasoning"],
+            details={
+                **final_signal,
+                "plan": plan.to_dict(),
+                "mcp_stats": self._mcp.get_stats(),
+                "agents_used": len(valid_responses),
+            },
+        )
+
+    def _select_agent_for_task(self, task) -> Optional[BaseAgent]:
+        """Выбор агента на основе типа задачи."""
+        task_type = task.type.lower()
+
+        mapping = {
+            "fundamental": self.fundamental,
+            "macro": self.macro,
+            "quant": self.quant,
+            "predictor": self.predictor,
+            "options": self.options_flow,
+            "sentiment": self.sentiment,
+            "technical": self.technical,
+            "risk": self.risk,
+            "bull": self.bull,
+            "bear": self.bear,
+            "astro": self.astro_council,
+        }
+
+        for key, agent in mapping.items():
+            if key in task_type:
+                return agent
+
+        return self.astro_council  # По умолчанию
+
+    async def _run_agent_with_mcp(
+        self,
+        agent: BaseAgent,
+        task,
+        context: Dict[str, Any],
+        tool: ToolMetadata,
+    ) -> AgentResponse:
+        """Запуск агента с MCP инструментом."""
+        try:
+            # Обогащаем контекст информацией о инструменте
+            enriched_context = {
+                **context,
+                "_mcp_tool": tool.dict() if hasattr(tool, 'dict') else {"name": tool.name},
+                "_task_id": task.task_id,
+            }
+
+            if hasattr(agent, 'analyze'):
+                return await agent.analyze(enriched_context)
+            elif hasattr(agent, 'run'):
+                return await agent.run(enriched_context)
+            else:
+                raise AttributeError(f"Agent {agent.name} has no analyze() or run()")
+
+        except Exception as e:
+            self.logger.error("agent_failed", agent=agent.name, error=str(e))
+            return AgentResponse(
+                agent_name=agent.name,
+                signal="NEUTRAL",
+                confidence=0,
+                summary=f"Agent failed: {str(e)}",
+                reasoning="",
+            )
+
+    def _synthesize_signal(
+        self,
+        symbol: str,
+        price: float,
+        responses: List[AgentResponse],
+    ) -> Dict[str, Any]:
+        """Синтез финального торгового сигнала."""
+        signal_scores = {
+            "STRONG_BUY": 100,
+            "BUY": 75,
+            "HOLD": 50,
+            "NEUTRAL": 50,
+            "SELL": 25,
+            "STRONG_SELL": 0,
+            "AVOID": 0,
+        }
+
+        long_score = 0.0
+        short_score = 0.0
+        details = {}
+
+        for resp in responses:
+            name = resp.agent_name
+            conf = resp.confidence if isinstance(resp.confidence, (int, float)) else 50
+            sig = resp.signal if isinstance(resp.signal, str) else "NEUTRAL"
+
+            # Найти вес агента
+            weight = 0.0
+            for key, w in self.WEIGHTS.items():
+                if key.lower() in name.lower():
+                    weight = w
+                    break
+
+            score = signal_scores.get(sig.upper(), 50) * (conf / 100)
+
+            if sig.upper() in ("STRONG_BUY", "BUY"):
+                long_score += score * weight
+            elif sig.upper() in ("STRONG_SELL", "SELL"):
+                short_score += score * weight
+
+            details[name] = {
+                "signal": sig,
+                "confidence": conf,
+                "weight": weight,
+                "score": score,
+            }
+
+        # Определение направления
+        if long_score > short_score + 15:
+            direction = "LONG"
+            confidence = int(min(95, 40 + long_score * 60))
+        elif short_score > long_score + 15:
+            direction = "SHORT"
+            confidence = int(min(95, 40 + short_score * 60))
+        else:
+            direction = "NEUTRAL"
+            confidence = 50
+
+        # Расчёт целей
+        if direction == "LONG":
+            entry = price
+            stop = price * 0.98
+            targets = [price * 1.02, price * 1.05, price * 1.08]
+            risk_reward = (targets[0] - entry) / (entry - stop) if entry > stop else 0
+        elif direction == "SHORT":
+            entry = price
+            stop = price * 1.02
+            targets = [price * 0.98, price * 0.95, price * 0.92]
+            risk_reward = (entry - targets[0]) / (stop - entry) if stop > entry else 0
+        else:
+            entry = price
+            stop = price * 0.95
+            targets = [price * 1.02, price * 1.05, price * 1.08]
+            risk_reward = 1.0
+
+        return {
+            "symbol": symbol,
+            "direction": direction,
+            "confidence": confidence,
+            "entry_price": entry,
+            "stop_loss": stop,
+            "targets": targets,
+            "risk_reward": round(risk_reward, 2),
+            "astro_score": int(long_score - short_score + 50),
+            "reasoning": f"{direction} {confidence}% (R/R={risk_reward:.2f})",
+            "details": details,
+        }
+
+    def get_mcp_stats(self) -> Dict[str, Any]:
+        """Получить статистику MCP Manager."""
+        return self._mcp.get_stats()
+
+    @property
+    def planner(self) -> PlanningAgent:
+        """Доступ к PlanningAgent."""
+        return self._planner
+
+    @property
+    def mcp(self) -> MCPManager:
+        """Доступ к MCP Manager."""
+        return self._mcp

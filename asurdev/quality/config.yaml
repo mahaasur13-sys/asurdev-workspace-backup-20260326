@@ -1,0 +1,46 @@
+# asurdev Sentinel — Quality Config
+# Подключение к PostgreSQL @ Acer-2011
+
+database:
+  host: "192.168.30.100"      # Acer-2011 (VLAN 30 MGMT)
+  port: 5432
+  database: "postgres"
+  schema: "asurdev_quality"
+  username: "sentinel_qa"
+  password_env: "asurdev_DB_PASSWORD"  # из .env или secrets
+  
+  # Ограничения для роли
+  role_permissions:
+    - "INSERT"   # только на свои таблицы
+    - "SELECT"   # только на свои таблицы
+    - "UPDATE"   # только feedback + metrics
+    - "DELETE"   # только свои записи (软删除 через soft_delete column)
+
+# Access control
+acl:
+  vlan_allow_list:
+    - "192.168.10.0/24"   # Core VLAN
+    - "192.168.30.0/24"   # MGMT VLAN
+    # IoT и Edge — НЕ имеют доступа к DB напрямую
+  
+  # Для Edge устройств — только через Core API
+  edge_mode: "proxy"  # запросы идут через Core
+
+# Connection pooling
+pool:
+  min: 2
+  max: 10
+  timeout: 30
+
+# Backup
+backup:
+  schedule: "0 3 * * *"  # 03:00 daily
+  retention_days: 30
+  location: "/mnt/backup/asurdev/"
+  
+# Degradation thresholds
+degradation:
+  accuracy_drop_pct: 10      # accuracy ↓ на 10% = деградация
+  max_drawup_pct: 15          # drawup ↑ на 15% = деградация
+  latency_p95_increase_ms: 500 # p95 latency ↑ на 500ms = деградация
+  edge_fallback_pct: 20       # fallback > 20% = проблема

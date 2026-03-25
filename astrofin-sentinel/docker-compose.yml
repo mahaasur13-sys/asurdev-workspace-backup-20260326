@@ -1,0 +1,112 @@
+version: "3.8"
+
+services:
+  # === FastAPI App ===
+  app:
+    build: .
+    container_name: astrofin-sentinel
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/astrofin
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - REDIS_URL=redis://redis:6379/0
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_FROM_NUMBER=${TWILIO_FROM_NUMBER}
+      - TWILIO_TO_NUMBER=${TWILIO_TO_NUMBER}
+      - TRADINGVIEW_SECRET=${TRADINGVIEW_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - astrofin-network
+
+  # === Ollama LLM Server ===
+  ollama:
+    image: ollama/ollama:latest
+    container_name: astrofin-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    # GPU support (uncomment if you have NVIDIA GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    restart: unless-stopped
+    networks:
+      - astrofin-network
+    command: serve
+
+  # === PostgreSQL Database ===
+  postgres:
+    image: postgres:16-alpine
+    container_name: astrofin-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=astrofin
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - astrofin-network
+
+  # === Redis (for RQ queue / LangGraph checkpoints) ===
+  redis:
+    image: redis:7-alpine
+    container_name: astrofin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - astrofin-network
+
+  # === pgAdmin for DB management ===
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: astrofin-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@astrofin.local
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - astrofin-network
+
+volumes:
+  ollama-data:
+  postgres-data:
+  redis-data:
+  pgadmin-data:
+
+networks:
+  astrofin-network:
+    driver: bridge

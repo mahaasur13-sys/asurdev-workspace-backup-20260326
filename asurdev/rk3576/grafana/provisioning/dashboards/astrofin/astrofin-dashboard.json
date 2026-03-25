@@ -1,0 +1,362 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "asurdev Sentinel — Multi-Agent Trading Dashboard",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 1,
+      "panels": [],
+      "title": "Agent Status",
+      "type": "row"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [
+            {"options": {"0": {"text": "OFFLINE"}}, "type": "value"},
+            {"options": {"1": {"text": "ONLINE"}}, "type": "value"}
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [{"params": ["$__interval"], "type": "time"}],
+          "measurement": "agent_status",
+          "query": "SELECT last(status) FROM agent_status WHERE agent='astro-agent'",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Astro Agent",
+      "type": "stat"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [
+            {"options": {"0": {"text": "OFFLINE"}}, "type": "value"},
+            {"options": {"1": {"text": "ONLINE"}}, "type": "value"}
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [{"params": ["$__interval"], "type": "time"}],
+          "measurement": "agent_status",
+          "query": "SELECT last(status) FROM agent_status WHERE agent='zvec-agent'",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "ZVec Agent",
+      "type": "stat"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [
+            {"options": {"0": {"text": "OFFLINE"}}, "type": "value"},
+            {"options": {"1": {"text": "ONLINE"}}, "type": "value"}
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [{"params": ["$__interval"], "type": "time"}],
+          "measurement": "agent_status",
+          "query": "SELECT last(status) FROM agent_status WHERE agent='risk-core'",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Risk Core",
+      "type": "stat"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null}
+            ]
+          },
+          "unit": "watt"
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [],
+          "measurement": "system_power",
+          "query": "SELECT last(watts) FROM system_power",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Power Consumption",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
+      "id": 6,
+      "panels": [],
+      "title": "Trading Signals",
+      "type": "row"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axis": {"show": true},
+            "barSize": 5,
+            "colorize": true,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {"mode": "none", "group": "A"},
+            "thresholdsStyle": {"mode": "off"}
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+      "id": 7,
+      "options": {
+        "legend": {"calcs": ["last", "mean"], "displayMode": "table", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [{"params": ["1h"], "type": "time"}],
+          "measurement": "signal_confidence",
+          "query": "SELECT mean(confidence) FROM signal_confidence WHERE symbol='BTCUSDT' GROUP BY time(1h)",
+          "rawQuery": true,
+          "refId": "A"
+        },
+        {
+          "groupBy": [{"params": ["1h"], "type": "time"}],
+          "measurement": "signal_confidence",
+          "query": "SELECT mean(confidence) FROM signal_confidence WHERE symbol='ETHUSDT' GROUP BY time(1h)",
+          "rawQuery": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Signal Confidence Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [
+            {"options": {"bullish": {"color": "green", "index": 0, "text": "BULL"}},
+            {"options": {"bearish": {"color": "red", "index": 1, "text": "BEAR"}}},
+            {"options": {"neutral": {"color": "yellow", "index": 2, "text": "NEUT"}}}
+          ]},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+      "id": 8,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [],
+          "measurement": "latest_signal",
+          "query": "SELECT last(signal) FROM latest_signal WHERE symbol='BTCUSDT'",
+          "rawQuery": true,
+          "refId": "A"
+        },
+        {
+          "groupBy": [],
+          "measurement": "latest_signal",
+          "query": "SELECT last(signal) FROM latest_signal WHERE symbol='ETHUSDT'",
+          "rawQuery": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Latest BTC Signal",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 14},
+      "id": 9,
+      "panels": [],
+      "title": "Gann Analysis",
+      "type": "row"
+    },
+    {
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axis": {"show": true},
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "purple", "value": null}]
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 15},
+      "id": 10,
+      "options": {
+        "legend": {"displayMode": "list", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "groupBy": [{"params": ["$__interval"], "type": "time"}],
+          "measurement": "gann_square9",
+          "query": "SELECT last(price_level) FROM gann_square9 WHERE symbol='BTCUSDT' GROUP BY time($__interval)",
+          "rawQuery": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Gann Square9 Price Levels",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["asurdev", "trading", "crypto"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "mode": "relative", "to": "now"},
+  "timepicker": {},
+  "timezone": "Asia/Dubai",
+  "title": "asurdev Sentinel Dashboard",
+  "uid": "asurdev-main",
+  "version": 1,
+  "weekStart": ""
+}

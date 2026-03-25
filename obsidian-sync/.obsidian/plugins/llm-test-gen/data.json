@@ -1,0 +1,27 @@
+{
+  "settings": {
+    "mySetting": "default",
+    "llmProvider": "ollama",
+    "apiKeys": {
+      "openai": "",
+      "anthropic": "",
+      "deepseek": " http://localhost:9103/v1/chat/completions",
+      "gemini": "",
+      "mistral": "",
+      "ollama": ""
+    },
+    "models": {
+      "openai": "gpt-3.5-turbo",
+      "anthropic": "claude-3-opus-20240229",
+      "deepseek": "deepseek-chat",
+      "gemini": "gemini-pro",
+      "mistral": "mistral-medium",
+      "ollama": "qwen2.5:7b"
+    },
+    "ollamaSettings": {
+      "url": " http://localhost:9103/v1/chat/completions"
+    }
+  },
+  "persistedIndex": [],
+  "testDocuments": {}
+}

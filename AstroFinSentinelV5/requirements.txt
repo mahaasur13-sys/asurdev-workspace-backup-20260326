@@ -1,0 +1,24 @@
+# AstroFin Sentinel v5 — Dependencies
+
+# Core orchestration
+langgraph>=0.0.55
+langchain-core>=0.1.0
+
+# LLM integration
+langchain-openai>=0.0.5
+
+# HTTP requests
+requests>=2.31.0
+
+# Optional: FAISS for vector search (when upgrading from keyword search)
+# faiss-cpu>=1.7.4
+
+# Optional: ChromaDB for persistent vector store
+# chromadb>=0.4.0
+
+# Optional: Swiss Ephemeris for accurate planetary positions
+# swisseph>=2.10.0
+
+# Development
+pytest>=7.0.0
+pytest-asyncio>=0.21.0

@@ -1,0 +1,77 @@
+{
+  "description": "MQTT Topic Structure for asurdev Sentinel",
+  "topics": {
+    "alerts": {
+      "description": "Trading alerts from all agents",
+      "pattern": "asurdev/alerts/{symbol}/{severity}",
+      "severity_levels": ["info", "warning", "critical"],
+      "examples": [
+        "asurdev/alerts/BTCUSDT/warning",
+        "asurdev/alerts/ETHUSDT/critical"
+      ]
+    },
+    "signals": {
+      "description": "Trading signals from synthesiser",
+      "pattern": "asurdev/signals/{symbol}/{signal_type}",
+      "signal_types": ["bullish", "bearish", "neutral"],
+      "examples": [
+        "asurdev/signals/BTCUSDT/bullish",
+        "asurdev/signals/ETHUSDT/neutral"
+      ]
+    },
+    "gann": {
+      "description": "Gann analysis results",
+      "pattern": "asurdev/gann/{symbol}/{analysis_type}",
+      "analysis_types": ["square9", "death_zone", "astro"],
+      "examples": [
+        "asurdev/gann/BTCUSDT/square9",
+        "asurdev/gann/BTCUSDT/death_zone"
+      ]
+    },
+    "astro": {
+      "description": "Astro analysis results",
+      "pattern": "asurdev/astro/{type}",
+      "types": ["choghadiya", "nakshatra", "moon_phase", "muhurta"],
+      "examples": [
+        "asurdev/astro/choghadiya",
+        "asurdev/astro/muhurta"
+      ]
+    },
+    "yolo": {
+      "description": "YOLO chart detection results",
+      "pattern": "asurdev/yolo/{symbol}/{pattern}",
+      "patterns": ["order_block", "support", "resistance", "trendline"],
+      "examples": [
+        "asurdev/yolo/BTCUSDT/order_block",
+        "asurdev/yolo/ETHUSDT/trendline"
+      ]
+    },
+    "system": {
+      "description": "System health and metrics",
+      "pattern": "asurdev/system/{component}",
+      "components": ["agents", "rabbitmq", "mqtt", "nodered", "grafana"],
+      "examples": [
+        "asurdev/system/agents",
+        "asurdev/system/rabbitmq"
+      ]
+    }
+  },
+  "qos_levels": {
+    "alerts_critical": 2,
+    "alerts_warning": 1,
+    "alerts_info": 0,
+    "signals": 1,
+    "gann": 0,
+    "astro": 0,
+    "yolo": 0,
+    "system": 0
+  },
+  "retain_policy": {
+    "alerts": false,
+    "signals": true,
+    "gann": true,
+    "astro": true,
+    "yolo": false,
+    "system": true
+  }
+}

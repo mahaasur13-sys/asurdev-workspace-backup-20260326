@@ -1,0 +1,52 @@
+{
+  "asset": "BTCUSDT",
+  "generated_at": "2026-03-20T12:00:00Z",
+  "method": "TS_Spectrum",
+  "version": "2.4.1",
+  
+  "cycle_data": {
+    "phase": "ascending",
+    "cycle_strength": 0.74,
+    "cycle_score": 0.68,
+    "dominant_period": 28,
+    "period_unit": "days"
+  },
+  
+  "trend_hint": {
+    "direction": "up",
+    "confidence": 0.62
+  },
+  
+  "turning_windows": [
+    {
+      "from": "2026-03-22",
+      "to": "2026-03-24",
+      "type": "top",
+      "strength": 0.72,
+      "tolerance_days": 2
+    },
+    {
+      "from": "2026-04-05",
+      "to": "2026-04-07",
+      "type": "bottom",
+      "strength": 0.65,
+      "tolerance_days": 2
+    }
+  ],
+  
+  "quality_flags": {
+    "is_stale": false,
+    "repaint_risk": "low",
+    "data_source": "coingecko_feed"
+  },
+  
+  "metadata": {
+    "ts_export_time": "2026-03-20T11:55:00Z",
+    "analyst_notes": "Strong ascending phase, watching March 22-24 window",
+    "parameters": {
+      "spectrum_range": [14, 45],
+      "filter_threshold": 0.5,
+      "confidence_threshold": 0.6
+    }
+  }
+}

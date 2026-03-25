@@ -1,0 +1,250 @@
+"""
+AstroFin Sentinel v4.3 — FastAPI + AgentIQ + LangSmith
+"""
+from __future__ import annotations
+
+import os
+import asyncio
+from contextlib import asynccontextmanager
+from typing import Optional
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from agentiq import AgentIQ, DynamoRuntime
+from langsmith import traceable
+
+# AstroFin components
+from backend.agents.astro_council import AstroCouncilAgent
+from backend.agents.orchestra import ConductorAgent
+from backend.shared_memory.bank import SharedMemoryBank
+from backend.utils.polygon_client import PolygonClient
+
+# ─── LangSmith Setup ─────────────────────────────────────────────────────────
+os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "false")
+os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY", "")
+
+# ─── AgentIQ Setup ───────────────────────────────────────────────────────────
+aiq = AgentIQ(
+    runtime=DynamoRuntime(
+        max_concurrency=20,
+        latency_target_ms=800,
+        priority_levels={
+            "critical": 1.0,
+            "high": 0.8,
+            "normal": 0.5,
+            "low": 0.2,
+        },
+    ),
+)
+
+
+# ─── Pydantic Models ──────────────────────────────────────────────────────────
+class AnalyzeRequest(BaseModel):
+    query: str = Field(..., description="User query for analysis")
+    symbol: str = Field(default="BTCUSDT", description="Trading pair")
+    timeframe: str = Field(default="SWING", description="SWING, DAY, HOUR, 4H")
+    current_price: Optional[float] = Field(default=None, description="Current price")
+    market_context: Optional[dict] = Field(default=None, description="Market context")
+    use_sandbox: bool = Field(default=True, description="Use NanoClaw sandbox")
+    use_conductor: bool = Field(default=False, description="Use ConductorAgent")
+    priority: str = Field(default="normal", description="critical/high/normal/low")
+
+
+class HealthResponse(BaseModel):
+    status: str
+    version: str
+    redis_connected: bool
+    polygon_connected: bool
+
+
+# ─── Lifespan ─────────────────────────────────────────────────────────────────
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Startup and shutdown events."""
+    # Startup
+    print("=" * 60)
+    print("🚀 AstroFin Sentinel v4.3 — Starting...")
+    print("=" * 60)
+
+    # Initialize Redis (if available)
+    redis_connected = False
+    try:
+        from backend.utils.cache import CacheManager
+        cache = CacheManager()
+        await cache.initialize()
+        redis_connected = True
+        print("✅ Redis: Connected")
+    except Exception as e:
+        print(f"⚠️  Redis: Not connected ({e})")
+
+    # Initialize Polygon.io (if API key available)
+    polygon_connected = False
+    try:
+        if os.getenv("POLYGON_API_KEY"):
+            pc = PolygonClient()
+            await pc.initialize()
+            polygon_connected = True
+            print("✅ Polygon.io: Connected")
+        else:
+            print("⚠️  Polygon.io: No API key")
+    except Exception as e:
+        print(f"⚠️  Polygon.io: Not connected ({e})")
+
+    # Register agents with AgentIQ
+    try:
+        # Main AstroCouncil agent
+        council = AstroCouncilAgent(use_sandbox=False)  # Sandbox disabled by default
+        aiq.register_agent("astro_council", council)
+        print("✅ AgentIQ: astro_council registered")
+
+        # Optional ConductorAgent
+        conductor = ConductorAgent(use_sandbox=False, use_mcp=True, use_memory=True)
+        aiq.register_agent("conductor", conductor)
+        print("✅ AgentIQ: conductor registered")
+    except Exception as e:
+        print(f"⚠️  AgentIQ: Registration failed ({e})")
+
+    print("=" * 60)
+    print("✅ AstroFin Sentinel v4.3 — Ready!")
+    print("=" * 60)
+
+    yield
+
+    # Shutdown
+    print("\n🛑 Shutting down AstroFin Sentinel...")
+    try:
+        if 'cache' in dir():
+            await cache.close()
+        if 'pc' in dir():
+            await pc.close()
+    except Exception as e:
+        print(f"⚠️  Shutdown error: {e}")
+    print("✅ Shutdown complete")
+
+
+# ─── FastAPI App ─────────────────────────────────────────────────────────────
+app = FastAPI(
+    title="AstroFin Sentinel API",
+    description="Multi-Agent Trading Analysis Platform",
+    version="4.3.0",
+    lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# ─── Routes ──────────────────────────────────────────────────────────────────
+@app.get("/health", response_model=HealthResponse)
+async def health():
+    """Health check endpoint."""
+    redis_connected = False
+    polygon_connected = False
+
+    try:
+        from backend.utils.cache import CacheManager
+        cache = CacheManager()
+        await cache.initialize()
+        redis_connected = True
+    except Exception:
+        pass
+
+    if os.getenv("POLYGON_API_KEY"):
+        polygon_connected = True
+
+    return HealthResponse(
+        status="healthy",
+        version="4.3.0",
+        redis_connected=redis_connected,
+        polygon_connected=polygon_connected,
+    )
+
+
+@app.post("/analyze")
+@traceable(run_type="chain", metadata={"agent": "astro_council"})
+async def analyze(request: AnalyzeRequest):
+    """
+    Main analysis endpoint.
+    Traced with LangSmith for observability.
+    Optimized with AgentIQ for performance.
+    """
+    try:
+        # Determine priority
+        priority_map = {"critical": 1.0, "high": 0.8, "normal": 0.5, "low": 0.2}
+        priority = priority_map.get(request.priority, 0.5)
+
+        # Choose agent
+        agent_name = "conductor" if request.use_conductor else "astro_council"
+
+        # Run analysis
+        result = await aiq.run(
+            agent=agent_name,
+            input={
+                "user_query": request.query,
+                "symbol": request.symbol,
+                "timeframe": request.timeframe,
+                "current_price": request.current_price or 50000,
+                "market_context": request.market_context or {},
+            },
+            priority=priority,
+        )
+
+        return result
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/analyze/direct")
+async def analyze_direct(request: AnalyzeRequest):
+    """
+    Direct analysis without AgentIQ (for debugging).
+    """
+    try:
+        council = AstroCouncilAgent(use_sandbox=False)
+        result = await council.analyze(
+            user_query=request.query,
+            symbol=request.symbol,
+            timeframe=request.timeframe,
+            current_price=request.current_price or 50000,
+            market_context=request.market_context or {},
+        )
+
+        return {
+            "agent": "AstroCouncilAgent",
+            "signal": result.signal.value,
+            "confidence": result.confidence,
+            "reasoning": result.reasoning,
+            "metadata": result.metadata,
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/agents")
+async def list_agents():
+    """List all registered agents."""
+    return {
+        "agents": list(aiq._agents.keys()) if hasattr(aiq, "_agents") else ["astro_council", "conductor"],
+        "version": "4.3.0",
+    }
+
+
+# ─── Run ─────────────────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=False,
+        workers=1,  # for graceful shutdown
+    )

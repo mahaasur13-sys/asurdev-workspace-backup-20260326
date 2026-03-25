@@ -1,0 +1,388 @@
+{
+  "main": {
+    "id": "59489fc23548b381",
+    "type": "split",
+    "children": [
+      {
+        "id": "b95ba780639f156b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5cc70a145a72a78f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Запретные периоды и дефекты лагны для брака.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Запретные периоды и дефекты лагны для брака"
+            }
+          },
+          {
+            "id": "3e21262a384639ce",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74)"
+            }
+          },
+          {
+            "id": "9e4968b6a07fac24",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Vimana-Recommendations/Запрещенные мухурты и особые условия в ведической астрологии-semantic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Запрещенные мухурты и особые условия в ведической астрологии-semantic"
+            }
+          },
+          {
+            "id": "13b3fbe05f356d70",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Vimana-Recommendations/Йогадхийога-semantic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Йогадхийога-semantic"
+            }
+          },
+          {
+            "id": "ec1dfb2044c2a909",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Vimana-Recommendations/Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74)-semantic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74)-semantic"
+            }
+          },
+          {
+            "id": "4ad90e008f08f399",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Vimana-Recommendations/Йоги Победы в Путешествии Окончательный Свод Правил (Часть 2)-semantic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Йоги Победы в Путешествии Окончательный Свод Правил (Часть 2)-semantic"
+            }
+          },
+          {
+            "id": "093046b5d5c44ea1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Применение методологии GTD к интеграции планировщиков задач и календарей.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Применение методологии GTD к интеграции планировщиков задач и календарей"
+            }
+          },
+          {
+            "id": "b822d077a8fe35da",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Без названия 14.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Без названия 14"
+            }
+          },
+          {
+            "id": "c00b7abf9c1e58e7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Расчёт благоприятного времени Варправритти и Калахора.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Расчёт благоприятного времени Варправритти и Калахора"
+            }
+          },
+          {
+            "id": "7911fb6434a754ab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Vimana-Recommendations/Запрещенные мухурты и особые условия в ведической астрологии-semantic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Запрещенные мухурты и особые условия в ведической астрологии-semantic"
+            }
+          },
+          {
+            "id": "545b9c11ed7eb9c5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Амрит Сиддхи Йога и Сарва Сиддхи Йога.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Амрит Сиддхи Йога и Сарва Сиддхи Йога"
+            }
+          },
+          {
+            "id": "b48ad6884bfd5984",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          },
+          {
+            "id": "6b8bbfb16952050f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Без названия 2.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Без названия 2"
+            }
+          }
+        ],
+        "currentTab": 12
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2a022d19bd42a80e",
+    "type": "split",
+    "children": [
+      {
+        "id": "d61cfe19abaaebbe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "657c4e98076669cb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "3536298a4c99ec9e",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": " Варправритти  Варправритти ",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "c0f2bbf8b8f2d6e2",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 219.5
+  },
+  "right": {
+    "id": "6d997468076a51ce",
+    "type": "split",
+    "children": [
+      {
+        "id": "1032642599ee7386",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "70b6485579b2718b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "`Мухурта - Пунья Кала и Классификация Накшатр.md.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для `Мухурта - Пунья Кала и Классификация Накшатр.md"
+            }
+          },
+          {
+            "id": "4d8e2086e4202537",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "ecae42e2f47e49f2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "8912c386a70bcecc",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура"
+            }
+          },
+          {
+            "id": "a7b3387204422f43",
+            "type": "leaf",
+            "state": {
+              "type": "chatbot-view",
+              "state": {},
+              "icon": "bot",
+              "title": "BMO Chatbot"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "llm-test-gen:Test dashboard": false,
+      "bmo-chatbot:BMO Chatbot": false,
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false,
+      "vimana-cognitive-core:Vimana Cognitive Core": false
+    }
+  },
+  "active": "6b8bbfb16952050f",
+  "lastOpenFiles": [
+    "Без названия 1.md",
+    "Vimana-Cognitive-Core-Dashboard.md",
+    "Без названия 17.md",
+    "Амрит Сиддхи Йога и Сарва Сиддхи Йога.md",
+    "Vimana-Recommendations/Запрещенные мухурты и особые условия в ведической астрологии-semantic.md",
+    "Варправритти  6 октября 2025  Виджаядашами.md",
+    "Vimana-Recommendations/Брачные Доши (Мухуртачинтамани)-semantic.md",
+    "Расчёт благоприятного времени Варправритти и Калахора.md",
+    "Vimana-Recommendations/Без названия-semantic.md",
+    "Без названия 14.md",
+    "Без названия 7.md",
+    "Без названия 16.md",
+    "Применение методологии GTD к интеграции планировщиков задач и календарей.md",
+    "Vimana-Recommendations/Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74)-semantic.md",
+    "Астрологические критерии благоприятного брака.md",
+    "`Мухурта - Яджняповита (Планетарные Влияния и Йоги).md",
+    "Семейное счастье и предсвадебные обряды в брачной мухурте.md",
+    "Без названия 15.md",
+    "Йоги Победы в Путешествии Окончательный Свод (Стихи 67-74).md",
+    "Сатурн.md",
+    "Vimana-Recommendations/Йогадхийога-semantic-semantic.md",
+    "Vimana-Recommendations/Дик-Шула-semantic-semantic-semantic.md",
+    "Vimana-Recommendations/Дик-Шула-semantic-semantic.md",
+    "Vimana-Recommendations/Йогадхийога-semantic.md",
+    "Дик-Шула-semantic.md",
+    "Vimana-Cognitive-Core-Dashboard-semantic-semantic-semantic.md",
+    "Pasted image 20251114161808.png",
+    "Pasted image 20251103162639.png",
+    "Pasted image 20251103164808.png",
+    "Pasted image 20251104192050.png",
+    "Pasted image 20251104192257.png",
+    "Без названия.base",
+    "BMO/Profiles",
+    "BMO",
+    "Vimana-Recommendations",
+    "Без названия 1",
+    "Без названия"
+  ]
+}

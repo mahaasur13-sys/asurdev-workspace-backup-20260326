@@ -1,0 +1,90 @@
+"""
+AstroFin Sentinel — LangGraph Architecture
+
+Multi-agent orchestration using LangGraph with:
+- Parallel agent execution (async)
+- RAG memory for context persistence
+- Conditional routing
+- State management
+
+Graph Structure:
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    USER QUERY                               │
+    └─────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │                 SUPERVISOR (Router)                          │
+    │  • Parses intent                                           │
+    │  • Determines required agents                              │
+    │  • Sets weights based on query type                         │
+    └─────────────────┬───────────────────────────────────────────┘
+                      │
+          ┌───────────┴───────────┬─────────────────┐
+          ▼                       ▼                 ▼
+    ┌───────────────┐  ┌─────────────────┐  ┌───────────────┐
+    │   TECHNICAL   │  │   FUNDAMENTAL    │  │  ASTROLOGER   │
+    │   ANALYST     │  │    ANALYST      │  │   (async)     │
+    │   (async)     │  │    (async)      │  │   (async)     │
+    └───────┬───────┘  └────────┬────────┘  └───────┬───────┘
+            │                   │                   │
+            └───────────────────┴───────────────────┘
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │                  QUALITY GATE                                │
+    │  • Validates report completeness                            │
+    │  • Handles missing/incomplete data                          │
+    │  • Routes to synthesizer or back to agents                  │
+    └─────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │                 SYNTHESIZER                                  │
+    │  • Weighted scoring                                          │
+    │  • Board opinion generation                                  │
+    │  • Final recommendation                                      │
+    └─────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │                  MEMORY (RAG)                                │
+    │  • Stores analysis result                                    │
+    │  • Retrieves relevant history                               │
+    │  • Context injection for future queries                      │
+    └─────────────────────────────────────────────────────────────┘
+"""
+
+from .state import AnalysisState, AgentReport
+from .nodes import (
+    supervisor_node,
+    technical_node,
+    fundamental_node,
+    astrologer_node,
+    quality_gate_node,
+    synthesizer_node,
+    memory_node
+)
+from .graph import (
+    create_analysis_graph,
+    create_compiled_graph,
+    run_analysis,
+    run_analysis_sync
+)
+from .memory import RAGMemory
+
+__all__ = [
+    "AnalysisState",
+    "AgentReport",
+    "create_analysis_graph",
+    "RAGMemory",
+    "supervisor_node",
+    "technical_node",
+    "fundamental_node",
+    "astrologer_node",
+    "quality_gate_node",
+    "synthesizer_node",
+    "memory_node",
+    "run_analysis",
+    "run_analysis_sync"
+]

@@ -1,0 +1,56 @@
+# AstroFin Sentinel Configuration
+
+weights:
+  technical: 0.35
+  fundamental: 0.35
+  astrological: 0.20  # Снижено с 0.40 — астрология как "второе мнение", не доминирующий фактор
+
+scoring:
+  strong_buy: 0.75
+  buy: 0.60
+  neutral: 0.50
+  sell: 0.40
+  strong_sell: 0.25
+
+risk_levels:
+  conservative: 0.05
+  moderate: 0.10
+  aggressive: 0.20
+
+# Astrology (Mankashi) settings
+astrology:
+  birth_chart_path: "./data/birth_charts/"
+  forecast_script: "/home/workspace/asurdev/manjasi_forecast_2026_03_23.py"
+
+# NEW: Astro nuance settings — добавляем гибкость для астрологии
+astrology_nuance:
+  # Если астрология неопределённая (NEUTRAL), снижаем её влияние ещё больше
+  undefined_penalty: 0.5  # Применяем 50% штраф к confidence если MUHURTA = NEUTRAL
+  # Порог для "сильного" сигнала астрологии (выше = только явные сигналы)
+  strong_signal_threshold: 0.7
+  # Минимальная уверенность астрологии
+  min_confidence: 0.30
+  # Максимальная уверенность астрологии (не может быть выше чем Tech/Fund)
+  max_relative_confidence: 0.80
+
+# Market data
+market:
+  default_exchange: "binance"
+  default_interval: "1h"
+  supported_pairs:
+    - "BTC/USDT"
+    - "ETH/USDT"
+    - "SOL/USDT"
+    - "BNB/USDT"
+
+# Model settings
+llm:
+  default_provider: "ollama"
+  default_model: "qwen2.5-coder:32b"
+  temperature: 0.3
+
+# Agent defaults
+agents:
+  timeout_seconds: 60
+  max_retries: 2
+  show_agent_details: true  # Показывать полные детали каждого агента в отчёте

@@ -1,0 +1,11 @@
+# Visualization dependencies for asurdev Sentinel
+# Install: pip install -r requirements-visualizations.txt
+
+# Core visualization
+matplotlib>=3.7.0
+numpy>=1.24.0
+plotly>=5.18.0
+kaleido>=0.2.1  # For static image export
+
+# Optional: for Pandas-based charts
+pandas>=2.0.0

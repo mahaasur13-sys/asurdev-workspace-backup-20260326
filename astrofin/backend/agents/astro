@@ -1,0 +1,264 @@
+"""
+AstroCouncilAgent v4.1 — главный координатор всех 14 агентов.
+"""
+
+from __future__ import annotations
+
+import asyncio
+from datetime import datetime
+from typing import Dict, Any, List
+
+from ..base_agent import BaseAgent, AgentResponse, Signal
+from backend.src.decorators import require_ephemeris
+from backend.src.swiss_ephemeris import swiss_ephemeris
+
+
+class TradingSignal:
+    """TradingSignal — финальный торговый сигнал с весами всех 14 агентов."""
+
+    WEIGHTS = {
+        # Фундаментал + Макро (33%)
+        "Fundamental": 0.20,
+        "Macro": 0.13,
+        # Quant блок (17%)
+        "Quant": 0.17,
+        # Опционы + Sentiment (25%)
+        "OptionsFlow": 0.15,
+        "Sentiment": 0.10,
+        # Technical (10%)
+        "Technical": 0.10,
+        # Аналитики Bull/Bear (10%)
+        "BullResearcher": 0.05,
+        "BearResearcher": 0.05,
+        # Риск-менеджмент (5%)
+        "Risk": 0.05,
+    }
+
+    def __init__(
+        self,
+        symbol: str,
+        direction: str,
+        confidence: int,
+        entry_price: float,
+        stop_loss: float,
+        targets: List[float],
+        risk_reward: float,
+        astro_score: int,
+        factors: Dict[str, Any],
+        timestamp: str,
+    ):
+        self.symbol = symbol
+        self.direction = direction
+        self.confidence = confidence
+        self.entry_price = entry_price
+        self.stop_loss = stop_loss
+        self.targets = targets
+        self.risk_reward = risk_reward
+        self.astro_score = astro_score
+        self.factors = factors
+        self.timestamp = timestamp
+
+    @classmethod
+    def from_agents(
+        cls,
+        symbol: str,
+        responses: List[AgentResponse],
+        entry_price: float,
+        weights: Dict[str, float] = None,
+    ) -> "TradingSignal":
+        weights = weights or cls.WEIGHTS
+
+        signal_scores = {
+            "STRONG_BUY": 100,
+            "BUY": 75,
+            "HOLD": 50,
+            "NEUTRAL": 50,
+            "SELL": 25,
+            "STRONG_SELL": 0,
+            "AVOID": 0,
+        }
+
+        long_score = 0.0
+        short_score = 0.0
+        all_details = {}
+
+        for resp in responses:
+            name = resp.agent_name
+            conf = resp.confidence if isinstance(resp.confidence, (int, float)) else 50
+            sig = resp.signal if isinstance(resp.signal, str) else "NEUTRAL"
+
+            weight = 0.0
+            for key, w in weights.items():
+                if key.lower() in name.lower():
+                    weight = w
+                    break
+
+            score = signal_scores.get(sig.upper(), 50) * (conf / 100)
+
+            if sig.upper() in ("STRONG_BUY", "BUY"):
+                long_score += score * weight
+            elif sig.upper() in ("STRONG_SELL", "SELL"):
+                short_score += score * weight
+
+            all_details[name] = {
+                "signal": sig,
+                "confidence": conf,
+                "weight": weight,
+                "score": score,
+                "summary": resp.summary or resp.reasoning or "",
+            }
+
+        if long_score > short_score + 15:
+            direction = "LONG"
+            confidence = int(min(95, 40 + long_score * 60))
+        elif short_score > long_score + 15:
+            direction = "SHORT"
+            confidence = int(min(95, 40 + short_score * 60))
+        else:
+            direction = "NEUTRAL"
+            confidence = 50
+
+        if direction == "LONG":
+            entry = entry_price
+            stop = entry_price * 0.98
+            targets = [entry_price * 1.02, entry_price * 1.05, entry_price * 1.08]
+            risk_reward = (targets[0] - entry) / (entry - stop) if entry > stop else 0
+        elif direction == "SHORT":
+            entry = entry_price
+            stop = entry_price * 1.02
+            targets = [entry_price * 0.98, entry_price * 0.95, entry_price * 0.92]
+            risk_reward = (entry - targets[0]) / (stop - entry) if stop > entry else 0
+        else:
+            entry = entry_price
+            stop = entry_price * 0.95
+            targets = [entry_price * 1.02, entry_price * 1.05, entry_price * 1.08]
+            risk_reward = 1.0
+
+        astro_score = int(long_score - short_score + 50)
+
+        return cls(
+            symbol=symbol,
+            direction=direction,
+            confidence=confidence,
+            entry_price=entry,
+            stop_loss=stop,
+            targets=targets,
+            risk_reward=round(risk_reward, 2),
+            astro_score=astro_score,
+            factors={"responses": [r.to_dict() for r in responses], "details": all_details},
+            timestamp=datetime.now().isoformat(),
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "symbol": self.symbol,
+            "direction": self.direction,
+            "confidence": self.confidence,
+            "entry_price": self.entry_price,
+            "stop_loss": self.stop_loss,
+            "targets": self.targets,
+            "risk_reward": self.risk_reward,
+            "astro_score": self.astro_score,
+            "factors": self.factors,
+            "timestamp": self.timestamp,
+        }
+
+
+class AstroCouncilAgent(BaseAgent):
+    """
+    AstroCouncilAgent v4.1 — главный координатор всех 14 агентов.
+    """
+
+    # Все 14 агентов с их весами
+    AGENT_CONFIG = {
+        # Основные (сумма 80%)
+        "fundamental": {"import_path": "fundamental_agent.FundamentalAgent", "weight": 0.20},
+        "macro": {"import_path": "macro_agent.MacroAgent", "weight": 0.13},
+        "quant": {"import_path": "quant_agent.QuantAgent", "weight": 0.17},
+        "options_flow": {"import_path": "options_flow_agent.OptionsFlowAgent", "weight": 0.15},
+        "sentiment": {"import_path": "sentiment_agent.SentimentAgent", "weight": 0.10},
+        "technical": {"import_path": "technical_agent.TechnicalAgent", "weight": 0.10},
+        # Аналитики Bull/Bear (сумма 10%)
+        "bull": {"import_path": "bull_researcher.BullResearcher", "weight": 0.05},
+        "bear": {"import_path": "bear_researcher.BearResearcher", "weight": 0.05},
+        # Риск (5%)
+        "risk": {"import_path": "risk_agent.RiskAgent", "weight": 0.05},
+    }
+
+    def __init__(self):
+        super().__init__(
+            name="AstroCouncil",
+            system_prompt=(
+                "Ты — совет директоров AstroFin. "
+                "Синтезируй все источники в один сильный сигнал."
+            ),
+        )
+        self._agents: Dict[str, BaseAgent] = {}
+
+    def _get_agent(self, key: str) -> BaseAgent:
+        if key not in self._agents:
+            config = self.AGENT_CONFIG[key]
+            module_name, class_name = config["import_path"].split(".")
+            module = __import__(f"backend.agents.{module_name}", fromlist=[class_name])
+            cls = getattr(module, class_name)
+            self._agents[key] = cls()
+        return self._agents[key]
+
+    @require_ephemeris
+    async def analyze(self, context: Dict[str, Any]) -> AgentResponse:
+        dt = context.get("datetime") or datetime.now()
+        symbol = context.get("symbol", "BTC")
+        price = context.get("price", 100.0)
+
+        # Получаем эфемериды
+        date_str = dt.strftime("%Y-%m-%d")
+        time_str = dt.strftime("%H:%M:%S")
+        eph = swiss_ephemeris(
+            date=date_str,
+            time=time_str,
+            lat=40.7128,
+            lon=-74.0060,
+            ayanamsa="lahiri",
+        )
+
+        # Запускаем всех агентов параллельно
+        tasks = []
+        agent_keys = []
+        for key in self.AGENT_CONFIG:
+            agent = self._get_agent(key)
+            tasks.append(agent.analyze(context))
+            agent_keys.append(key)
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        valid_responses: List[AgentResponse] = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                print(f"[AstroCouncil] {agent_keys[i]}: ERROR - {result}")
+            elif isinstance(result, AgentResponse):
+                valid_responses.append(result)
+                print(f"[AstroCouncil] {result.agent_name}: {result.signal} ({result.confidence}%)")
+
+        if not valid_responses:
+            return AgentResponse(
+                agent_name="AstroCouncil",
+                signal="NEUTRAL",
+                confidence=30,
+                summary="Не удалось получить данные от агентов",
+                details={"error": "All sub-agents failed"},
+            )
+
+        final_signal = TradingSignal.from_agents(
+            symbol=symbol,
+            responses=valid_responses,
+            entry_price=price,
+        )
+
+        return AgentResponse(
+            agent_name="AstroCouncil",
+            signal=final_signal.direction,
+            confidence=final_signal.confidence,
+            summary=f"{final_signal.direction} {final_signal.confidence}%",
+            reasoning=f"AstroCouncil: {len(valid_responses)} agents, R/R={final_signal.risk_reward}",
+            details=final_signal.to_dict(),
+        )

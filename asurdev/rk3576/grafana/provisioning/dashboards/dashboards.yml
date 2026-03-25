@@ -1,0 +1,14 @@
+# Grafana Dashboard Provisioning
+apiVersion: 1
+
+providers:
+  - name: 'asurdev Dashboards'
+    orgId: 1
+    folder: 'asurdev Sentinel'
+    folderUid: 'asurdev'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/asurdev

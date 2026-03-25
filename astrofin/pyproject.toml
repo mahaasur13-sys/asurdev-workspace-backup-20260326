@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "astrofin-sentinel"
+version = "5.0.0"
+description = "Multi-Factor Analytical Platform with Astrology"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "AstroFin Team", email = "team@astrofin.io"}
+]
+keywords = ["trading", "astrology", "analysis", "crypto", "finance"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "httpx>=0.26.0",
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+ephemeris = ["swisseph>=2.10.0"]
+redis = ["redis>=5.0.0"]
+ml = ["scikit-learn>=1.4.0", "scipy>=1.12.0"]
+dev = ["pytest>=8.0.0", "black>=24.0.0", "ruff>=0.2.0"]
+
+[project.scripts]
+astrofin = "backend.main:main"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true

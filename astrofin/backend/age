@@ -1,0 +1,328 @@
+"""
+AstroCouncilAgent v4.2 — Главный координатор всех агентов.
+Включает PredictorAgent (14%) и RiskAgent. Ленивая инициализация, кэширование, параллельный запуск.
+"""
+
+from __future__ import annotations
+
+import asyncio
+from datetime import datetime
+from typing import Dict, Any, List
+
+from backend.agents.base_agent import BaseAgent, AgentResponse, Signal
+from backend.src.decorators import require_ephemeris
+from backend.src.swiss_ephemeris import swiss_ephemeris
+
+
+class TradingSignal:
+    """TradingSignal — финальный торговый сигнал с весами."""
+    
+    # Веса для AstroCouncilAgent v4.2 (сумма = 100%)
+    WEIGHTS = {
+        "Fundamental": 0.18,
+        "Macro": 0.15,
+        "Quant": 0.18,
+        "OptionsFlow": 0.14,
+        "Sentiment": 0.10,
+        "Technical": 0.08,
+        "BullResearcher": 0.04,
+        "BearResearcher": 0.04,
+        "Risk": 0.05,
+        "Predictor": 0.14,  # ← Новый PredictorAgent
+    }
+    
+    def __init__(
+        self,
+        symbol: str,
+        direction: str,
+        confidence: int,
+        entry_price: float,
+        stop_loss: float,
+        targets: List[float],
+        risk_reward: float,
+        astro_score: int,
+        factors: Dict[str, Any],
+        timestamp: str,
+    ):
+        self.symbol = symbol
+        self.direction = direction
+        self.confidence = confidence
+        self.entry_price = entry_price
+        self.stop_loss = stop_loss
+        self.targets = targets
+        self.risk_reward = risk_reward
+        self.astro_score = astro_score
+        self.factors = factors
+        self.timestamp = timestamp
+
+    @classmethod
+    def from_agents(
+        cls,
+        symbol: str,
+        responses: List[AgentResponse],
+        entry_price: float,
+        weights: Dict[str, float] = None,
+    ) -> "TradingSignal":
+        weights = weights or cls.WEIGHTS
+        
+        signal_scores = {
+            "STRONG_BUY": 100,
+            "BUY": 75,
+            "HOLD": 50,
+            "NEUTRAL": 50,
+            "SELL": 25,
+            "STRONG_SELL": 0,
+            "AVOID": 0,
+        }
+        
+        long_score = 0.0
+        short_score = 0.0
+        all_details = {}
+        
+        for resp in responses:
+            name = resp.agent_name
+            conf = resp.confidence if isinstance(resp.confidence, (int, float)) else 50
+            sig = resp.signal if isinstance(resp.signal, str) else "NEUTRAL"
+            
+            # Поиск веса по имени агента
+            weight = 0.05  # Default weight
+            for key, w in weights.items():
+                if key.lower() in name.lower():
+                    weight = w
+                    break
+            
+            score = signal_scores.get(sig.upper(), 50) * (conf / 100)
+            
+            if sig.upper() in ("STRONG_BUY", "BUY"):
+                long_score += score * weight
+            elif sig.upper() in ("STRONG_SELL", "SELL"):
+                short_score += score * weight
+            
+            all_details[name] = {
+                "signal": sig,
+                "confidence": conf,
+                "weight": round(weight, 3),
+                "score": round(score, 2),
+                "summary": resp.summary or resp.reasoning or "",
+            }
+        
+        # Определяем направление
+        if long_score > short_score + 15:
+            direction = "LONG"
+            confidence = int(min(95, 40 + long_score * 60))
+        elif short_score > long_score + 15:
+            direction = "SHORT"
+            confidence = int(min(95, 40 + short_score * 60))
+        else:
+            direction = "NEUTRAL"
+            confidence = 50
+        
+        # Рассчитываем уровни
+        if direction == "LONG":
+            entry = entry_price
+            stop = entry_price * 0.97  # 3% стоп
+            targets = [entry_price * 1.02, entry_price * 1.05, entry_price * 1.10]
+            risk = entry - stop
+            reward = targets[0] - entry
+            risk_reward = reward / risk if risk > 0 else 0
+        elif direction == "SHORT":
+            entry = entry_price
+            stop = entry_price * 1.03  # 3% стоп
+            targets = [entry_price * 0.98, entry_price * 0.95, entry_price * 0.90]
+            risk = stop - entry
+            reward = entry - targets[0]
+            risk_reward = reward / risk if risk > 0 else 0
+        else:
+            entry = entry_price
+            stop = entry_price * 0.95
+            targets = [entry_price * 1.02, entry_price * 1.05, entry_price * 1.08]
+            risk_reward = 1.0
+        
+        astro_score = int(long_score - short_score + 50)
+        
+        return cls(
+            symbol=symbol,
+            direction=direction,
+            confidence=confidence,
+            entry_price=entry,
+            stop_loss=stop,
+            targets=targets,
+            risk_reward=round(risk_reward, 2),
+            astro_score=astro_score,
+            factors={"responses": [r.to_dict() for r in responses], "details": all_details},
+            timestamp=datetime.now().isoformat(),
+        )
+    
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "symbol": self.symbol,
+            "direction": self.direction,
+            "confidence": self.confidence,
+            "entry_price": self.entry_price,
+            "stop_loss": self.stop_loss,
+            "targets": self.targets,
+            "risk_reward": self.risk_reward,
+            "astro_score": self.astro_score,
+            "factors": self.factors,
+            "timestamp": self.timestamp,
+        }
+
+
+class AstroCouncilAgent(BaseAgent):
+    """
+    AstroCouncilAgent v4.2 — Главный координатор всех агентов.
+    Включает PredictorAgent (14%) и RiskAgent.
+    """
+
+    def __init__(self):
+        super().__init__(
+            name="AstroCouncil",
+            system_prompt=(
+                "Ты — совет директоров AstroFin. "
+                "Синтезируй все источники (астрология, фундаментал, quant, macro, "
+                "options flow, sentiment, technical, risk и predictor) в один сильный сигнал."
+            ),
+        )
+        self._agents: Dict[str, BaseAgent] = {}
+
+    # ─── Ленивая инициализация агентов ───────────────────────────────────────
+
+    @property
+    def fundamental(self) -> BaseAgent:
+        return self._get_agent("fundamental", "fundamental_agent.FundamentalAgent")
+
+    @property
+    def macro(self) -> BaseAgent:
+        return self._get_agent("macro", "macro_agent.MacroAgent")
+
+    @property
+    def quant(self) -> BaseAgent:
+        return self._get_agent("quant", "quant_agent.QuantAgent")
+
+    @property
+    def options_flow(self) -> BaseAgent:
+        return self._get_agent("options_flow", "options_flow_agent.OptionsFlowAgent")
+
+    @property
+    def sentiment(self) -> BaseAgent:
+        return self._get_agent("sentiment", "sentiment_agent.SentimentAgent")
+
+    @property
+    def technical(self) -> BaseAgent:
+        return self._get_agent("technical", "technical_agent.TechnicalAgent")
+
+    @property
+    def bull(self) -> BaseAgent:
+        return self._get_agent("bull", "bull_researcher.BullResearcher")
+
+    @property
+    def bear(self) -> BaseAgent:
+        return self._get_agent("bear", "bear_researcher.BearResearcher")
+
+    @property
+    def risk(self) -> BaseAgent:
+        return self._get_agent("risk", "risk_agent.RiskAgent")
+
+    @property
+    def predictor(self) -> BaseAgent:
+        return self._get_agent("predictor", "predictor_agent.PredictorAgent")
+
+    def _get_agent(self, key: str, import_path: str) -> BaseAgent:
+        """Lazy load agent by import path."""
+        if key not in self._agents:
+            import importlib
+            module_name, class_name = import_path.split(".")
+            full_path = f"backend.agents.{module_name}"
+            module = importlib.import_module(full_path)
+            cls = getattr(module, class_name)
+            self._agents[key] = cls()
+        return self._agents[key]
+
+    async def _get_ephemeris(self, dt: datetime) -> Dict:
+        """Кэшированный вызов Swiss Ephemeris."""
+        date_str = dt.strftime("%Y-%m-%d")
+        time_str = dt.strftime("%H:%M:%S")
+        return swiss_ephemeris(
+            date=date_str,
+            time=time_str,
+            lat=40.7128,
+            lon=-74.0060,
+            ayanamsa="lahiri",
+        )
+
+    @require_ephemeris
+    async def analyze(self, context: Dict[str, Any]) -> AgentResponse:
+        dt = context.get("datetime") or datetime.now()
+        symbol = context.get("symbol", "BTC")
+        price = context.get("price", 100.0)
+
+        # 1. Получаем эфемериды
+        eph = await self._get_ephemeris(dt)
+
+        # 2. Параллельный запуск всех агентов
+        sub_agents = [
+            self.fundamental,
+            self.macro,
+            self.quant,
+            self.options_flow,
+            self.sentiment,
+            self.technical,
+            self.bull,
+            self.bear,
+            self.risk,
+            self.predictor,  # ← Новый PredictorAgent
+        ]
+
+        tasks = [agent.analyze(context) for agent in sub_agents]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # 3. Фильтруем успешные ответы
+        valid_responses: List[AgentResponse] = []
+        for result in results:
+            if isinstance(result, Exception):
+                print(f"[AstroCouncil] Agent error: {result}")
+            elif isinstance(result, AgentResponse):
+                valid_responses.append(result)
+
+        if not valid_responses:
+            return AgentResponse(
+                agent_name="AstroCouncil",
+                signal="NEUTRAL",
+                confidence=30,
+                summary="Не удалось получить данные от агентов",
+                details={"error": "All sub-agents failed"},
+            )
+
+        # 4. Финальное взвешивание
+        final_signal = TradingSignal.from_agents(
+            symbol=symbol,
+            responses=valid_responses,
+            entry_price=price,
+            weights=TradingSignal.WEIGHTS,
+        )
+
+        return AgentResponse(
+            agent_name="AstroCouncil",
+            signal=final_signal.direction,
+            confidence=final_signal.confidence,
+            summary=f"{final_signal.direction} {final_signal.confidence}%",
+            reasoning=f"AstroCouncil: {len(valid_responses)} agents, R/R={final_signal.risk_reward}",
+            details={
+                "ephemeris_date": dt.isoformat(),
+                "sub_agents_count": len(valid_responses),
+                "sub_agents": [r.to_dict() for r in valid_responses],
+                "final_signal": final_signal.to_dict(),
+                "ephemeris_summary": {
+                    "yoga": eph.get("panchanga", {}).get("yoga"),
+                    "nakshatra": eph.get("panchanga", {}).get("nakshatra"),
+                    "yoga_category": eph.get("panchanga", {}).get("yoga_category"),
+                },
+            },
+        )
+
+
+async def run_astro_council(state: Dict[str, Any]) -> Dict:
+    """Runner для оркестратора."""
+    agent = AstroCouncilAgent()
+    result = await agent.analyze(state)
+    return {"astro_council_signal": result.to_dict()}

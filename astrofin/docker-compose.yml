@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ASTROFIN_DEBUG=0
+      - ASTROFIN_COINGECKO_API_KEY=${COINGECKO_API_KEY}
+      - ASTROFIN_FRED_API_KEY=${FRED_API_KEY}
+      - ASTROFIN_POLYGON_API_KEY=${POLYGON_API_KEY}
+    volumes:
+      - ./swiss_ephemeris_data:/home/workspace/astrofin/swiss_ephemeris_data
+    restart: unless-stopped
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:

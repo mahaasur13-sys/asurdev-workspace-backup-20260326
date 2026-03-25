@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Data
+data/chroma_db/
+data/rag_index/
+*.sqlite3
+*.db
+
+# Logs
+*.log
+
+# Node (except package.json)
+ui_react/node_modules/
+ui_react/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated
+*.png
+*.html
+zodiac_wheel_*.png
+gann_chart.html
+astro_overlay_chart.html
+
+# Ephemeris files
+*.bsp
+*.se1
+*.dat
+
+# Environment
+.env
+.env.local

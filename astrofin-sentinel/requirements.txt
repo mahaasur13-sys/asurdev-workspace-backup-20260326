@@ -1,0 +1,60 @@
+# AstroFin Sentinel v4.1 - Dependencies
+# Optimized for GreenBoost RTX 3060 12GB + Ollama
+
+# ===========================================
+# Core
+# ===========================================
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# ===========================================
+# Database
+# ===========================================
+sqlalchemy[asyncio]>=2.0.25
+asyncpg>=0.29.0
+alembic>=1.13.0
+
+# ===========================================
+# HTTP Client & Async
+# ===========================================
+httpx>=0.26.0
+aiohttp>=3.9.0
+asyncio-throttle>=1.0.2
+
+# ===========================================
+# LLM / Ollama
+# ===========================================
+ollama>=0.1.0
+
+# LangChain (for tool binding)
+langchain-core>=0.1.0
+langchain-community>=0.0.20
+
+# ===========================================
+# Tools & Integrations
+# ===========================================
+# Crypto data
+requests>=2.31.0
+
+# News/search
+# tavily-python>=0.2.0  # Optional - set TAVILY_API_KEY
+# brave-search>=1.0.0   # Optional - set BRAVE_API_KEY
+
+# ===========================================
+# Astro Calculations
+# ===========================================
+pyswisseph>=2.10.0
+ephem>=4.1.0
+
+# ===========================================
+# Utilities
+# ===========================================
+python-dotenv>=1.0.0
+orjson>=3.9.0  # Fast JSON parsing
+
+# ===========================================
+# Optional: Redis for task queue
+# ===========================================
+# redis>=5.0.0

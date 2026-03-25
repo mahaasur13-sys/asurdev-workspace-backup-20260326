@@ -1,0 +1,10 @@
+{
+  "id": "vimana-cognitive-core",
+  "name": "Vimana Cognitive Core",
+  "version": "3.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Native integration with Vimana Cognitive Core AI stack (Ollama qwen2.5:7b + PrivateGPT)",
+  "author": "Vimana AI",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}

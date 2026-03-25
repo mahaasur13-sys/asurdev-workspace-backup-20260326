@@ -1,0 +1,174 @@
+# asurdev Sentinel — Docker Compose
+# Развёртывание на 4 устройствах
+
+version: '3.8'
+
+services:
+  # ============================================
+  # CORE (Основной ПК — RTX 3060)
+  # ============================================
+  ollama-core:
+    image: ollama/ollama:latest
+    container_name: ollama-core
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-core:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_MODELS=/root/.ollama/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      core-net:
+        ipv4_address: 192.168.10.10
+    restart: unless-stopped
+
+  sentinel-core:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    container_name: sentinel-core
+    environment:
+      - OLLAMA_BASE_URL=http://192.168.10.10:11434
+      - DEFAULT_MODEL=qwen2.5-coder:32b
+      - HEAVY_MODEL=samantha-13b
+    depends_on:
+      - ollama-core
+    networks:
+      core-net:
+        ipv4_address: 192.168.10.11
+    restart: unless-stopped
+
+  # ============================================
+  # EDGE (RK3576 — NPU + Astrologer)
+  # ============================================
+  ollama-edge:
+    image: ollama/ollama:latest
+    container_name: ollama-edge
+    ports:
+      - "11435:11434"  # Альтернативный порт
+    volumes:
+      - ollama-edge:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_MODELS=/root/.ollama/models
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.40
+    restart: unless-stopped
+
+  astrologer:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge
+    container_name: astrologer
+    environment:
+      - OLLAMA_BASE_URL=http://192.168.20.40:11434
+      - DEFAULT_MODEL=gemma:2b
+    depends_on:
+      - ollama-edge
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.41
+    restart: unless-stopped
+
+  # YOLOv8n для анализа графиков
+  vision-node:
+    image: Ultralytics/yolov8:latest
+    container_name: vision-node
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./data/screenshots:/data/screenshots
+      - ./models:/models
+    environment:
+      - MODEL_NAME=yolov8n
+      - DEVICE=NPU  # Использовать NPU RK3576
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.42
+    restart: unless-stopped
+
+  # ============================================
+  # EDGE UI (Acer — NiceGUI Dashboard)
+  # ============================================
+  nicegui-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    container_name: nicegui-dashboard
+    ports:
+      - "8080:8080"  # HTTP
+    environment:
+      - OLLAMA_BASE_URL=http://192.168.10.10:11434
+      - RK3576_URL=http://192.168.20.40:11434
+    depends_on:
+      - ollama-core
+      - ollama-edge
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.20
+    restart: unless-stopped
+
+  # ============================================
+  # MONITORING (Radxa X4 — Prometheus + Grafana)
+  # ============================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.30
+    restart: unless-stopped
+
+  # Telegram Bot для алертов
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: telegram-bot
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - OLLAMA_BASE_URL=http://192.168.10.10:11434
+    networks:
+      edge-net:
+        ipv4_address: 192.168.20.31
+    restart: unless-stopped
+
+# ============================================
+# NETWORKS
+# ============================================
+networks:
+  core-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+  
+  edge-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24
+
+# ============================================
+# VOLUMES
+# ============================================
+volumes:
+  ollama-core:
+  ollama-edge:
+  prometheus-data:

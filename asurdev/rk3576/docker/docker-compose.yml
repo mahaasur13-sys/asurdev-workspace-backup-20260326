@@ -1,0 +1,215 @@
+# asurdev Sentinel — RK3576 Docker Compose
+# Lightweight agents running 24/7 @ 10-14W
+---
+version: '3.8'
+
+services:
+  # Message Bus
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: astro-rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - astro-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Astrologer Agent (Gemma-2B) — always on
+  astro-agent:
+    build:
+      context: ../..
+      dockerfile: rk3576/docker/Dockerfile.agent
+    container_name: astro-astro-agent
+    image: astro-agent:latest
+    ports:
+      - "11434:11434" # Ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODEL=gemma:2b
+      - TZ=Asia/Dubai
+    volumes:
+      - ollama_data:/root/.ollama
+      - ../../data:/app/data
+    networks:
+      - astro-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 300s
+
+  # ZVec RAG Agent (TinyLlama) — always on
+  zvec-agent:
+    build:
+      context: ../..
+      dockerfile: rk3576/docker/Dockerfile.agent
+    container_name: astro-zvec-agent
+    image: astro-agent:latest
+    ports:
+      - "11435:11434" # Second Ollama instance
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODEL=tinyllama:1.1b
+      - OLLAMA_PORT_BASE=11435
+      - TZ=Asia/Dubai
+    volumes:
+      - ollama_data:/root/.ollama
+      - ../../data:/app/data
+      - ../../notes:/app/notes:ro
+    networks:
+      - astro-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 180s
+
+  # RiskCore Backup (Phi-3-mini) — on-demand
+  risk-core:
+    build:
+      context: ../..
+      dockerfile: rk3576/docker/Dockerfile.agent
+    container_name: astro-risk-core
+    image: astro-agent:latest
+    profiles:
+      - ondemand  # Only starts with: docker compose --profile ondemand up
+    ports:
+      - "11436:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODEL=phi3:mini
+      - TZ=Asia/Dubai
+    volumes:
+      - ollama_data:/root/.ollama
+      - ../../data:/app/data
+    networks:
+      - astro-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+        reservations:
+          memory: 4G
+
+  # MQTT Broker for alerts
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: astro-mqtt
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # WebSocket
+    volumes:
+      - mqtt_data:/mosquitto/data
+      - mqtt_logs:/mosquitto/log
+      - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    networks:
+      - astro-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Node-RED for alert flows
+  nodered:
+    image: nodered/node-red:3.1
+    container_name: astro-nodered
+    ports:
+      - "1880:1880"   # Node-RED
+    volumes:
+      - nodered_data:/data
+      - ./mqtt/flows:/data/flows:ro
+    environment:
+      - TZ=Asia/Dubai
+    networks:
+      - astro-net
+    depends_on:
+      - mqtt
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Grafana for metrics dashboard
+  grafana:
+    image: grafana/grafana:10.2
+    container_name: astro-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    networks:
+      - astro-net
+    depends_on:
+      - influxdb
+    restart: unless-stopped
+
+  # InfluxDB for time-series metrics
+  influxdb:
+    image: influxdb:2.7
+    container_name: astro-influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USER:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_PASSWORD:-admin123}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_ORG:-astro}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_BUCKET:-telemetry}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUX_TOKEN:-mytoken}
+    networks:
+      - astro-net
+    restart: unless-stopped
+
+networks:
+  astro-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  rabbitmq_data:
+  ollama_data:
+  mqtt_data:
+  mqtt_logs:
+  nodered_data:
+  grafana_data:
+  influxdb_data:
+  influxdb_config:
