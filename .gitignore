@@ -2,3 +2,5 @@ node_modules/
 .git/
 .venv/
 __pycache__/
+.tar.gz
+Trash/
