@@ -93,6 +93,16 @@ def route_query(user_query: str, context: Optional[dict] = None) -> RouterOutput
         include_technical = False
         include_astro = False
         include_electional = True
+        return RouterOutput(
+            query_type=query_type,
+            symbols=symbols if symbols else ["BTCUSDT"],
+            timeframe=timeframe,
+            include_technical=include_technical,
+            include_astro=include_astro,
+            include_electional=include_electional,
+            birth_data=context.get("birth_data"),
+            confidence_threshold=context.get("confidence_threshold", 0.5),
+        )
     elif has_technical or symbols:
         query_type = QueryType.SINGLE_SYMBOL if len(symbols) == 1 else QueryType.MULTI_SYMBOL
         include_technical = True
@@ -102,7 +112,7 @@ def route_query(user_query: str, context: Optional[dict] = None) -> RouterOutput
         query_type = QueryType.FULL_ANALYSIS
         include_technical = True
         include_astro = True
-        include_electional = True
+        include_electional = context.get("include_electional", False)
     
     # Timeframe
     timeframe = "SWING"

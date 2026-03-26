@@ -3,9 +3,12 @@ Cycle Agent — market timing cycles analysis.
 """
 
 import asyncio
+import logging
 from datetime import datetime, timedelta
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class CycleAgent(BaseAgent[AgentResponse]):
@@ -42,7 +45,7 @@ class CycleAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="CycleAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.25,
+                confidence=25,
                 reasoning="No market data for cycle analysis",
                 sources=[],
             )
@@ -58,13 +61,13 @@ class CycleAgent(BaseAgent[AgentResponse]):
 
         if cycle_phase["direction"] == "up" and cycle_score > 0.55:
             signal = SignalDirection.LONG
-            confidence = min(cycle_score + 0.1, 0.75)
+            confidence=min(int(cycle_score * 100 + 10), 75)
         elif cycle_phase["direction"] == "down" and cycle_score > 0.55:
             signal = SignalDirection.SHORT
-            confidence = min(cycle_score + 0.1, 0.75)
+            confidence=min(int(cycle_score * 100 + 10), 75)
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.40
+            confidence=40
 
         reasoning = (
             f"Dominant cycle: {dominant_cycle['period']} days "
@@ -101,6 +104,7 @@ class CycleAgent(BaseAgent[AgentResponse]):
             data = resp.json()
             return [[float(x[4])] for x in data]  # close prices
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV data for {symbol} with interval {interval} and limit {limit}")
             return []
 
     def _find_dominant_cycle(self, data: list) -> dict:

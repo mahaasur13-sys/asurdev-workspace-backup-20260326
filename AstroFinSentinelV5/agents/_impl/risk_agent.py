@@ -3,8 +3,11 @@ Risk Agent — position sizing and risk management.
 """
 
 import asyncio
+import logging
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class RiskAgent(BaseAgent[AgentResponse]):
@@ -41,7 +44,7 @@ class RiskAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="RiskAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.25,
+                confidence=25,
                 reasoning="No market data for risk calculation",
                 sources=[],
             )
@@ -76,13 +79,13 @@ class RiskAgent(BaseAgent[AgentResponse]):
 
         if risk_score > 0.7:
             signal = SignalDirection.AVOID
-            confidence = 0.70
+            confidence=70
         elif risk_score > 0.5:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.50
+            confidence=50
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.60
+            confidence=60
 
         reasoning = (
             f"ATR(14): ${atr:,.2f} ({volatility*100:.2f}% of price). "
@@ -119,6 +122,7 @@ class RiskAgent(BaseAgent[AgentResponse]):
             data = resp.json()
             return [[float(x[2]), float(x[3]), float(x[4])] for x in data]  # high, low, close
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV data for {symbol} with interval {interval} and limit {limit}")
             return []
 
     def _calculate_atr(self, data: list, period: int = 14) -> float:

@@ -5,12 +5,15 @@ AstroFin Sentinel v5 — Technical Agent
 """
 
 import asyncio
+import logging
 import requests
 from datetime import datetime
 from typing import Dict, Any
 
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class TechnicalAgent(BaseAgent):
@@ -107,7 +110,8 @@ class TechnicalAgent(BaseAgent):
                 "mars": mars.longitude,
                 "moon": moon.longitude,
             }
-        except Exception:
+        except Exception as e:
+            logger.warning(f"[TechnicalAgent] Error calculating ephemeris: {e}")
             return {"yoga": "unknown", "score": 50}
 
     async def _fetch_ohlcv(self, symbol: str, interval: str, limit: int) -> list:
@@ -118,6 +122,7 @@ class TechnicalAgent(BaseAgent):
             data = resp.json()
             return [[float(x[4]), float(x[5])] for x in data]  # [close, volume]
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV for {symbol} with interval {interval} and limit {limit}")
             return []
 
     def _calculate_indicators(self, data: list, current_price: float) -> Dict:

@@ -41,7 +41,7 @@ class ElliotAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="ElliotAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.20,
+                confidence=20,
                 reasoning="No market data for Elliott Wave analysis",
                 sources=[],
             )
@@ -63,13 +63,13 @@ class ElliotAgent(BaseAgent[AgentResponse]):
 
         if wave_count["suggestion"] == "long":
             signal = SignalDirection.LONG
-            confidence = min(elliot_score + 0.1, 0.70)
+            confidence=min(int(elliot_score * 100 + 10), 70)
         elif wave_count["suggestion"] == "short":
             signal = SignalDirection.SHORT
-            confidence = min(elliot_score + 0.1, 0.70)
+            confidence=min(int(elliot_score * 100 + 10), 70)
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.40
+            confidence=40
 
         reasoning = (
             f"Wave structure: {wave_count['summary']}. "

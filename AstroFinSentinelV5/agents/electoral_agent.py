@@ -4,10 +4,13 @@ Electional astrology for trading entry timing.
 """
 
 import asyncio
+import logging
 from datetime import datetime, timedelta
 from typing import Optional
 
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+
+logger = logging.getLogger(__name__)
 
 
 class ElectoralAgent(BaseAgent[AgentResponse]):
@@ -38,8 +41,6 @@ class ElectoralAgent(BaseAgent[AgentResponse]):
         from astrology.vedic import (
             get_current_nakshatra,
             get_choghadiya,
-            get_rahukaal,
-            is_good_muhurta,
         )
         
         now = datetime.utcnow()
@@ -74,16 +75,16 @@ class ElectoralAgent(BaseAgent[AgentResponse]):
         # Determine recommendation
         if current_choghadiya["name"] in ["Marana", "Vyatipata", "Parivesha"]:
             recommendation = SignalDirection.AVOID
-            confidence = 0.75
+            confidence=75
             reasoning = (
                 f"Current Choghadiya: {current_choghadiya['name']} — "
                 f"Marana period. Trading NOT recommended. "
                 f"Next favorable window: {best_window['start'].strftime('%H:%M')} "
                 f"({best_window['choghadiya']['name']})"
             )
-        elif best_window["score"] >= 7:
+        elif best_window and best_window["score"] >= 7:
             recommendation = SignalDirection.LONG
-            confidence = best_window["score"] / 10.0
+            confidence = int(best_window["score"] * 10)
             reasoning = (
                 f"Best window found: {best_window['start'].strftime('%H:%M')}–"
                 f"{best_window['end'].strftime('%H:%M')} "
@@ -93,13 +94,13 @@ class ElectoralAgent(BaseAgent[AgentResponse]):
             )
         else:
             recommendation = SignalDirection.NEUTRAL
-            confidence = 0.45
-            reasoning = (
-                f"No strong muhurta in next 24h. "
+            confidence=45
+            bw_info = (
                 f"Best available: {best_window['choghadiya']['name']} "
                 f"at {best_window['start'].strftime('%H:%M')} "
                 f"(score: {best_window['score']:.1f}/10)"
-            )
+            ) if best_window else "No window found"
+            reasoning = f"No strong muhurta in next 24h. {bw_info}."
         
         return AgentResponse(
             agent_name="ElectoralAgent",

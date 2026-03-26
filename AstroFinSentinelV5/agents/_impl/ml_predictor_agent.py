@@ -42,7 +42,7 @@ class MLPredictorAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="MLPredictorAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.3,
+                confidence=30,
                 reasoning="Insufficient data for ML prediction",
                 sources=[],
             )
@@ -61,7 +61,7 @@ class MLPredictorAgent(BaseAgent[AgentResponse]):
             confidence = direction_pred["confidence"]
         else:
             direction = SignalDirection.NEUTRAL
-            confidence = 0.4
+            confidence=40
 
         reasoning = (
             f"ML Direction: {direction_pred['direction']} ({direction_pred['confidence']:.0%}). "
@@ -116,19 +116,19 @@ class MLPredictorAgent(BaseAgent[AgentResponse]):
         # Signals from MA crossover
         if ma_short > ma_medium > ma_long:
             direction = "up"
-            confidence = 0.65
+            confidence=65
         elif ma_short < ma_medium < ma_long:
             direction = "down"
-            confidence = 0.65
+            confidence=65
         elif ma_short > ma_medium:
             direction = "up"
-            confidence = 0.55
+            confidence=55
         elif ma_short < ma_medium:
             direction = "down"
-            confidence = 0.55
+            confidence=55
         else:
             direction = "neutral"
-            confidence = 0.45
+            confidence=45
 
         # Distance from MAs (overbought/oversold)
         if current > ma_short * 1.05:

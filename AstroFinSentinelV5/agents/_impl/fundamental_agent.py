@@ -3,9 +3,12 @@ Fundamental Agent — financial statement analysis, valuation metrics.
 """
 
 import asyncio
+import logging
 import requests
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class FundamentalAgent(BaseAgent[AgentResponse]):
@@ -67,7 +70,7 @@ class FundamentalAgent(BaseAgent[AgentResponse]):
         else:
             direction = SignalDirection.NEUTRAL
 
-        confidence = sum(scores) / len(scores) if scores else 0.5
+        confidence=int(sum(scores)/len(scores) * 100) if scores else 50
 
         reasoning = (
             f"Valuation: {valuation['summary']}. "
@@ -137,8 +140,8 @@ class FundamentalAgent(BaseAgent[AgentResponse]):
                             (max(p[1] for p in prices) - min(p[1] for p in prices)) / current * 100, 1
                         ),
                     }
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"[FundamentalAgent] Failed to fetch onchain data for {symbol}: {e}")
         return {"mvrv_ratio": 1.0, "ath_distance_pct": 50.0, "volatility_30d": 10.0}
 
     def _analyze_valuation(self, metadata: dict, onchain: dict, current_price: float) -> dict:

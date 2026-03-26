@@ -42,7 +42,7 @@ class QuantAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="QuantAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.3,
+                confidence=30,
                 reasoning="Insufficient data for quant analysis",
                 sources=[],
             )
@@ -87,7 +87,7 @@ class QuantAgent(BaseAgent[AgentResponse]):
         else:
             direction = SignalDirection.NEUTRAL
 
-        confidence = sum(scores) / len(scores) if scores else 0.5
+        confidence=int(sum(scores)/len(scores) * 100) if scores else 50
 
         reasoning = (
             f"Momentum: {momentum['summary']}. "

@@ -8,25 +8,53 @@ AstroFin Sentinel v5 — AstroCouncil Agent
 """
 
 import asyncio
+import logging
 from datetime import datetime
 from typing import Dict, Any, List
 
 from agents.base_agent import BaseAgent, AgentResponse
 from agents._impl.types import TradingSignal
 from agents._impl.ephemeris_decorator import require_ephemeris
+from agents.synthesis_agent import CATEGORY_WEIGHTS, AGENT_WEIGHTS
+
+logger = logging.getLogger(__name__)
 
 
-# Финальные веса (сумма = 100%)
-HYBRID_WEIGHTS = {
-    "Fundamental": 0.20,
-    "Macro": 0.15,
-    "Quant": 0.20,
-    "OptionsFlow": 0.15,
-    "Sentiment": 0.10,
-    "Technical": 0.10,
-    "BullResearcher": 0.05,
-    "BearResearcher": 0.05,
+# Map agent short name → category → weight
+# Agents in ASTRO_POOL / TECHNICAL_POOL use short names as agent_name.
+# TradingSignal.from_agents looks up weights by agent_name.
+# CATEGORY_WEIGHTS keys are categories; AGENT_WEIGHTS keys are full class names.
+_AGENT_CATEGORY_MAP = {
+    "Fundamental":    "fundamental",
+    "Macro":          "macro",
+    "Quant":          "quant",
+    "OptionsFlow":    "options",
+    "Sentiment":      "sentiment",
+    "Technical":      "technical",
+    "BullResearcher": "sentiment",
+    "BearResearcher": "sentiment",
 }
+
+
+def _build_agent_weights() -> Dict[str, float]:
+    """Derive agent-name → weight mapping from CATEGORY_WEIGHTS + AGENT_WEIGHTS.
+
+    Priority: agent name in AGENT_WEIGHTS > category weight from CATEGORY_WEIGHTS.
+    Result is normalized to sum to 1.0.
+    """
+    weights = {}
+    for agent_short, category in _AGENT_CATEGORY_MAP.items():
+        if agent_short in AGENT_WEIGHTS:
+            weights[agent_short] = AGENT_WEIGHTS[agent_short]
+        else:
+            weights[agent_short] = CATEGORY_WEIGHTS.get(category, 0.10)
+    total = sum(weights.values())
+    if total > 0:
+        weights = {k: v / total for k, v in weights.items()}
+    return weights
+
+
+HYBRID_WEIGHTS = _build_agent_weights()
 
 
 class AstroCouncilAgent(BaseAgent):
@@ -97,14 +125,27 @@ class AstroCouncilAgent(BaseAgent):
         )
 
     async def _run_sub_agents(self, context: Dict[str, Any]) -> List[AgentResponse]:
-        """Параллельно запускает всех суб-агентов."""
-        # Lazy import и регистрация суб-агентов
+        """Параллельно запускает Thompson-selected суб-агентов.
+
+        If context contains "_thompson_selected_astro" (list of agent names),
+        only those agents are called. Otherwise all registered agents are called.
+        """
         if not self._sub_agents:
             self._register_sub_agents()
 
+        selected = context.get("_thompson_selected_astro")
+        if selected:
+            agents_to_run = {
+                name: agent
+                for name, agent in self._sub_agents.items()
+                if name in selected
+            }
+        else:
+            agents_to_run = self._sub_agents
+
         tasks = []
         names = []
-        for name, agent in self._sub_agents.items():
+        for name, agent in agents_to_run.items():
             if hasattr(agent, "run"):
                 tasks.append(agent.run(context))
                 names.append(name)
@@ -113,7 +154,7 @@ class AstroCouncilAgent(BaseAgent):
             return []
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         responses = []
         for name, result in zip(names, results):
             if isinstance(result, Exception):
@@ -127,20 +168,20 @@ class AstroCouncilAgent(BaseAgent):
                 ))
             else:
                 responses.append(result)
-        
+
         return responses
 
     def _register_sub_agents(self) -> None:
         """Регистрация всех суб-агентов."""
         try:
-            from agents.fundamental_agent import FundamentalAgent
-            from agents.macro_agent import MacroAgent
-            from agents.quant_agent import QuantAgent
-            from agents.options_flow_agent import OptionsFlowAgent
-            from agents.sentiment_agent import SentimentAgent
+            from agents._impl.fundamental_agent import FundamentalAgent
+            from agents._impl.macro_agent import MacroAgent
+            from agents._impl.quant_agent import QuantAgent
+            from agents._impl.options_flow_agent import OptionsFlowAgent
+            from agents._impl.sentiment_agent import SentimentAgent
             from agents.technical_agent import TechnicalAgent
-            from agents.bull_researcher import BullResearcherAgent
-            from agents.bear_researcher import BearResearcherAgent
+            from agents._impl.bull_researcher import BullResearcherAgent
+            from agents._impl.bear_researcher import BearResearcherAgent
 
             self._sub_agents = {
                 "Fundamental": FundamentalAgent(),

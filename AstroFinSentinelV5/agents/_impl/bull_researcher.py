@@ -3,8 +3,11 @@ Bull Researcher Agent — bullish case for trading opportunities.
 """
 
 import asyncio
+import logging
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class BullResearcherAgent(BaseAgent[AgentResponse]):
@@ -45,7 +48,7 @@ class BullResearcherAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="BullResearcher",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.30,
+                confidence=30,
                 reasoning="No market data available for bull case analysis",
                 sources=[],
             )
@@ -68,13 +71,13 @@ class BullResearcherAgent(BaseAgent[AgentResponse]):
 
         if bullish_score >= 0.65:
             signal = SignalDirection.LONG
-            confidence = min(bullish_score + 0.1, 0.85)
+            confidence=min(int(bullish_score * 100 + 10), 85)
         elif bullish_score >= 0.45:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.50
+            confidence=50
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.35
+            confidence=35
 
         reasoning = (
             f"Bullish patterns: {patterns['summary']}. "
@@ -114,6 +117,7 @@ class BullResearcherAgent(BaseAgent[AgentResponse]):
             data = resp.json()
             return [[float(x[1]), float(x[2]), float(x[3]), float(x[4]), float(x[5])] for x in data]
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV data for {symbol} on {interval} with limit {limit}")
             return []
 
     def _detect_bullish_patterns(self, data: list) -> dict:

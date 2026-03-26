@@ -3,8 +3,11 @@ Sentiment Agent — fear/greed and market sentiment analysis.
 """
 
 import asyncio
+import logging
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class SentimentAgent(BaseAgent[AgentResponse]):
@@ -50,13 +53,13 @@ class SentimentAgent(BaseAgent[AgentResponse]):
 
         if sentiment_score >= 0.65:
             signal = SignalDirection.LONG
-            confidence = min(sentiment_score + 0.1, 0.75)
+            confidence=min(int(sentiment_score * 100 + 10), 75)
         elif sentiment_score <= 0.35:
             signal = SignalDirection.SHORT
-            confidence = min(1 - sentiment_score + 0.1, 0.75)
+            confidence=min(int((1 - sentiment_score) * 100 + 10), 75)
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.45
+            confidence=45
 
         reasoning = (
             f"Fear & Greed: {fear_greed['summary']}. "
@@ -152,8 +155,8 @@ class SentimentAgent(BaseAgent[AgentResponse]):
 
                 return {"score": score, "summary": summary, "raw_rate": funding_rate}
 
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"[SentimentAgent] Failed to fetch funding rate for {symbol}: {e}")
 
         return {"score": 0.5, "summary": "Funding rate unavailable"}
 

@@ -5,38 +5,97 @@ AstroCouncil: координатор всех агентов, финальный
 """
 
 import json
+import os
+import yaml
 from datetime import datetime
+from pathlib import Path
 from typing import Optional, Dict, Any
 
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.volatility import VolatilityEngine, VolatilityRegime, get_volatility_risk
 
 
-# ─── Финальные веса агентов (сумма = 100%) ────────────────────────────────
-# По спецификации пользователя:
+# ─── Fallback guard ─────────────────────────────────────────────────────────────
+MIN_AGENTS_FALLBACK = 2   # minimum agents needed for a reliable synthesis
+                     # If fewer agents produced signals, fallback is triggered
 
-AGENT_WEIGHTS = {
-    # Фундаментал + Макро
-    "FundamentalAgent": 0.20,   # Фундаментальный анализ
-    "MacroAgent": 0.15,         # Макроэкономика
-    
-    # Quant/AI
-    "QuantAgent": 0.20,        # ML + бэктестирование
-    
-    # Options Flow
-    "OptionsFlowAgent": 0.15,   # Gamma exposure, unusual activity
-    
-    # Sentiment
-    "SentimentAgent": 0.10,     # Новости, соцсети
-    "BullResearcher": 0.05,    # Бычий нарратив + сильные астро факторы
-    "BearResearcher": 0.05,    # Медвежий нарратив + рисковые факторы
-    
-    # Technical (фильтр)
-    "TechnicalAgent": 0.10,    # RSI, MACD, Bollinger
+# ─── Load weights from config (R-02: single source of truth) ──────────────────
+
+def _load_weights() -> dict:
+    """
+    Load and normalize weights from config/agent_weights.yaml.
+    Performs runtime validation: raises ValueError if weights don't sum to 1.0.
+    """
+    config_path = Path(__file__).parent.parent / "config" / "agent_weights.yaml"
+    if config_path.exists():
+        with open(config_path) as f:
+            data = yaml.safe_load(f)
+    else:
+        data = {}
+
+    def _normalize(d, name: str):
+        """Scale dict values to sum to 1.0 + runtime validation."""
+        if not d:
+            return d
+        total = sum(v for v in d.values() if isinstance(v, (int, float)))
+        if total <= 0:
+            return d
+        normalized = {k: v / total for k, v in d.items()}
+        # Runtime validation: sum must be 1.0 (within epsilon)
+        actual = sum(normalized.values())
+        if abs(actual - 1.0) > 0.001:
+            raise ValueError(
+                f"{name} sum = {actual:.4f} (expected 1.0). "
+                f"Check config/agent_weights.yaml — all weight values must sum to 1.0."
+            )
+        return normalized
+
+    if "category_weights" in data:
+        data["category_weights"] = _normalize(data["category_weights"], "category_weights")
+    if "agent_weights" in data:
+        data["agent_weights"] = _normalize(data["agent_weights"], "agent_weights")
+
+    return data
+
+_CONFIG = _load_weights()
+
+# Fallback defaults (used only if config is absent/corrupt)
+_DEFAULT_CATEGORY_WEIGHTS = {
+    "astro": 0.22,
+    "fundamental": 0.15,
+    "macro": 0.15,
+    "quant": 0.18,
+    "options": 0.12,
+    "sentiment": 0.09,
+    "technical": 0.09,
 }
 
-# AstroCouncil — координатор, получает 100% на финальном этапе
-# Его суб-агенты (BradleyAgent, ElectoralAgent, TimeWindowAgent)
-# объединяются в блок Astro и суммируются в SynthesisAgent
+_DEFAULT_AGENT_WEIGHTS = {
+    "FundamentalAgent": 0.20,
+    "QuantAgent": 0.20,
+    "MacroAgent": 0.15,
+    "OptionsFlowAgent": 0.15,
+    "SentimentAgent": 0.10,
+    "TechnicalAgent": 0.10,
+    "BullResearcher": 0.05,
+    "BearResearcher": 0.05,
+}
+
+CATEGORY_WEIGHTS = _CONFIG.get("category_weights", _DEFAULT_CATEGORY_WEIGHTS)
+AGENT_WEIGHTS = _CONFIG.get("agent_weights", _DEFAULT_AGENT_WEIGHTS)
+
+# Guards
+MAX_CONFIDENCE  = _CONFIG.get("guards", {}).get("max_confidence", 92)
+MIN_CONFIDENCE  = _CONFIG.get("guards", {}).get("min_confidence", 30)
+VOLATILITY_DROP = _CONFIG.get("guards", {}).get("volatility_drop", 15)
+
+# Conflict resolution
+_CONFLICT_CFG = _CONFIG.get("conflict_resolution", {}).get(
+    "astro_vs_fundamental_quant", {}
+)
+ASTRO_REDUCTION     = _CONFLICT_CFG.get("astro_reduction", 0.30)
+FUNDAMENTAL_BOOST   = _CONFLICT_CFG.get("fundamental_boost", 0.18)
+QUANT_BOOST         = _CONFLICT_CFG.get("quant_boost", 0.12)
 
 
 class SynthesisAgent(BaseAgent[AgentResponse]):
@@ -67,27 +126,106 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
             AgentResponse с финальным сигналом
         """
         all_signals = state.get("all_signals", [])
+        thompson_selections = state.get("thompson_selections", {})
+        called_agents = (
+            thompson_selections.get("technical", [])
+            + thompson_selections.get("astro", [])
+            + thompson_selections.get("electoral", [])
+        )
+
         symbol = state.get("symbol", "BTCUSDT")
         current_price = state.get("current_price", 50000)
         timeframe = state.get("timeframe_requested", "SWING")
-        
+
+        # ── FALLBACK: insufficient agents produced signals ─────────────────────────
+        if len(all_signals) < MIN_AGENTS_FALLBACK:
+            reason_detail = (
+                f"Fallback triggered: only {len(all_signals)} agent(s) produced signals "
+                f"(minimum required: {MIN_AGENTS_FALLBACK}). "
+                f"Agents selected: {called_agents or 'none'}. "
+                f"Signals received: {[self._get_signal_attr(s, 'agent_name', '?') for s in all_signals] or 'none'}."
+            )
+            return AgentResponse(
+                agent_name="SynthesisAgent",
+                signal=SignalDirection.NEUTRAL,
+                confidence=30,
+                reasoning=reason_detail,
+                sources=[],
+                metadata={
+                    "symbol": symbol,
+                    "timeframe": timeframe,
+                    "current_price": current_price,
+                    "fallback": True,
+                    "agents_selected": called_agents,
+                    "agents_responded": len(all_signals),
+                    "threshold_min": MIN_AGENTS_FALLBACK,
+                    "breakdown": f"  [FALLBACK]      NEUTRAL    [░░░░░░░░░░]   0.0% w=n/a (insufficient signals)",
+                },
+            )
+
+        # ── R-07: Volatility Risk Engine ────────────────────────────────
+        # Compute dynamic risk_pct before synthesis so levels are volatility-aware
+        vol_risk = None
+        if symbol:
+            try:
+                vol_engine = VolatilityEngine.from_price_atr(current_price, atr=None)
+                # Try to get ATR from any agent that computed it
+                for sig in all_signals:
+                    meta = self._get_signal_attr(sig, "metadata", {})
+                    if meta.get("atr"):
+                        vol_engine = VolatilityEngine.from_price_atr(current_price, meta["atr"])
+                        break
+                vol_risk = vol_engine.analyze(symbol=symbol, price=current_price)
+            except Exception:
+                pass
+
+        regime = vol_risk.regime if vol_risk else VolatilityRegime.NORMAL
+        risk_pct = vol_risk.risk_pct if vol_risk else 0.02
+
         # ─── 1. Группируем по категориям ────────────────────────────────
         categories = self._group_by_category(all_signals)
-        
+
         # ─── 2. Проверяем конфликты ────────────────────────────────────
         conflicts = self._detect_conflicts(categories)
-        
+
         # ─── 3. Считаем взвешенные оценки ───────────────────────────────
         direction, confidence, reasoning = self._synthesize(
             categories, conflicts, symbol
         )
-        
+
+        # ── V-07: EXTREME regime → force AVOID ──────────────────────────
+        if regime == VolatilityRegime.EXTREME:
+            direction = SignalDirection.AVOID
+            confidence = max(30, confidence - 25)
+            reasoning = (
+                f"V-07 [EXTREME VOLATILITY] — trade blocked. "
+                f"Original: {reasoning}"
+            )
+
+        # ── V-06: Volatility confidence drop ────────────────────────────
+        if vol_risk and vol_risk.confidence_drop > 0:
+            confidence = max(30, confidence - vol_risk.confidence_drop)
+            reasoning += f" [V-06 drop={vol_risk.confidence_drop}]"
+
         # ─── 4. Формируем breakdown ────────────────────────────────────
         breakdown = self._format_breakdown(categories)
-        
-        # ─── 5. Entry zones, targets, stop ────────────────────────────
-        meta = self._calculate_levels(direction, current_price)
-        
+
+        # ─── 5. Entry zones, targets, stop (dynamic risk_pct) ──────────
+        meta = self._calculate_levels(direction, current_price, risk_pct)
+
+        # Attach volatility risk info to metadata
+        if vol_risk:
+            meta["volatility_risk"] = {
+                "regime": regime.value,
+                "atr_pct": round(vol_risk.atr_pct, 4),
+                "risk_pct": risk_pct,
+                "position_size": vol_risk.position_size,
+                "stop_distance_pct": vol_risk.stop_distance_pct,
+                "confidence_drop": vol_risk.confidence_drop,
+                "kelly_raw": round(vol_risk.kelly_raw, 4),
+                "kelly_adjusted": round(vol_risk.kelly_adjusted, 4),
+            }
+
         return AgentResponse(
             agent_name="SynthesisAgent",
             signal=direction,
@@ -101,17 +239,37 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
                 "breakdown": breakdown,
                 "conflicts": conflicts,
                 "agent_weights": AGENT_WEIGHTS,
+                "thompson_selections": thompson_selections,
                 **meta,
             },
         )
     
+    def _get_signal_attr(self, sig, key: str, default=None):
+        """Get attribute or dict key from signal (handles both AgentResponse and dict)."""
+        if hasattr(sig, key):
+            return getattr(sig, key)
+        if isinstance(sig, dict):
+            return sig.get(key, default)
+        return default
+
     def _group_by_category(self, signals: list) -> Dict[str, list]:
         """Группирует сигналы по категориям."""
         category_map = {
+            # AstroCouncil sub-agents — все "astro"
             "AstroCouncil": "astro",
             "ElectoralAgent": "astro",
             "BradleyAgent": "astro",
             "TimeWindowAgent": "astro",
+            "GannAgent": "astro",
+            "ElliotWaveAgent": "astro",     # Fixed: was "ElliotAgent" (typo)
+            "CycleAgent": "astro",
+            "SolarAgent": "astro",
+            "LunarAgent": "astro",
+            "PlanetaryAgent": "astro",
+            "MuhurtaAgent": "astro",
+            "ElectionAgent": "astro",
+            "DignityAgent": "astro",
+            # Other categories
             "FundamentalAgent": "fundamental",
             "InsiderAgent": "fundamental",
             "MacroAgent": "macro",
@@ -123,8 +281,6 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
             "SentimentAgent": "sentiment",
             "TechnicalAgent": "technical",
             "MarketAnalyst": "technical",
-            "GannAgent": "technical",
-            "ElliotAgent": "technical",
         }
         
         categories = {
@@ -133,7 +289,7 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         }
         
         for sig in signals:
-            agent = sig.get("agent_name", "")
+            agent = self._get_signal_attr(sig, "agent_name", "")
             cat = category_map.get(agent, "other")
             if cat in categories:
                 categories[cat].append(sig)
@@ -147,7 +303,7 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         def get_direction(signals):
             if not signals:
                 return "NEUTRAL"
-            votes = [s.get("signal", "NEUTRAL").upper() for s in signals]
+            votes = [self._get_signal_attr(s, "signal", "NEUTRAL").upper() for s in signals]
             long_v = votes.count("LONG") + votes.count("BUY") + votes.count("STRONG_BUY")
             short_v = votes.count("SHORT") + votes.count("SELL") + votes.count("STRONG_SELL")
             return "LONG" if long_v > short_v else "SHORT" if short_v > long_v else "NEUTRAL"
@@ -157,7 +313,7 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         quant_dir = get_direction(categories.get("quant", []))
         
         # Конфликт Astro vs Fundamental+Quant
-        if astro_dir != "NEUTRAL" and astro_dir != "NEUTRAL":
+        if astro_dir != "NEUTRAL":
             other = [fund_dir, quant_dir]
             non_neutral = [d for d in other if d != "NEUTRAL"]
             if non_neutral and astro_dir != non_neutral[0]:
@@ -175,44 +331,20 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         self, categories: Dict[str, list], conflicts: list, symbol: str
     ) -> tuple:
         """Финальный синтез."""
-        
-        # Эффективные веса
-        eff = {k: v for k, v in AGENT_WEIGHTS.items()}
-        
-        # Применяем разрешение конфликтов
+        eff = {k: v for k, v in CATEGORY_WEIGHTS.items()}
         if conflicts:
             for c in conflicts:
                 if c["type"] == "astro_vs_fundamental_quant":
-                    # Astro -30%, Fundamental +18%, Quant +12%
-                    eff["AstroCouncil"] *= 0.70
-                    eff["FundamentalAgent"] *= 1.18
-                    eff["QuantAgent"] *= 1.12
-        
-        # Считаем взвешенные оценки
-        scores = {k: 0.0 for k in ["LONG", "SHORT", "NEUTRAL", "AVOID"]}
-        
-        for agent, weight in eff.items():
-            # Находим сигнал агента во всех сигналах
-            # (Это упрощение — в реальном коде нужно передавать все сигналы)
-            pass
-        
-        # Простое голосование
-        direction, confidence, reasoning = self._vote(categories)
-        
+                    eff["astro"] = eff.get("astro", 0.25) * (1 - ASTRO_REDUCTION)
+                    eff["fundamental"] = eff.get("fundamental", 0.15) * (1 + FUNDAMENTAL_BOOST)
+                    eff["quant"] = eff.get("quant", 0.20) * (1 + QUANT_BOOST)
+        direction, confidence, reasoning = self._vote(categories, eff)
         return direction, confidence, reasoning
     
-    def _vote(self, categories: Dict[str, list]) -> tuple:
-        """Простое голосование по категориям."""
+    def _vote(self, categories: Dict[str, list], eff: Dict[str, float] = None) -> tuple:
+        """Простое голосование по категориям с EC-01/V-06 guards."""
         
-        cat_weights = {
-            "astro": 0.25,
-            "fundamental": 0.20,
-            "macro": 0.15,
-            "quant": 0.20,
-            "options": 0.15,
-            "sentiment": 0.10,
-            "technical": 0.10,
-        }
+        cat_weights = eff if eff else CATEGORY_WEIGHTS
         
         long_w = 0.0
         short_w = 0.0
@@ -224,8 +356,8 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
             w = cat_weights.get(cat, 0.10)
             
             for sig in signals:
-                conf = sig.get("confidence", 0.5)
-                direction = sig.get("signal", "NEUTRAL").upper()
+                conf = self._get_signal_attr(sig, "confidence", 50)
+                direction = self._get_signal_attr(sig, "signal", "NEUTRAL").upper()
                 
                 if direction in ("LONG", "BUY", "STRONG_BUY"):
                     long_w += conf * w
@@ -243,44 +375,61 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         
         if long_pct > 0.55:
             direction = SignalDirection.LONG
-            confidence = min(0.92, 0.5 + long_pct * 0.4)
+            confidence = min(MAX_CONFIDENCE, 50 + int(long_pct * 40))  # EC-01 cap
             reasoning = f"Long consensus: {long_pct*100:.0f}% weighted votes"
         elif short_pct > 0.55:
             direction = SignalDirection.SHORT
-            confidence = min(0.92, 0.5 + short_pct * 0.4)
+            confidence = min(MAX_CONFIDENCE, 50 + int(short_pct * 40))  # EC-01 cap
             reasoning = f"Short consensus: {short_pct*100:.0f}% weighted votes"
         else:
             direction = SignalDirection.NEUTRAL
-            confidence = 0.5
+            confidence=50
             reasoning = f"No strong consensus: Long {long_pct*100:.0f}% | Short {short_pct*100:.0f}%"
         
+        # Apply guards
+        confidence, guard_applied = self._apply_guards(
+            direction, confidence
+        )
+        if guard_applied:
+            reasoning += f" [{guard_applied}]"
+        
         return direction, confidence, reasoning
+    
+    def _apply_guards(
+        self, direction: SignalDirection, confidence: int
+    ) -> tuple:
+        """
+        Apply EC-01 (hubris cap) — V-06 is handled in run() via vol_risk.
+        Returns: (adjusted_confidence, guard_label_or_None)
+        """
+        adjusted = min(confidence, MAX_CONFIDENCE)
+
+        if adjusted < MIN_CONFIDENCE:
+            return MIN_CONFIDENCE, "GUARD-TRIGGERED-NEUTRAL"
+
+        return adjusted, None
     
     def _format_breakdown(self, categories: Dict[str, list]) -> str:
         """Форматирует breakdown."""
         lines = []
-        cat_weights = {
-            "astro": 0.25, "fundamental": 0.20, "macro": 0.15,
-            "quant": 0.20, "options": 0.15, "sentiment": 0.10, "technical": 0.10,
-        }
         
         for cat, signals in categories.items():
-            w = cat_weights.get(cat, 0.0)
+            w = CATEGORY_WEIGHTS.get(cat, 0.0)
             if not signals:
                 lines.append(f"  [{cat.upper():12s}] NEUTRAL    [░░░░░░░░░░]   0.0% w={w:.2f} (no signals)")
                 continue
             
-            conf_avg = sum(s.get("confidence", 0) for s in signals) / len(signals)
-            votes = [s.get("signal", "NEUTRAL").upper() for s in signals]
+            conf_avg = sum(self._get_signal_attr(s, "confidence", 50) for s in signals) / len(signals)
+            votes = [self._get_signal_attr(s, "signal", "NEUTRAL").upper() for s in signals]
             long_v = votes.count("LONG") + votes.count("BUY")
             short_v = votes.count("SHORT") + votes.count("SELL")
             
             direction = "LONG ▲" if long_v > short_v else "SHORT ▼" if short_v > long_v else "NEUT"
             
-            bar = "█" * int(conf_avg * 10) + "░" * (10 - int(conf_avg * 10))
-            agents = ", ".join(s.get("agent_name", "?") for s in signals)
+            bar = "█" * int(conf_avg / 10) + "░" * (10 - int(conf_avg / 10))
+            agents = ", ".join(self._get_signal_attr(s, "agent_name", "?") for s in signals)
             
-            lines.append(f"  [{cat.upper():12s}] {direction:12s} [{bar}] {conf_avg*100:5.1f}% w={w:.2f} ({agents})")
+            lines.append(f"  [{cat.upper():12s}] {direction:12s} [{bar}] {conf_avg:5.1f}% w={w:.2f} ({agents})")
         
         return "\n".join(lines)
     
@@ -288,38 +437,50 @@ class SynthesisAgent(BaseAgent[AgentResponse]):
         """Собирает источники."""
         sources = []
         for sig in signals:
-            for src in sig.get("sources", []):
+            for src in self._get_signal_attr(sig, "sources", []):
                 if src and isinstance(src, str):
                     sources.append(src)
         return list(set(sources))
     
-    def _calculate_levels(self, direction: SignalDirection, price: float) -> dict:
-        """Рассчитывает entry zones, targets, stop."""
-        
+    def _calculate_levels(self, direction: SignalDirection, price: float, risk_pct: float) -> dict:
+        """
+        Рассчитывает entry zones, targets, stop.
+        Uses dynamic risk_pct from VolatilityEngine (R-07):
+          - stop_distance = risk_pct * 1.5  (slightly wider than risk for buffer)
+          - targets       = risk_pct * 3.0  (3:1 risk-reward)
+          - position      = risk_pct / 2    (half the risk as position size)
+        """
+        rr_ratio = 2.5  # risk-reward ratio
+        stop_dist = risk_pct * 1.5   # 1.5× risk = stop distance
+        tp_dist   = risk_pct * rr_ratio  # 2.5× risk = first target
+
         if direction == SignalDirection.LONG:
-            entry_low = price * 0.985
-            entry_high = price * 1.015
-            stop = price * 0.95
-            targets = [price * 1.03, price * 1.06, price * 1.10]
-            position = 0.05
+            entry_low  = price * (1 - risk_pct * 0.5)
+            entry_high = price * (1 + risk_pct * 0.5)
+            stop       = price * (1 - stop_dist)
+            targets    = [price * (1 + tp_dist * i) for i in [1, 2, 3]]
+            position   = risk_pct / 2
+
         elif direction == SignalDirection.SHORT:
-            entry_low = price * 0.985
-            entry_high = price * 1.015
-            stop = price * 1.05
-            targets = [price * 0.97, price * 0.94, price * 0.90]
-            position = 0.03
+            entry_low  = price * (1 - risk_pct * 0.5)
+            entry_high = price * (1 + risk_pct * 0.5)
+            stop       = price * (1 + stop_dist)
+            targets    = [price * (1 - tp_dist * i) for i in [1, 2, 3]]
+            position   = risk_pct / 2
+
         else:
-            entry_low = price * 0.98
-            entry_high = price * 1.02
-            stop = price * 0.95
-            targets = [price * 1.02, price * 1.05, price * 1.08]
-            position = 0.02
-        
+            entry_low  = price * (1 - risk_pct * 0.25)
+            entry_high = price * (1 + risk_pct * 0.25)
+            stop       = price * (1 - stop_dist * 0.5)
+            targets    = [price * (1 + risk_pct * 0.5), price * (1 + risk_pct), price * (1 + risk_pct * 1.5)]
+            position   = risk_pct / 3
+
         return {
-            "entry_zone": (entry_low, entry_high),
-            "stop_loss": stop,
-            "targets": targets,
-            "position_size": position,
+            "entry_zone":   (round(entry_low, 2), round(entry_high, 2)),
+            "stop_loss":    round(stop, 2),
+            "targets":      [round(t, 2) for t in targets],
+            "position_size": round(position, 4),
+            "risk_pct_used": risk_pct,
         }
 
 

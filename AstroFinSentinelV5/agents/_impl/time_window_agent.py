@@ -50,23 +50,23 @@ class TimeWindowAgent(BaseAgent[AgentResponse]):
 
         if bullish_windows >= 3:
             signal = SignalDirection.LONG
-            confidence = 0.65
+            confidence=65
             direction = "bullish"
         elif bearish_windows >= 3:
             signal = SignalDirection.SHORT
-            confidence = 0.65
+            confidence=65
             direction = "bearish"
         elif bullish_windows > bearish_windows:
             signal = SignalDirection.LONG
-            confidence = 0.50
+            confidence=50
             direction = "slight_bullish"
         elif bearish_windows > bullish_windows:
             signal = SignalDirection.SHORT
-            confidence = 0.50
+            confidence=50
             direction = "slight_bearish"
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.40
+            confidence=40
             direction = "neutral"
 
         reasoning = (

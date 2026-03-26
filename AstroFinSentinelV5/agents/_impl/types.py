@@ -59,6 +59,17 @@ class TradingSignal:
     summary: str = ""
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
+    @staticmethod
+    def _normalize_conf(conf) -> int:
+        """Normalize confidence to 0-100 int scale.
+        Handles both 0-1 floats (e.g. 0.75) and 0-100 floats/ints (e.g. 75 or 47.5).
+        """
+        if isinstance(conf, float):
+            if conf >= 1:
+                return int(round(conf))
+            return int(round(conf * 100))
+        return int(conf)
+
     def to_dict(self) -> Dict:
         return {
             "symbol": self.symbol,
@@ -86,22 +97,42 @@ class TradingSignal:
         Гибридное взвешивание сигналов от агентов.
         weights = {agent_name: weight}, сумма должна = 1.0
         """
+        # Guard: empty responses
+        if not responses:
+            entry = entry_price
+            stop = entry * (1 - risk_pct)
+            target = entry * (1 + risk_pct * 2)
+            return cls(
+                symbol=symbol,
+                signal=Signal.NEUTRAL,
+                confidence=0,
+                entry=round(entry, 2),
+                stop_loss=round(stop, 2),
+                take_profit=round(target, 2),
+                risk_reward=1.0,
+                agents=[],
+                summary="NEUTRAL (no agents)",
+            )
+
         default_weights = {
-            "Fundamental": 0.20,
-            "Macro": 0.15,
-            "Quant": 0.20,
-            "OptionsFlow": 0.15,
-            "Sentiment": 0.10,
-            "Technical": 0.10,
-            "BullResearcher": 0.05,
-            "BearResearcher": 0.05,
+            "Fundamental": 0.2041,
+            "Macro": 0.1531,
+            "Quant": 0.2041,
+            "OptionsFlow": 0.1531,
+            "Sentiment": 0.0918,
+            "Technical": 0.0918,
+            "BullResearcher": 0.0510,
+            "BearResearcher": 0.0510,
         }
         weights = weights or default_weights
 
         total_weight = 0.0
         weighted_score = 0.0
 
-        for resp in responses:
+        # Normalize each confidence once, up front
+        normalized_confidences = [cls._normalize_conf(r.confidence) for r in responses]
+
+        for resp, norm_conf in zip(responses, normalized_confidences):
             w = weights.get(resp.agent_name, 0.10)
             try:
                 sig = Signal(resp.signal)
@@ -142,12 +173,13 @@ class TradingSignal:
 
         rr = abs(target - entry) / abs(entry - stop) if abs(entry - stop) > 0 else 1.0
 
-        avg_conf = sum(r.confidence for r in responses) / len(responses) if responses else 50
+        # Average normalized confidences
+        avg_conf = min(95, sum(normalized_confidences) // len(normalized_confidences))
 
         return cls(
             symbol=symbol,
             signal=final_signal,
-            confidence=min(95, int(avg_conf)),
+            confidence=avg_conf,
             entry=round(entry, 2),
             stop_loss=round(stop, 2),
             take_profit=round(target, 2),

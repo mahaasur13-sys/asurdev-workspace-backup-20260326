@@ -3,8 +3,11 @@ Bear Researcher Agent — bearish case for trading opportunities.
 """
 
 import asyncio
+import logging
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class BearResearcherAgent(BaseAgent[AgentResponse]):
@@ -44,7 +47,7 @@ class BearResearcherAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="BearResearcher",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.30,
+                confidence=30,
                 reasoning="No market data available for bear case analysis",
                 sources=[],
             )
@@ -63,13 +66,13 @@ class BearResearcherAgent(BaseAgent[AgentResponse]):
 
         if bearish_score >= 0.65:
             signal = SignalDirection.SHORT
-            confidence = min(bearish_score + 0.1, 0.85)
+            confidence=min(int(bearish_score * 100 + 10), 85)
         elif bearish_score >= 0.45:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.50
+            confidence=50
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.35
+            confidence=35
 
         reasoning = (
             f"Bearish patterns: {patterns['summary']}. "
@@ -109,6 +112,7 @@ class BearResearcherAgent(BaseAgent[AgentResponse]):
             data = resp.json()
             return [[float(x[1]), float(x[2]), float(x[3]), float(x[4]), float(x[5])] for x in data]
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV data for {symbol} on {interval} with limit {limit}")
             return []
 
     def _detect_bearish_patterns(self, data: list) -> dict:

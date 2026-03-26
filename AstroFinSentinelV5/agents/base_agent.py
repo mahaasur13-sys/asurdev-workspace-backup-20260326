@@ -25,12 +25,18 @@ class AgentResponse:
     """Стандартный ответ каждого агента."""
     agent_name: str
     signal: SignalDirection
-    confidence: float          # 0.0 — 1.0
+    confidence: int            # 0 — 100
     reasoning: str
     sources: list[str] = field(default_factory=list)  # RAG chunk IDs
     metadata: dict = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     session_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
+
+    def __post_init__(self):
+        if not (0 <= self.confidence <= 100):
+            raise ValueError(
+                f"confidence must be 0-100, got {self.confidence}"
+            )
 
     def to_dict(self) -> dict:
         # Handle both string signals (new) and enum signals (old)
@@ -38,7 +44,7 @@ class AgentResponse:
         return {
             "agent_name": self.agent_name,
             "signal": signal_value,
-            "confidence": self.confidence,
+            "confidence": int(self.confidence),
             "reasoning": self.reasoning,
             "sources": self.sources,
             "metadata": self.metadata,

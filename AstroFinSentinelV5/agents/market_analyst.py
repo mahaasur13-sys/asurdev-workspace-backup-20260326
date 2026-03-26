@@ -4,7 +4,10 @@ Technical analysis: RSI, MACD, Bollinger, Volume.
 """
 
 import asyncio
+import logging
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+
+logger = logging.getLogger(__name__)
 
 
 class MarketAnalystAgent(BaseAgent[AgentResponse]):
@@ -31,7 +34,7 @@ class MarketAnalystAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="MarketAnalyst",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.3,
+                confidence=30,
                 reasoning="No market data available",
                 sources=[],
             )
@@ -49,32 +52,32 @@ class MarketAnalystAgent(BaseAgent[AgentResponse]):
         # RSI
         if rsi < 30:
             signals.append(SignalDirection.LONG)
-            confidences.append(0.7)
+            confidences.append(70)
         elif rsi > 70:
             signals.append(SignalDirection.SHORT)
-            confidences.append(0.7)
+            confidences.append(70)
         else:
             signals.append(SignalDirection.NEUTRAL)
-            confidences.append(0.5)
+            confidences.append(50)
 
         # MACD
         if macd["histogram"] > 0:
             signals.append(SignalDirection.LONG)
-            confidences.append(0.6)
+            confidences.append(60)
         else:
             signals.append(SignalDirection.SHORT)
-            confidences.append(0.6)
+            confidences.append(60)
 
         # Bollinger
         if current_price < bb["lower"]:
             signals.append(SignalDirection.LONG)
-            confidences.append(0.65)
+            confidences.append(65)
         elif current_price > bb["upper"]:
             signals.append(SignalDirection.SHORT)
-            confidences.append(0.65)
+            confidences.append(65)
         else:
             signals.append(SignalDirection.NEUTRAL)
-            confidences.append(0.4)
+            confidences.append(40)
 
         # Aggregate
         long_count = signals.count(SignalDirection.LONG)
@@ -87,7 +90,7 @@ class MarketAnalystAgent(BaseAgent[AgentResponse]):
         else:
             direction = SignalDirection.NEUTRAL
 
-        avg_confidence = sum(confidences) / len(confidences)
+        avg_confidence = int(sum(confidences) / len(confidences))
 
         reasoning = (
             f"RSI(14)={rsi:.1f} {'(oversold)' if rsi < 30 else '(overbought)' if rsi > 70 else ''}. "
@@ -116,6 +119,7 @@ class MarketAnalystAgent(BaseAgent[AgentResponse]):
             data = resp.json()
             return [[float(x[4]), float(x[5])] for x in data]  # [close, volume]
         except Exception:
+            logger.warning(f"Failed to fetch OHLCV data for {symbol}")
             return []
 
     def _calculate_rsi(self, data: list, period: int = 14) -> float:

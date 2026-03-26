@@ -80,7 +80,7 @@ class OptionsFlowAgent(BaseAgent[AgentResponse]):
         else:
             direction = SignalDirection.NEUTRAL
 
-        confidence = sum(scores) / len(scores)
+        confidence=int(sum(scores)/len(scores) * 100)
 
         reasoning = (
             f"GEX: {gex_analysis['summary']}. "

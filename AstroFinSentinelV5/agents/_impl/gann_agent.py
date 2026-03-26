@@ -41,7 +41,7 @@ class GannAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="GannAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.20,
+                confidence=20,
                 reasoning="No market data for Gann analysis",
                 sources=[],
             )
@@ -66,13 +66,13 @@ class GannAgent(BaseAgent[AgentResponse]):
 
         if gann_score >= 0.60:
             signal = SignalDirection.LONG
-            confidence = min(gann_score, 0.75)
+            confidence=min(int(gann_score * 100), 75)
         elif gann_score <= 0.35:
             signal = SignalDirection.SHORT
-            confidence = min(1 - gann_score, 0.75)
+            confidence=min(int((1 - gann_score) * 100), 75)
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.40
+            confidence=40
 
         reasoning = (
             f"Gann angles: {angles['summary']}. "

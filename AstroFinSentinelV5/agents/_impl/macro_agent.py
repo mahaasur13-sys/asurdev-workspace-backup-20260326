@@ -3,10 +3,13 @@ Macro Agent — macro + geopolitical indicators monitoring.
 """
 
 import asyncio
+import logging
 import requests
 from datetime import datetime
 from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
+
+logger = logging.getLogger(__name__)
 
 
 class MacroAgent(BaseAgent[AgentResponse]):
@@ -87,7 +90,7 @@ class MacroAgent(BaseAgent[AgentResponse]):
         else:
             direction = SignalDirection.NEUTRAL
 
-        confidence = sum(scores) / len(scores)
+        confidence=int(sum(scores)/len(scores) * 100)
 
         reasoning = f"VIX: {vix_summary} | DXY: {dxy_summary} | Gold: {gold_summary} | F&G: {fear_greed} | Fed: {fed_rate}%"
 
@@ -141,8 +144,8 @@ class MacroAgent(BaseAgent[AgentResponse]):
             resp = requests.get(url, timeout=10)
             if resp.status_code == 200:
                 return 2300.0  # placeholder
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"[MacroAgent] Failed to fetch gold price: {e}")
         return 2300.0
 
     async def _fetch_fear_greed(self) -> str:

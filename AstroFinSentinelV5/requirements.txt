@@ -3,6 +3,7 @@
 # Core orchestration
 langgraph>=0.0.55
 langchain-core>=0.1.0
+numpy>=1.26.0
 
 # LLM integration
 langchain-openai>=0.0.5

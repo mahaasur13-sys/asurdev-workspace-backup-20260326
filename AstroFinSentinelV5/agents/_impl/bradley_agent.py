@@ -40,7 +40,7 @@ class BradleyAgent(BaseAgent[AgentResponse]):
             return AgentResponse(
                 agent_name="BradleyAgent",
                 signal=SignalDirection.NEUTRAL,
-                confidence=0.20,
+                confidence=20,
                 reasoning="No market data for Bradley Model analysis",
                 sources=[],
             )
@@ -57,13 +57,13 @@ class BradleyAgent(BaseAgent[AgentResponse]):
 
         if bradley_score >= 0.60:
             signal = SignalDirection.LONG
-            confidence = min(bradley_score, 0.75)
+            confidence=min(int(bradley_score * 100), 75)
         elif bradley_score <= 0.35:
             signal = SignalDirection.SHORT
-            confidence = min(1 - bradley_score, 0.75)
+            confidence=min(int((1 - bradley_score) * 100), 75)
         else:
             signal = SignalDirection.NEUTRAL
-            confidence = 0.40
+            confidence=40
 
         reasoning = (
             f"Bradley seasonality: {seasonality['summary']}. "
