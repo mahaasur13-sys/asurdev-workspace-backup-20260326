@@ -32,9 +32,9 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from agents.astro_council_agent import run_astro_council
-from agents.electoral_agent import run_electoral_agent
-from agents.synthesis_agent import SynthesisAgent, CATEGORY_WEIGHTS
-from agents.market_analyst import run_market_analyst
+from agents._impl.electoral_agent import run_electoral_agent
+from agents._impl.synthesis_agent import SynthesisAgent, CATEGORY_WEIGHTS
+from agents._impl.market_analyst import run_market_analyst
 from agents._impl.bull_researcher import run_bull_researcher
 from agents._impl.bear_researcher import run_bear_researcher
 from agents.base_agent import AgentResponse, SignalDirection

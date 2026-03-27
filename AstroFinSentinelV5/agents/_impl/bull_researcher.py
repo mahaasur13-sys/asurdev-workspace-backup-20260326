@@ -4,7 +4,7 @@ Bull Researcher Agent — bullish case for trading opportunities.
 
 import asyncio
 import logging
-from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
 
 logger = logging.getLogger(__name__)

@@ -4,7 +4,7 @@ Insider Agent — insider trading and 13F filings analysis.
 
 import asyncio
 import requests
-from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
 
 

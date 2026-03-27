@@ -4,7 +4,7 @@ Time Window Agent — entry timing and best trading windows.
 
 import asyncio
 from datetime import datetime, timedelta
-from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
 
 

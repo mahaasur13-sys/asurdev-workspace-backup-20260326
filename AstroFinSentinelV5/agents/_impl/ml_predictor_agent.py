@@ -4,7 +4,7 @@ ML Predictor Agent — ML-based price prediction and volatility forecasting.
 
 import asyncio
 import numpy as np
-from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
 
 

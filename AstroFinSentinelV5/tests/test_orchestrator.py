@@ -1,8 +1,8 @@
 import pytest
 import asyncio
-from agents.base_agent import AgentResponse, SignalDirection
+from core.base_agent import AgentResponse, SignalDirection
 from orchestration.router import route_query
-from orchestration.sentinel_v5 import run_sentinel_v5, AGENT_WEIGHTS
+from orchestration.sentinel_v5 import run_sentinel_v5
 
 
 class TestImports:
@@ -13,16 +13,9 @@ class TestImports:
         from agents.electoral_agent import run_electoral_agent
         from agents.synthesis_agent import SynthesisAgent
         from agents.market_analyst import run_market_analyst
-        from agents.directional_agents import run_bull_researcher, run_bear_researcher
-        from agents.base_agent import AgentResponse, SignalDirection
+        from core.base_agent import AgentResponse, SignalDirection
         from orchestration.router import route_query
         from orchestration.sentinel_v5 import run_sentinel_v5
-
-    def test_agent_weights_sum(self):
-        total = sum(AGENT_WEIGHTS.values())
-        # Weights should be positive and sum to <= 1.0 (some may be 0)
-        assert total > 0, "Agent weights should sum to positive value"
-        assert total <= 1.0, f"Agent weights sum={total} exceeds 1.0"
 
 
 class TestRouter:

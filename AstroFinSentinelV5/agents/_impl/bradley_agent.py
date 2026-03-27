@@ -3,7 +3,7 @@ Bradley Agent — Bradley Model (S&P 500 seasonality/cyccles).
 """
 
 import asyncio
-from agents.base_agent import BaseAgent, AgentResponse, SignalDirection
+from core.base_agent import BaseAgent, AgentResponse, SignalDirection
 from agents._impl.ephemeris_decorator import require_ephemeris
 
 

@@ -147,7 +147,7 @@ def _run_technical_agents(state: AgentState, selected: list[str]) -> dict:
     """Run Thompson-selected technical agents in parallel."""
     from agents._impl.bull_researcher import run_bull_researcher
     from agents._impl.bear_researcher import run_bear_researcher
-    from agents.market_analyst import run_market_analyst
+    from agents._impl.market_analyst import run_market_analyst
 
     tasks, names = [], []
 
@@ -278,7 +278,7 @@ def electoral_node(state: AgentState) -> AgentState:
     selections["electoral"] = selected
 
     try:
-        from agents.electoral_agent import run_electoral_agent
+        from agents._impl.electoral_agent import run_electoral_agent
         result = asyncio.run(run_electoral_agent(state))
     except Exception as e:
         result = {}
@@ -293,7 +293,7 @@ def synthesis_node(state: AgentState) -> AgentState:
     Synthesis node — always runs last, regardless of which flows were active.
     Collects all produced signals into all_signals for SynthesisAgent.
     """
-    from agents.synthesis_agent import SynthesisAgent
+    from agents._impl.synthesis_agent import SynthesisAgent
     from agents.base_agent import AgentResponse, SignalDirection
 
     all_signals: list = []
