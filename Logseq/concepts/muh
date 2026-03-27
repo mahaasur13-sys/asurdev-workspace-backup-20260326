@@ -1,0 +1,294 @@
+---
+type:: concept
+id:: muhurta
+tags:: [astrology, vedic, muhurta, panchanga, choghadiya, timing]
+aliases:: [мухурта, electional astrology, выбор момента]
+created:: 2026-03-29
+updated:: 2026-03-29
+related:: [[concepts/panchanga]], [[concepts/choghadiya]], [[concepts/muhurta_trading]], [[agents/electoral_agent]], [[methods/ephemeris_calculations]]
+
+---
+
+# Muhurta — Выбор благоприятного момента
+
+## Определение
+
+**Muhurta** (санскр. मुहूर्त, мухурта) — традиционная индийская система выбора **астрологически оптимального момента** для начала любого важного действия. Термин происходит от корня `muh` (очаровывать, погружаться) и означает «момент, когда влияние планет наиболее благоприятно».
+
+В отличие от натальной астрологии, изучающей судьбу, **мухурта изучает时机** — искусство начинать дела в правильное время.
+
+---
+
+## Происхождение и история
+
+### Классические тексты
+
+| Текст | Автор | Описание |
+|-------|-------|---------|
+| **Brihat Samhita** | Varāhamihira (6 в. н.э.) | Энциклопедия астрологии, включая главы о мухурте |
+| **Muhurta Chintamani** | V. Shridhar | «Сокровищница выбора момента» — ключевой текст по электоральной астрологии |
+| **Panchanga Sarvartha Chintamani** | — | Мухурта через призму панчанги |
+| **Sutras** (Сурадж Надиг) | — | Правила для конкретных действий |
+
+### Исторический контекст
+
+```
+Мухурта ← Веды (1500 до н.э.)
+         ← Джйотиш (Ведическая астрология)
+         ← Surya Siddhanta (4 в. н.э.)
+         ← Brihat Parasara Hora Shastra
+```
+
+В Индии мухурта используется для:
+- Свадьбы
+- открытия бизнеса
+- закладки фундамента
+- путешествий
+- **финансовых операций** (Muhurta Trading)
+
+---
+
+## Структура: как работает Muhurta
+
+### 5 ключевых элементов (из Panchanga)
+
+| Элемент | Значение | Влияние |
+|---------|---------|---------|
+| **Tith** (титхи) | Лунный день (1-15) | Энергия, рост |
+| **Nakshatra** (накшатра) | Лунная стоянка (27) | Карма, эмоции |
+| **Yoga** (йога) | Комбинация Солнце+Луна | Удача |
+| **Karana** (карана) | Половина титхи | Детали |
+| **Var** (вара) | День недели | Управитель планеты |
+
+### Схема выбора Muhurta
+
+```
+Вопрос → Категория действия
+              │
+              ▼
+    ┌─ Panchanga (5 элементов)
+    │     │
+    │     ├─ Tith ⟶ Amrit, Pushya, Shubha?
+    │     ├─ Nakshatra ⟶ Rohini, Mrigashira, Swati?
+    │     └─ Yoga ⟶ Siddhi, Shubha?
+    │
+    ├─ Choghadiya ⟶ Amrit, Labh, Shubha, Char (×) Rog, Kaal, Udik
+    │
+    ├─ Ascendant (Lagna) ⟶ Fire signs × water signs
+    │
+    └─ Natal Strength
+              │
+              ▼
+        MUHURTA SELECTED ✓
+```
+
+---
+
+## Методы расчёта
+
+### 1. Расчёт Tithи (лунного дня)
+
+```
+Tithи = floor((longitude_Moon - longitude_Sun) / 12°)
+
+Где:
+  1 Tithи = 12° эклиптики
+  Полная Luna = 30 Tithи (360° / 12°)
+```
+
+**Ключевые титхи:**
+
+| Тип | Tithи | Значение |
+|-----|-------|---------|
+| **Shubha** (благоприятные) | 1, 2, 3, 4, 5, 7, 10, 11, 13 | Начинания |
+| **Purna** (полнолуние) | 15 | Завершение |
+| **Amrit** (бессмертие) | 4, 8, 12 | Лучшие для медитации |
+| **Kaal** (время смерти) | 3, 7, 9, 13 | Избегать начинаний |
+
+### 2. Расчёт Nakshatры (лунной стоянки)
+
+```
+Nakshatra = floor(longitude_Moon / 13°20')  [27 накшатр по 13°20']
+```
+
+**Накшатры по группам:**
+
+| Группа | Накшатры | Качество |
+|--------|----------|---------|
+| **Dharma** (дхарма) | Mrigashira, Punarvasu, Pushya, Hasta, Swati | Духовный рост |
+| **Artha** (артха) | Rohini, Vishaka, Jyeshtha, Shravana | Материальное |
+| **Kama** (кама) | Krittika, Bharani, Ashlesha, Magha, Phalguni, Chitra | Желания |
+| **Moksha** (мокша) | Revati, Ashvini, Mula, Purva Ashada, Purva Bhadra | Освобождение |
+
+**Торговые фильтры:**
+
+```
+✓ ROHINI, SWATI, PUSHYA, WHITEPUSHYA, SHRAVANA — благоприятны
+✗ MULA, ASHLESHA, JYESHTHA — избегать
+```
+
+### 3. Choghadiya — определение периода
+
+```
+День = Восход → Закат  (≈ 12 часов)
+Делится на 8 × 1.5 часовых блоков (Muhurt)
+
+Каждая Muhurta = 45 минут (день + ночь = 30 мухурт / сутки)
+
+Благоприятные: Amrit, Shubha, Labh, Char
+Нейтральные:  Samartha, Vaidhriti
+Неблагоприятные: Rog, Kaal, Udik
+```
+
+**Muhurta Trading (BSE/NSE):**
+
+```
+Muhurta Session = 1 час в Дивали (примерно 18:30-19:30 IST)
+Прибавляется к 3.5 часов Regular Session
+Результат: 4.5 часовой день (Diwali Muhurta Trading)
+```
+
+---
+
+## Применение в трейдинге
+
+### Фильтрация сигналов AstroFin Sentinel
+
+```python
+# Псевдокод для Muhurta filter
+def muhurta_filter(trade_signal, current_time, location):
+    p = Panchanga.from_time(current_time, location)
+
+    # Отклоняем если:
+    if p.tithi in [3, 7, 9, 13]:
+        return "AVOID"  # Kaal tithis
+
+    if p.nakshatra in ["Mula", "Ashlesha", "Jyeshtha"]:
+        return "AVOID"  # Dushtan nakshatras
+
+    if p.choghadiya in ["Rog", "Kaal", "Udik"]:
+        return "CAUTION"  # Неблагоприятные периоды
+
+    if p.choghadiya in ["Amrit", "Labh", "Shubha"]:
+        return "APPROVE"  # Благоприятные
+
+    return "NEUTRAL"
+```
+
+### Историческая статистика (непроверенная)
+
+| Muhurta | Результат |
+|---------|-----------|
+| Amrit + Rohini + Shubha Yoga | +1.2% avg (квартальные данные BSE) |
+| Rog + Mula + Kaal Yoga | -0.8% avg |
+| Muhurta Diwali Session | +0.5-2% (за 10 лет, среднее) |
+
+> ⚠️ Данные требуют формального backtest через AstroFin Sentinel
+
+---
+
+## Muhurta для конкретных действий
+
+### Для открытия длинной позиции (LONG)
+
+```
+✓ Tithи: 1, 2, 4, 10, 11 (Shubha)
+✓ Nakshatra: Rohini, Swati, Pushya, Shravana
+✓ Choghadiya: Amrit, Labh, Char
+✓ День недели: Wednesday ( Mercury), Thursday (Jupiter)
+✗ Избегать: New Moon (Tithи 30), Full Moon ±1 день
+```
+
+### Для закрытия позиции
+
+```
+✓ Tithи: 5, 13 (завершающие)
+✓ Choghadiya: Shubha, Labh
+✗ Не закрывать в Rog period
+```
+
+---
+
+## Формулы (Swiss Ephemeris)
+
+```python
+# Расчёт Tithи
+def calc_tithi(jd, sunrise):
+    sun = swe.sun_utc(...)
+    moon = swe.moon_utc(...)
+    tithi = floor((moon - sun) / 12.0) % 30
+    return tithi
+
+# Расчёт Nakshatra
+def calc_nakshatra(jd, lat, lon):
+    moon = swe.calc_ut(jd, swe.MOON)
+    nak = floor(moon[0] / (13 + 20/60)) % 27
+    nakshatras = [
+        "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira",
+        "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha",
+        "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra",
+        "Swati", "Vishaka", "Anuradha", "Jyeshtha", "Mula",
+        "Purva Ashada", "Uttara Ashada", "Shravana", "Dhanishta",
+        "Shatabhisha", "Purva Bhadra", "Uttara Bhadra", "Revati"
+    ]
+    return nakshatras[int(nak)]
+
+# Расчёт Choghadiya
+def calc_choghadiya(jd, lat, lon):
+    sunrise = swe.rise_trans(jd, swe.SUN, lat, lon, flag=swe.BETH_RISET)  # восход
+    day_length = (sunset - sunrise) / 8  # 8 мухурт дневных
+    muhurta = floor((current_time - sunrise) / day_length) % 8
+
+    choghadiyas = [
+        "Amrit",   # 0 — лучший
+        "Shubha",  # 1
+        "Labh",    # 2
+        "Char",    # 3
+        "Samartha", # 4 — нейтральный
+        "Vaidhriti", # 5
+        "Rog",    # 6 — избегать
+        "Kaal",   # 7 — избегать
+        "Udik",   # цикл повторяется
+    ]
+    return choghadiyas[muhurta]
+```
+
+---
+
+## Источники
+
+### Книги и тексты
+
+- Varāhamihira. **Brihat Saṃhitā**, Chapter 87-98 (Muhurta Shastra)
+- V.K. Shridhar. **Electional Astrology — Muhurta Chintamani** (1987)
+- **Suryasiddhanta** — астрономические расчёты
+- **Graha Laghavam** — сила планет
+
+### Исследования
+
+- NSE India: **Muhurta Trading Statistics** (annual reports)
+- BSE: **Diwali Muhurta Session Results** (2005-2025)
+- Economic Times: "Muhurta Trading — Myth or Reality?" (2019)
+- Academic: "Timing and Stock Returns" — Indian evidence
+
+---
+
+## Изображения
+
+> Таблица Choghadiya и Panchanga доступны в файлах:
+> `Logseq/concepts/choghadiya.md`
+> `Logseq/concepts/panchanga.md`
+
+---
+
+## Связи
+
+- [[concepts/panchanga]] — Panchanga (5 элементов, основа для Muhurta)
+- [[concepts/choghadiya]] — Choghadiya (периоды дня)
+- [[concepts/muhurta_trading]] — Muhurta Trading на биржах
+- [[agents/electoral_agent]] — ElectoralAgent в AstroFin Sentinel
+- [[methods/ephemeris_calculations]] — расчёты эфемерид
+
+---
+
+*Создано: 2026-03-29*
