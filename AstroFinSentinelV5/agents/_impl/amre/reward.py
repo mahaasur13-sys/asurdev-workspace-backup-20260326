@@ -280,10 +280,17 @@ def compute_trajectory_reward(
     if not signals:
         return 0.0
 
+    def _get(s, key, default=None):
+        if hasattr(s, key):
+            return getattr(s, key)
+        if isinstance(s, dict):
+            return s.get(key, default)
+        return default
+
     # Base signal score
     signal_score = sum(
-        (1.0 if s.get("signal", "NEUTRAL") in ("LONG", "BUY") else -0.5 if s.get("signal") in ("SHORT", "SELL") else 0)
-        * s.get("confidence", 50) / 100
+        (1.0 if _get(s, "signal", "NEUTRAL") in ("LONG", "BUY") else -0.5 if _get(s, "signal") in ("SHORT", "SELL") else 0)
+        * _get(s, "confidence", 50) / 100
         for s in signals
     ) / len(signals)
 

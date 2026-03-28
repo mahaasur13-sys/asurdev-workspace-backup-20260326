@@ -151,12 +151,20 @@ class KARLSynthesisAgent:
         state_hash = self._compute_state_hash(state, signal, confidence, regime)
 
         # ── Step 7: Build DecisionRecord ─────────────────────────────────────
+        # Ensemble for record (s can be AgentResponse or dict)
+        def _sig_get(s, key, default=None):
+            if hasattr(s, key):
+                return getattr(s, key)
+            if isinstance(s, dict):
+                return s.get(key, default)
+            return default
+
         # Collect ensemble info from signals
         selected_ensemble = [
             {
-                "name": s.get("agent_name", "unknown"),
-                "signal": s.get("signal", "NEUTRAL"),
-                "confidence": s.get("confidence", 50),
+                "name": _sig_get(s, "agent_name", "unknown"),
+                "signal": _sig_get(s, "signal", "NEUTRAL"),
+                "confidence": _sig_get(s, "confidence", 50),
                 "weight": 0.0,
                 "q_value": 0.0,
             }
