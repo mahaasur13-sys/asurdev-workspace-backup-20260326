@@ -1,41 +1,30 @@
-"""amre/hierarchical_policy.py — ATOM-KARL Hierarchical Policy + Regime Detection"""
-from dataclasses import dataclass
-
-@dataclass
-class PolicyConfig:
-    high_vol_threshold: float = 0.7
-    trend_threshold: float = 0.6
-
-def detect_regime(state: dict, config: PolicyConfig = None) -> str:
-    if config is None:
-        config = PolicyConfig()
-    vol = state.get("volatility", state.get("atr_pct", 0) / 10)
-    trend = state.get("trend_strength", 0.5)
-    if vol > config.high_vol_threshold:
-        return "high_vol"
-    elif trend > config.trend_threshold:
-        return "trend"
-    else:
-        return "range"
+"""amre/hierarchical_policy.py — Hierarchical Policy + Regime Detection"""
+from typing import Any, Dict, List
 
 class HierarchicalPolicy:
     def __init__(self):
-        self.regime = "range"
-
-    def get_action(self, state: dict, signals: list) -> dict:
-        self.regime = detect_regime(state)
-        if self.regime == "high_vol":
-            return {"dominant": "market_dominant", "astro_weight": 0.1, "market_weight": 0.9}
-        elif self.regime == "trend":
-            return {"dominant": "balanced", "astro_weight": 0.3, "market_weight": 0.7}
-        else:
-            return {"dominant": "astro_dominant", "astro_weight": 0.5, "market_weight": 0.5}
-
-def dynamic_thresholds(kpi: dict) -> dict:
-    base_buy = 0.6
-    base_sell = 0.6
-    penalty = kpi.get("oos_variance", 0) + kpi.get("uncertainty_mean", 0)
-    return {
-        "buy": base_buy + 0.2 * penalty,
-        "sell": base_sell + 0.2 * penalty,
-    }
+        self.regimes = ["LOW", "NORMAL", "HIGH", "EXTREME"]
+    def detect_regime(self, state: Dict[str, Any]) -> str:
+        price = state.get("price", 0)
+        n_signals = state.get("n_signals", 1)
+        confs = [s.get("confidence", 50) for s in state.get("signals", []) if isinstance(s, dict)]
+        avg_conf = sum(confs) / len(confs) if confs else 50
+        if n_signals >= 7 and avg_conf > 70:
+            return "LOW"
+        elif n_signals >= 4 and avg_conf > 55:
+            return "NORMAL"
+        elif n_signals >= 3 and avg_conf > 40:
+            return "HIGH"
+        return "EXTREME"
+    def get_action(self, regime: str, amre_data: Dict[str, Any]) -> Dict[str, Any]:
+        uncertainty = amre_data.get("uncertainty", {}).get("total", 0.5)
+        q_star = amre_data.get("q_star", 0.5)
+        if regime == "LOW" and uncertainty < 0.3:
+            return {"action": "SCALE_IN", "confidence_boost": 5, "position_multiplier": 1.5}
+        elif regime == "EXTREME" or uncertainty > 0.7:
+            return {"action": "STAND_ASIDE", "confidence_boost": -15, "position_multiplier": 0.3}
+        elif regime == "HIGH" and q_star > 0.6:
+            return {"action": "REDUCE_SIZE", "confidence_boost": -5, "position_multiplier": 0.7}
+        elif regime == "NORMAL" and q_star > 0.65:
+            return {"action": "HOLD_OR_ADD", "confidence_boost": 0, "position_multiplier": 1.0}
+        return {"action": "MAINTAIN", "confidence_boost": 0, "position_multiplier": 1.0}

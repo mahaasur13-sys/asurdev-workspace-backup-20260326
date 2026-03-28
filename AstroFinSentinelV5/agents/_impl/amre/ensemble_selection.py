@@ -1,34 +1,29 @@
-"""amre/ensemble_selection.py — ATOM-KARL-007 Ensemble TTC Selection"""
-from typing import List, Optional
-from .trajectory import Trajectory
+"""amre/ensemble_selection.py — Ensemble diversity selection"""
+from typing import List, Any, Dict
 
-def majority_vote(directions: List[str]) -> str:
-    counts = {}
-    for d in directions:
-        canon = d.upper()
-        if canon in ("BUY", "STRONG_BUY"):
-            canon = "LONG"
-        elif canon in ("SELL", "STRONG_SELL"):
-            canon = "SHORT"
-        counts[canon] = counts.get(canon, 0) + 1
-    if not counts:
-        return "NEUTRAL"
-    return max(counts, key=counts.get)
+def select_ensemble(signals: List[Any], target_size: int = 5) -> List[Any]:
+    if len(signals) <= target_size:
+        return signals
+    by_cat: Dict[str, List[Any]] = {}
+    for s in signals:
+        cat = s.get("category", "other") if isinstance(s, dict) else getattr(s, "category", "other")
+        by_cat.setdefault(cat, []).append(s)
+    result = []
+    cats = list(by_cat.keys())
+    for i in range(min(target_size, len(signals))):
+        cat = cats[i % len(cats)]
+        if by_cat[cat]:
+            result.append(by_cat[cat].pop(0))
+    return result
 
-def ensemble_select(trajectories: List[Trajectory], top_k: int = 5) -> dict:
-    """ATOM-KARL-007: Replace max() with ensemble selection."""
-    if not trajectories:
-        return {"direction": "NEUTRAL", "confidence": 50, "count": 0}
-    sorted_traj = sorted(trajectories, key=lambda t: t.final_reward, reverse=True)
-    top = sorted_traj[:top_k]
-    directions = [t.direction for t in top]
-    direction = majority_vote(directions)
-    confidence = sum(t.confidence for t in top) // len(top)
-    return {"direction": direction, "confidence": confidence, "count": len(top)}
+def ensemble_diversity_score(signals: List[Any]) -> float:
+    if len(signals) < 2:
+        return 0.0
+    signal_types = [s.get("signal", "") for s in signals if isinstance(s, dict)]
+    unique = len(set(signal_types))
+    return min(1.0, unique / len(signals))
 
-def ensemble_select_from_buffer(buffer: list, top_k: int = 5) -> List[Trajectory]:
-    """Select top-k from buffer using ensemble method."""
-    if not buffer:
-        return []
-    sorted_traj = sorted(buffer, key=lambda t: t.final_reward, reverse=True)
-    return sorted_traj[:top_k]
+def select_ensemble_by_confidence(signals: List[Any], top_k: int = 5) -> List[Any]:
+    scored = [(s, s.get("confidence", 50) if isinstance(s, dict) else getattr(s, "confidence", 50)) for s in signals]
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return [s for s, _ in scored[:top_k]]

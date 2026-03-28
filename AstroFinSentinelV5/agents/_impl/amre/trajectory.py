@@ -1,56 +1,96 @@
-"""amre/trajectory.py — KARL Trajectory data structures"""
+"""amre/trajectory.py — Market state + Trajectory + TrajectoryStep"""
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 @dataclass
 class TrajectoryStep:
     timestamp: str
-    direction: str
+    price: float
+    regime: str
+    signals: Dict[str, float]
     confidence: int
-    reasoning: str
-    market_state: dict
-    metadata: dict
+    position: Optional[str] = None
+
+@dataclass  
+class Trajectory:
+    steps: List[TrajectoryStep] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class TrajectoryMetrics:
-    sharpe: float = 0.0
-    win_rate: float = 0.0
-    total_return: float = 0.0
-    max_drawdown: float = 0.0
-    trade_count: int = 0
-    avg_confidence: float = 50.0
-    q_star: Optional[float] = None
+    total_reward: float
+    sharpe_ratio: float
+    max_drawdown: float
+    win_rate: float
+    trade_count: int
+    avg_confidence: float
+    regime_stability: float
 
 @dataclass
-class Trajectory:
-    trajectory_id: str
+class MarketState:
     symbol: str
+    price: float
     timeframe: str
-    direction: str
-    confidence: int
-    reasoning: str
-    start_time: str
-    end_time: str
-    final_reward: float = 0.0
-    steps: list = field(default_factory=list)
-    metrics: Optional[TrajectoryMetrics] = None
-    market_state_hash: str = ""
-    metadata: dict = field(default_factory=dict)
+    n_signals: int
+    session_id: str
+    timestamp: str
+    regime: str = "NORMAL"
+    trajectory: Optional[Trajectory] = None
+    reward: Optional[float] = None
+    confidence: Optional[int] = None
+    signal_diversity: Optional[int] = None
+    regime_stability: Optional[float] = None
+    market_regime: Optional[str] = None
+    is_contrarian: Optional[bool] = None
+    volatility_score: Optional[float] = None
 
-    def to_dict(self) -> dict:
-        return {
-            "trajectory_id": self.trajectory_id,
-            "symbol": self.symbol,
-            "timeframe": self.timeframe,
-            "direction": self.direction,
-            "confidence": self.confidence,
-            "reasoning": self.reasoning,
-            "start_time": self.start_time,
-            "end_time": self.end_time,
-            "final_reward": self.final_reward,
-            "steps": [{"timestamp": s.timestamp, "direction": s.direction, "confidence": s.confidence, "reasoning": s.reasoning} for s in self.steps],
-            "metrics": {"sharpe": self.metrics.sharpe, "win_rate": self.metrics.win_rate, "total_return": self.metrics.total_return, "max_drawdown": self.metrics.max_drawdown, "trade_count": self.metrics.trade_count, "avg_confidence": self.metrics.avg_confidence, "q_star": self.metrics.q_star} if self.metrics else {},
-            "market_state_hash": self.market_state_hash,
-            "metadata": self.metadata,
-        }
+def market_state_hash(ms: MarketState) -> str:
+    import hashlib
+    data = f"{ms.symbol}:{ms.price}:{ms.timeframe}:{ms.n_signals}:{ms.regime}"
+    return hashlib.md5(data.encode()).hexdigest()[:12]
+
+def trajectory_from_state(ms: MarketState) -> Trajectory:
+    step = TrajectoryStep(
+        timestamp=ms.timestamp,
+        price=ms.price,
+        regime=ms.regime,
+        signals={},
+        confidence=ms.confidence or 50,
+        position=None
+    )
+    return Trajectory(steps=[step])
+
+def compute_trajectory_metrics(traj: Trajectory) -> TrajectoryMetrics:
+    if not traj.steps:
+        return TrajectoryMetrics(0.0, 0.0, 0.0, 0.0, 0, 50.0, 0.0)
+    rewards = [s.confidence / 100.0 for s in traj.steps]
+    total = sum(rewards)
+    avg = total / len(rewards) if rewards else 0
+    win_rate = sum(1 for r in rewards if r > 0.5) / len(rewards) if rewards else 0
+    peak = rewards[0] if rewards else 0
+    dd = 0.0
+    for r in rewards:
+        peak = max(peak, r)
+        dd = max(dd, (peak - r) / peak if peak > 0 else 0)
+    variance = sum((r - avg) ** 2 for r in rewards) / len(rewards) if rewards else 0
+    sharpe = (avg / (variance ** 0.5)) if variance > 0 else 0
+    return TrajectoryMetrics(
+        total_reward=round(total, 4),
+        sharpe_ratio=round(sharpe, 4),
+        max_drawdown=round(dd, 4),
+        win_rate=round(win_rate, 4),
+        trade_count=len(traj.steps),
+        avg_confidence=round(sum(s.confidence for s in traj.steps) / len(traj.steps), 1),
+        regime_stability=round(1.0 - dd, 4)
+    )
+
+def trajectory_to_dict(traj: Trajectory) -> dict:
+    return {
+        "steps": [{"timestamp": s.timestamp, "price": s.price, "regime": s.regime} for s in traj.steps],
+        "metadata": traj.metadata
+    }
+
+def trajectory_from_dict(data: dict) -> Trajectory:
+    steps = [TrajectoryStep(**s) for s in data.get("steps", [])]
+    return Trajectory(steps=steps, metadata=data.get("metadata", {}))

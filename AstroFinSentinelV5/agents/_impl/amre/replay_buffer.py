@@ -1,46 +1,49 @@
-"""amre/replay_buffer.py — KARL Replay Buffer with TTC + Ensemble"""
-from typing import List, Optional
-from collections import deque
+"""amre/replay_buffer.py — Replay Buffer for trajectory learning"""
+from dataclasses import dataclass, field
+from typing import List, Optional, Dict, Any
 from .trajectory import Trajectory, TrajectoryMetrics
-from .reward import compute_reward, RewardConfig
-from .similarity import get_similar_trajectories
-from .counterfactual import CounterfactualEngine
-from .ensemble_selection import ensemble_select_from_buffer
+from .similarity import is_similar_trajectory
+
+DEFAULT_BUFFER_SIZE = 1000
+
+@dataclass
+class BufferEntry:
+    trajectory: Trajectory
+    metrics: TrajectoryMetrics
+    outcome: float
+    market_context: Dict[str, Any]
+    created_at: str
 
 class ReplayBuffer:
-    def __init__(self, capacity: int = 1000):
-        self.capacity = capacity
-        self.buffer: deque = deque(maxlen=capacity)
-        self.counterfactual_engine = CounterfactualEngine()
+    def __init__(self, max_size: int = DEFAULT_BUFFER_SIZE):
+        self.max_size = max_size
+        self.buffer: List[BufferEntry] = []
 
-    def add(self, trajectory: Trajectory) -> None:
-        self.buffer.append(trajectory)
+    def add(self, entry: BufferEntry):
+        self.buffer.append(entry)
+        if len(self.buffer) > self.max_size:
+            self.buffer.pop(0)
 
-    def get_trajectories(self) -> List[Trajectory]:
-        return list(self.buffer)
+    def get_all_trajectories(self) -> List[Trajectory]:
+        return [e.trajectory for e in self.buffer]
 
-    def get_by_symbol(self, symbol: str) -> List[Trajectory]:
-        return [t for t in self.buffer if t.symbol == symbol]
+    def get_similar(self, trajectory: Trajectory, threshold: float = 0.3) -> List[BufferEntry]:
+        return [e for e in self.buffer if is_similar_trajectory(trajectory, e.trajectory, threshold)]
 
-    def select_best(self, trajectories: List[Trajectory], top_k: int = 5) -> List[Trajectory]:
-        return ensemble_select_from_buffer(trajectories, top_k=top_k)
+    def size(self) -> int:
+        return len(self.buffer)
 
-    def get_kpi(self) -> dict:
-        if not self.buffer:
-            return {"count": 0, "avg_reward": 0, "avg_sharpe": 0}
-        trajs = list(self.buffer)
-        rewards = [t.final_reward for t in trajs]
-        sharpes = [t.metrics.sharpe if t.metrics else 0 for t in trajs]
-        return {
-            "count": len(trajs),
-            "avg_reward": sum(rewards) / len(rewards),
-            "avg_sharpe": sum(sharpes) / len(sharpes),
-        }
+_DEFAULT_BUFFER: Optional[ReplayBuffer] = None
 
-DEFAULT_BUFFER: Optional[ReplayBuffer] = None
+def get_default_buffer() -> ReplayBuffer:
+    global _DEFAULT_BUFFER
+    if _DEFAULT_BUFFER is None:
+        _DEFAULT_BUFFER = ReplayBuffer()
+    return _DEFAULT_BUFFER
 
-def get_global_buffer() -> ReplayBuffer:
-    global DEFAULT_BUFFER
-    if DEFAULT_BUFFER is None:
-        DEFAULT_BUFFER = ReplayBuffer()
-    return DEFAULT_BUFFER
+def _select_best_trajectory(trajectories: List[Trajectory], q_star_scores: List[float]) -> Trajectory:
+    if not trajectories:
+        raise ValueError("No trajectories provided")
+    scored = list(zip(trajectories, q_star_scores))
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return scored[0][0]

@@ -1,42 +1,17 @@
-"""amre/grounding.py — ATOM-KARL Grounding Engine"""
-from dataclasses import dataclass
+"""amre/grounding.py — Domain grounding validation"""
+from typing import List, Any, Dict
 
-@dataclass
-class MarketContext:
-    price: float
-    regime: str
-    trend_strength: float
-    volatility: float
-    volume: float
-
-def check_grounding(state: dict, trajectory) -> dict:
-    context = MarketContext(
-        price=state.get("current_price", 0),
-        regime=state.get("regime", "unknown"),
-        trend_strength=state.get("trend_strength", 0.5),
-        volatility=state.get("volatility", 0.5),
-        volume=state.get("volume", 0),
-    )
+def validate_with_grounding(state: Any, signals: List[Any]) -> Dict[str, Any]:
+    if not signals:
+        return {"passed": True, "confidence_adjustment": 0, "issues": []}
     issues = []
-    score = 1.0
-
-    # Price context check
-    if trajectory.direction == "LONG" and trajectory.steps:
-        entry_prices = [s.market_state.get("price", context.price) for s in trajectory.steps]
-        if entry_prices and max(entry_prices) > context.price * 1.05:
-            issues.append("entry_above_current")
-            score *= 0.9
-
-    # Volatility regime
-    if context.volatility > 0.7 and "astro" in trajectory.metadata.get("primary_signal", ""):
-        issues.append("astro_in_high_vol")
-        score *= 0.85
-
-    # Trend alignment
-    if context.trend_strength > 0.6:
-        if trajectory.direction == "NEUTRAL":
-            issues.append("neutral_in_trend")
-            score *= 0.8
-
-    grounded = score >= 0.8 and len(issues) == 0
-    return {"grounded": grounded, "score": round(score, 3), "issues": issues}
+    for s in signals:
+        sig = s.get("signal", "") if isinstance(s, dict) else getattr(s, "signal", "")
+        conf = s.get("confidence", 50) if isinstance(s, dict) else getattr(s, "confidence", 50)
+        if conf > 85 and sig in ("NEUTRAL", "neutral"):
+            issues.append(f"High confidence ({conf}) but NEUTRAL signal")
+        if conf < 25 and sig not in ("NEUTRAL", "neutral", "AVOID"):
+            issues.append(f"Low confidence ({conf}) but directional signal: {sig}")
+    failed_count = sum(1 for i in issues if "but" in i and "signal" in i)
+    adjustment = -failed_count * 5 if failed_count > 0 else 0
+    return {"passed": len(issues) < 2, "confidence_adjustment": adjustment, "issues": issues[:3]}

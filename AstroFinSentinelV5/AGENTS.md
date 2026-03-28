@@ -215,6 +215,86 @@ report = engine.compute(positions)
 
 ---
 
+## AMRE Modules (ATOM-KARL Framework)
+
+```
+agents/_impl/amre/
+├── audit.py          ← ATOM-KARL-009: DecisionRecord + AuditLog
+├── backtest_loop.py  ← ATOM-KARL-010: ContinuousBacktest
+├── counterfactual.py
+├── ensemble_selection.py
+├── grounding.py
+├── hierarchical_policy.py
+├── karl_integration.py ← ATOM-012: AMRE post-processing + delisted fallback
+├── oap_optimizer.py  ← ATOM-KARL-010: KPI Control Loop
+├── replay_buffer.py
+├── reward.py         ← ATOM-012: RewardCalibrator, FalseCorrelationDetector, DrawdownTracker
+├── self_question.py
+├── similarity.py
+├── trajectory.py
+└── uncertainty.py
+```
+
+### ATOM-KARL-009: Decision Audit Trail
+
+**Full `DecisionRecord` schema:**
+```python
+DecisionRecord {
+    decision_id, timestamp, session_id
+    symbol, price, timeframe, regime, state_hash
+    top_trajectories: [TrajectorySnapshot]
+    selected_ensemble: [EnsembleMember]
+    q_values, q_star, advantage
+    uncertainty_aleatoric, epistemic, total
+    confidence_raw, confidence_final
+    confidence_adjustments: [str]
+    final_action: LONG/SHORT/NEUTRAL
+    position_pct
+    kpi_snapshot: KPISnapshot
+}
+```
+
+**AuditLog features:**
+- `record()` — добавить DecisionRecord
+- `find_by_state_hash()` — воспроизвести конкретное решение
+- `analyze_drift()` — анализ OAP drift (деградирует ли система)
+- `export_json()` / `import_json()` — сериализация
+
+### ATOM-KARL-010: Backtest-as-a-Service
+
+**ContinuousBacktest loop:**
+```python
+for t in historical_data:
+    state = build_state(t)
+    decision = agent.run(state)
+    reward = evaluate_future(t, horizon=H)
+    buffer.add(decision, reward)
+```
+
+**Features:**
+- Walk-forward validation
+- Rolling window continuous backtest
+- OOS evaluation на каждом шаге
+- Q* evolution tracking
+- KPI Control Loop:
+  - `if kpi["uncertainty"] > 0.6: increase_ttc_depth()`
+  - `if kpi["entropy"] < 0.3: boost_exploration()`
+  - `if kpi["oos_fail_rate"] > 0.4: tighten_grounding()`
+
+### KPI Control State
+
+```python
+KPIControlState {
+    current_ttc_depth: int
+    current_exploration_rate: float
+    current_grounding_strength: float
+    uncertainty_avg, entropy_avg, oos_fail_rate
+    control_history: [actions applied]
+}
+```
+
+---
+
 ## Session History (R-08)
 
 Every `run_sentinel_v5()` call is automatically persisted to `core/history.db` (SQLite).
@@ -277,6 +357,11 @@ python -m orchestration.sentinel_v5 "Analyze BTC" BTCUSDT SWING
 - [x] **core/aspects.py — AspectsEngine (2026-03-26)**
 - [x] **Deduplicate agents — archive 7 root duplicates (2026-03-26)**
 - [x] **Add weights for ElectoralAgent, BradleyAgent, TimeWindowAgent, GannAgent, CycleAgent (2026-03-26)**
+- [x] **ATOM-KARL-009: Decision Audit Trail**
+- [x] **ATOM-KARL-010: Backtest-as-a-Service + KPI Control Loop**
+- [x] **ATOM-012: Enhanced KARL — reward calibration, delisted fallback, grounding integration**
+- [x] **ATOM-013: Full KARL integration in sentinel_v5.py (KARLSynthesisAgent)**
+- [x] **ATOM-015: KARL CLI integration, dashboard, JSONL persistence, HTML reports, continuous backtest command**
 - [ ] Connect real data APIs (Polygon, Unusual Whales, SEC EDGAR)
 - [ ] Add Telegram bot for alerts
 - [ ] Build RAG index (FAISS/Chroma)
