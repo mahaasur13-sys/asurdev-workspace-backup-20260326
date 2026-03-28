@@ -1,247 +1,244 @@
-"""orchestration/karl_cli.py — ATOM-015: KARL CLI + Dashboard + Persistence"""
-import asyncio
-import json
-import sys
-import os
+"""orchestration/karl_cli.py — ATOM-017: Industrial KARL CLI + Rich UI"""
+import asyncio, json, sys, os
 from datetime import datetime
 from pathlib import Path
-
+try:
+    from rich.console import Console
+    from rich.table import Table
+    from rich.panel import Panel
+    from rich.text import Text
+    RICH = True
+except ImportError:
+    RICH = False
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
+console = Console() if RICH else None
+def cprint(msg, style=None):
+    if RICH: console.print(msg, style=style or "")
+    else: print(msg)
 
 def print_banner():
-    print("=" * 70)
-    print("  ASTROFIN SENTINEL v5 — KARL MODE (ATOM-015)")
-    print("=" * 70)
+    banner = r"""
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   ███████╗██╗   ██╗██████╗ ██████╗  █████╗ ██████╗ ██████╗   ║
+║   ██╔════╝██║   ██║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ║
+║   ███████╗██║   ██║██████╔╝██████╔╝███████║██████╔╝██║  ██║  ║
+║   ╚════██║██║   ██║██╔═══╝ ██╔══██╗██╔══██║██╔══██╗██║  ██║  ║
+║   ███████║╚██████╔╝██║     ██║  ██║██║  ██║██║  ██║██████╔╝  ║
+║   ╚══════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝   ║
+║                                                              ║
+║   SENTINEL v5 — KARL MODE  ·  ATOM-017  ·  Industrial CLI  ║
+╚══════════════════════════════════════════════════════════════╝"""
+    cprint(banner, "bold cyan on black")
 
-
-def print_decision_summary(record: dict, amre: dict, synth: dict):
-    print()
-    print("┌" + "─" * 68 + "┐")
-    print("│" + " " * 20 + "KARL DECISION SUMMARY" + " " * 27 + "│")
-    print("├" + "─" * 68 + "┤")
-    
+def print_decision_rich(record, amre, synth):
+    if not RICH: return print_decision_ascii(record, amre, synth)
     action = record.get("final_action", synth.get("signal", "NEUTRAL"))
     confidence = record.get("confidence_final", synth.get("confidence", 50))
     regime = record.get("regime", "NORMAL")
     price = record.get("price", 0)
     decision_id = record.get("decision_id", "N/A")
-    
-    icon = {"LONG": "🟢", "SHORT": "🟣", "NEUTRAL": "⚪", "AVOID": "⛔"}.get(action, "⚪")
-    regime_icon = {"LOW": "🟢", "NORMAL": "🟡", "HIGH": "🟠", "EXTREME": "🟣"}.get(regime, "⚪")
-    
-    print(f"│  {icon} {action:8}  CONF={confidence:3}  REGIME={regime_icon}{regime:7}  ID={decision_id}")
-    print(f"│  Price: {price:,.2f}  |  Position: {record.get('position_pct', 0)*100:.1f}%")
-    
-    unc = amre.get("uncertainty", {})
-    print(f"│  Uncertainty: aleatoric={unc.get('aleatoric', 0):.3f}  epistemic={unc.get('epistemic', 0):.3f}  total={unc.get('total', 0):.3f}")
-    
     q_star = record.get("q_star", 0)
     reward = amre.get("reward_estimate", 0)
-    print(f"│  Q*={q_star:.4f}  reward={reward:.4f}")
-    
+    unc = amre.get("uncertainty", {})
     grounded = amre.get("grounding_passed", True)
-    print(f"│  Grounding: {'PASSED' if grounded else 'FAILED'}")
-    
-    print("└" + "─" * 68 + "┤")
+    action_color = {"LONG":"green","SHORT":"red","NEUTRAL":"yellow","AVOID":"bold red"}.get(action, "white")
+    regime_color = {"LOW":"green","NORMAL":"yellow","HIGH":"bold yellow","EXTREME":"bold red"}.get(regime, "white")
+    action_icon = {"LONG":"📈","SHORT":"📉","NEUTRAL":"⏸","AVOID":"🚫"}.get(action, "❓")
+    main = Text()
+    main.append(f"  {action_icon} ACTION  ", style=f"bold {action_color}")
+    main.append(f"  CONF={confidence:3}  ", style="bold white")
+    main.append(f"  REGIME={regime}  ", style=regime_color)
+    main.append(f"  ID={decision_id}", style="dim")
+    t = Table(show_header=False, box=None)
+    t.add_column(style="dim", width=20); t.add_column(style="white", width=20)
+    t.add_column(style="dim", width=20); t.add_column(style="white", width=20)
+    t.add_row("Price", f"${price:,.2f}", "Position", f"{record.get('position_pct',0)*100:.1f}%")
+    t.add_row("Q*", f"{q_star:.4f}", "Reward", f"{reward:.4f}")
+    t.add_row("Uncertainty (total)", f"{unc.get('total',0):.3f}", "Grounding", "✓ PASSED" if grounded else "✗ FAILED")
+    try:
+        console.print(Panel(main, title="[bold]KARL DECISION[/bold]", border_style="cyan", expand=False))
+        console.print(Panel(t, title="[bold]Metrics[/bold]", border_style="blue", expand=False))
+    except Exception as e:
+        print(f"[WARN] Failed to print decision panel: {e}")
+    console.print()
 
+def print_decision_ascii(record, amre, synth):
+    W = 68
+    action = record.get("final_action", synth.get("signal", "NEUTRAL"))
+    confidence = record.get("confidence_final", synth.get("confidence", 50))
+    regime = record.get("regime", "NORMAL")
+    price = record.get("price", 0); decision_id = record.get("decision_id", "N/A")
+    unc = amre.get("uncertainty", {}); grounded = amre.get("grounding_passed", True)
+    icon = {"LONG":"+LONG","SHORT":"-SHORT","NEUTRAL":"=NEUT","AVOID":"!AVOID"}.get(action, " ? ")
+    sep = "+" + "="*W + "+"
+    print()
+    print(sep)
+    print("|  " + icon + "  CONF=" + str(confidence) + "  REGIME=" + regime + "  ID=" + decision_id)
+    print("|  Price: $%s  |  Position: %.1f%%" % ("%,.2f" % price, record.get("position_pct",0)*100))
+    print("|  Uncertainty: aleatoric=%.3f  epistemic=%.3f  total=%.3f" % (unc.get("aleatoric",0), unc.get("epistemic",0), unc.get("total",0)))
+    print("|  Grounding: " + ("PASSED" if grounded else "FAILED"))
+    print(sep)
+    print()
 
-def print_signal_breakdown(synth: dict):
+def print_signal_breakdown_rich(synth):
+    if not RICH: return print_signal_breakdown_ascii(synth)
+    breakdown = synth.get("metadata", {}).get("breakdown", "")
+    if not breakdown: return
+    t = Table(title="[bold cyan]Agent Breakdown[/bold cyan]", show_header=True, box=None)
+    t.add_column("Category", style="cyan", width=14); t.add_column("Signal", width=10)
+    t.add_column("Confidence", width=12); t.add_column("Agents", style="dim")
+    for line in breakdown.split("\n"):
+        if not line.strip(): continue
+        parts = line.strip()[1:-1].split("]")
+        if len(parts) < 2: continue
+        cat = parts[0].strip(); rest = parts[1].strip().split()
+        signal = rest[0] if rest else "?"; conf = rest[1] if len(rest) > 1 else "?"
+        agents = " ".join(rest[2:]) if len(rest) > 2 else ""
+        sc = {"LONG":"green","SHORT":"red","NEUTRAL":"yellow"}.get(signal, "white")
+        t.add_row(f"[{cat}]", f"[{sc}]{signal}[/{sc}]", conf, agents)
+    try:
+        console.print(t); console.print()
+    except Exception as e:
+        print(f"[WARN] Failed to print signal breakdown panel: {e}")
+
+def print_signal_breakdown_ascii(synth):
     breakdown = synth.get("metadata", {}).get("breakdown", "")
     if breakdown:
+        W = 68
+        horiz = "─"*W
+        vert = "│"
+        sep_h = "+" + horiz + "+"
         print()
-        print("┌" + "─" * 68 + "┐")
-        print("│" + " " * 20 + "AGENT BREAKDOWN" + " " * 32 + "│")
-        print("├" + "─" * 68 + "┤")
+        print(sep_h)
+        print(vert + "AGENT BREAKDOWN".center(W) + vert)
+        print(sep_h)
         for line in breakdown.split("\n"):
-            if line.strip():
-                print(f"│  {line[:66]}")
-        print("└" + "─" * 68 + "┤")
+            if line.strip(): print(vert + "  " + line[:66].ljust(W-2) + vert)
+        print(sep_h)
+        print()
 
+def print_karl_diagnostics_rich(diagnostics):
+    if not RICH: return print_karl_diagnostics_ascii(diagnostics)
+    oap = diagnostics.get("oap_kpi", {}); audit = diagnostics.get("audit_summary", {})
+    drift = diagnostics.get("drift_status", {}); calibr = diagnostics.get("calibration", {})
+    ot = Table(title="[bold]OAP KPIs[/bold]", show_header=False, box=None)
+    ot.add_column(style="dim", width=22); ot.add_column(style="white", width=15)
+    ot.add_row("TTC Depth", str(oap.get("current_ttc_depth", "N/A")))
+    ot.add_row("OOS Fail Rate", f"{oap.get('oos_fail_rate',0):.3f}")
+    ot.add_row("Entropy", f"{oap.get('entropy_avg',0):.3f}")
+    ot.add_row("Grounding Strength", f"{oap.get('grounding_strength',0):.3f}")
+    ct = Table(title="[bold]Reward Calibration[/bold]", show_header=False, box=None)
+    ct.add_column(style="dim", width=22); ct.add_column(style="white", width=15)
+    ct.add_row("Calibration Error", f"{calibr.get('calibration_error',0):.4f}")
+    ct.add_row("Slope", f"{calibr.get('slope',0):.4f}")
+    ct.add_row("Intercept", f"{calibr.get('intercept',0):.4f}")
+    at = Table(title="[bold]Audit Log[/bold]", show_header=False, box=None)
+    at.add_column(style="dim", width=22); at.add_column(style="white", width=15)
+    at.add_row("Total Decisions", str(audit.get("total", 0)))
+    at.add_row("Avg Confidence", f"{audit.get('avg_confidence_final',0):.1f}")
+    ad = audit.get("action_distribution", {})
+    at.add_row("Action Distribution", f"L={ad.get('LONG',0)} S={ad.get('SHORT',0)} N={ad.get('NEUTRAL',0)}")
+    if drift.get("status") == "degrading":
+        dt = Text(); dt.append("⚠  DRIFT DETECTED\n", style="bold yellow")
+        dt.append(f"   Confidence drift: {drift.get('confidence_drift',0):+.2f}\n")
+        dt.append(f"   Uncertainty drift: {drift.get('uncertainty_drift',0):+.3f}")
+        try:
+            console.print(Panel(dt, title="[bold yellow]Drift Alert[/bold yellow]", border_style="yellow"))
+        except Exception as e:
+            print(f"[WARN] Failed to print drift alert panel: {e}")
+    try:
+        console.print(ot); console.print(ct); console.print(at); console.print()
+    except Exception as e:
+        print(f"[WARN] Failed to print diagnostics panels: {e}")
 
-def print_karl_diagnostics(diagnostics: dict):
+def print_karl_diagnostics_ascii(diagnostics):
+    oap = diagnostics.get("oap_kpi", {}); audit = diagnostics.get("audit_summary", {})
+    ad = audit.get("action_distribution", {})
+    W = 68
+    horiz = "─"*W; vert = "│"
+    sep_h = "+" + horiz + "+"
     print()
-    print("┌" + "─" * 68 + "┐")
-    print("│" + " " * 20 + "KARL DIAGNOSTICS" + " " * 30 + "│")
-    print("├" + "─" * 68 + "┤")
-    
-    oap = diagnostics.get("oap_kpi", {})
-    print(f"│  OAP: TTC_depth={oap.get('current_ttc_depth', '?')}  OOS_fail={oap.get('oos_fail_rate', 0):.3f}  entropy={oap.get('entropy_avg', 0):.3f}")
-    
-    audit = diagnostics.get("audit_summary", {})
-    print(f"│  Audit: total={audit.get('total', 0)}  avg_conf={audit.get('avg_confidence_final', 0):.1f}")
-    
-    print("└" + "─" * 68 + "┤")
+    print(sep_h)
+    print(vert + "KARL DIAGNOSTICS".center(W) + vert)
+    print(sep_h)
+    print(vert + "  OAP: TTC=%s  OOS_fail=%.3f  entropy=%.3f" % (
+        oap.get('current_ttc_depth','?'), oap.get('oos_fail_rate',0), oap.get('entropy_avg',0)) + vert)
+    print(vert + "  Audit: total=%d  avg_conf=%.1f" % (
+        audit.get('total',0), audit.get('avg_confidence_final',0)) + vert)
+    print(vert + "  Actions: L=%d  S=%d  N=%d" % (
+        ad.get('LONG',0), ad.get('SHORT',0), ad.get('NEUTRAL',0)) + vert)
+    print(sep_h)
+    print()
 
+def print_entry_levels_rich(synth):
+    if not RICH: return
+    meta = synth.get("metadata", {})
+    entry = meta.get("entry_zone", (0,0)); stop = meta.get("stop_loss", 0)
+    targets = meta.get("targets", []); position = meta.get("position_size", 0)
+    price = meta.get("current_price", 0)
+    t = Table(title="[bold green]Entry Levels[/bold green]", show_header=True, box=None)
+    t.add_column("Level", style="cyan", width=20); t.add_column("Price", style="white", width=15); t.add_column("Distance", style="dim", width=15)
+    for i, tp in enumerate(targets[:3]):
+        dist = f"+{(tp-price)/price*100:.1f}%" if price else "?"
+        t.add_row(f"Target {i+1}", f"${tp:,.2f}", dist)
+    t.add_row("Stop Loss", f"${stop:,.2f}", f"-{(price-stop)/price*100:.1f}%" if price else "?")
+    t.add_row("Position Size", f"{position*100:.2f}%", f"Risk: ${price*position:.0f}" if price else "?")
+    try:
+        console.print(t)
+    except Exception as e:
+        print(f"[WARN] Failed to print entry levels panel: {e}")
 
-def save_decision_to_jsonl(record: dict, filepath: str = "data/karl_decisions.jsonl"):
-    Path(filepath).parent.mkdir(parents=True, exist_ok=True)
-    with open(filepath, "a") as f:
-        f.write(json.dumps(record, default=str) + "\n")
+def print_entry_levels_ascii(synth):
+    meta = synth.get("metadata", {}); entry = meta.get("entry_zone", (0,0))
+    stop = meta.get("stop_loss", 0); targets = meta.get("targets", [])
+    W = 68
+    horiz = "─"*W; vert = "│"
+    sep_h = "+" + horiz + "+"
+    print()
+    print(sep_h)
+    print(vert + "ENTRY LEVELS".center(W) + vert)
+    print(sep_h)
+    print(vert + "  Entry Zone:  $%.2f — $%.2f" % (entry[0], entry[1]) + vert)
+    print(vert + "  Stop Loss:    $%.2f" % stop + vert)
+    for i, tp in enumerate(targets[:3]): print(vert + "  Target %d:    $%.2f" % (i+1, tp) + vert)
+    print(sep_h)
+    print()
 
+def save_decision_jsonl(record, filepath="data/karl_decisions.jsonl"):
+    if not record:
+        print("[WARN] Skipping empty decision record"); return
+    from core.safe_json import safe_jsonl_append
+    safe_jsonl_append(record, filepath)
 
-def generate_html_report(result: dict, output_path: str = "data/karl_report.html"):
+def generate_html_report(result, output_path="data/karl_report.html"):
     synth = result.get("final_recommendation", {})
-    record = result.get("decision_record", {})
-    amre = result.get("amre_output", {})
-    
-    action = synth.get("signal", "NEUTRAL")
-    confidence = synth.get("confidence", 50)
+    record = result.get("decision_record", {}); amre = result.get("amre_output", {})
+    action = synth.get("signal", "NEUTRAL"); confidence = synth.get("confidence", 50)
     price = synth.get("metadata", {}).get("current_price", 0)
     regime = synth.get("metadata", {}).get("volatility_risk", {}).get("regime", "NORMAL")
     breakdown = synth.get("metadata", {}).get("breakdown", "")
-    
-    regime_color = {"LOW": "#22c55e", "NORMAL": "#eab308", "HIGH": "#f97316", "EXTREME": "#ef4444"}.get(regime, "#6b7280")
-    action_color = {"LONG": "#22c55e", "SHORT": "#ef4444", "NEUTRAL": "#6b7280", "AVOID": "#dc2626"}.get(action, "#6b7280")
-    
-    breakdown_html = "".join(f"<tr><td colspan='4' style='font-family:monospace;font-size:11px'>{line}</td></tr>" for line in breakdown.split("\n") if line.strip())
-    
-    html = f"""<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>ATOM-015 KARL Report</title>
-<style>
-  body {{ font-family: -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }}
-  .container {{ max-width: 900px; margin: 0 auto; }}
-  h1 {{ color: #f8fafc; border-bottom: 2px solid #334155; padding-bottom: 10px; }}
-  .signal-box {{ background: {action_color}22; border-left: 6px solid {action_color}; padding: 20px; margin: 20px 0; border-radius: 8px; }}
-  .signal-action {{ font-size: 32px; font-weight: bold; color: {action_color}; }}
-  .metric {{ font-size: 24px; font-weight: bold; color: #38bdf8; }}
-  .metric-label {{ font-size: 12px; color: #94a3b8; }}
-  .grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }}
-  .card {{ background: #1e293b; border-radius: 8px; padding: 16px; }}
-  table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-  th {{ background: #1e293b; text-align: left; padding: 8px; }}
-  td {{ padding: 8px; border-bottom: 1px solid #334155; }}
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>AstroFin Sentinel v5 — KARL Report</h1>
-  <div class="timestamp">Generated: {datetime.now().isoformat()}</div>
-  <div class="signal-box">
-    <div class="signal-action">{action}</div>
-    <div>Confidence: {confidence}/100 | Price: {price:,.2f} | Symbol: {result.get('symbol', 'BTC')}</div>
-    <div>Regime: {regime}</div>
-  </div>
-  <div class="grid">
-    <div class="card"><div class="metric-label">Decision ID</div><div class="metric">{record.get('decision_id', 'N/A')}</div></div>
-    <div class="card"><div class="metric-label">Q*</div><div class="metric">{record.get('q_star', 0):.4f}</div></div>
-    <div class="card"><div class="metric-label">Uncertainty</div><div class="metric">{amre.get('uncertainty', {}).get('total', 0):.3f}</div></div>
-  </div>
-  <h2>Agent Breakdown</h2>
-  <table><tr><th colspan="4">Signals</th></tr>{breakdown_html}</table>
-  <h2>Entry Levels</h2>
-  <table>
-    <tr><td>Entry Zone</td><td>{synth.get('metadata', {}).get('entry_zone', 'N/A')}</td></tr>
-    <tr><td>Stop Loss</td><td>{synth.get('metadata', {}).get('stop_loss', 'N/A')}</td></tr>
-    <tr><td>Targets</td><td>{synth.get('metadata', {}).get('targets', 'N/A')}</td></tr>
-    <tr><td>Position Size</td><td>{(synth.get('metadata', {}).get('position_size', 0)*100):.2f}%</td></tr>
-  </table>
-  <h2>Reasoning</h2><p>{synth.get('reasoning', 'N/A')}</p>
-</div>
-</body>
-</html>"""
+    regime_c = {"LOW":"#22c55e","NORMAL":"#eab308","HIGH":"#f97316","EXTREME":"#ef4444"}.get(regime,"#6b7280")
+    action_c = {"LONG":"#22c55e","SHORT":"#ef4444","NEUTRAL":"#6b7280","AVOID":"#dc2626"}.get(action,"#6b7280")
+    unc = amre.get("uncertainty", {}); q_star = record.get("q_star", 0)
+    bh = "".join(f"<tr><td colspan=4 style=font-family:monospace;font-size:11px>{l}</td></tr>" for l in breakdown.split("\n") if l.strip())
+    html = f"""<!DOCTYPE html><html><head><meta charset=utf-8><title>ATOM-017 KARL Report</title>"""
+    html += f"""<style>body{{font-family:-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}}"""
+    html += f"""<style>.container{{max-width:900px;margin:0 auto}}.signal-box{{background:{action_c}22;border-left:6px solid {action_c};padding:20px;margin:20px 0;border-radius:8px}}.signal-action{{font-size:32px;font-weight:bold;color:{action_c}}}.metric{{font-size:24px;font-weight:bold;color:#38bdf8}}.metric-label{{font-size:12px;color:#94a3b8}}.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}}.card{{background:#1e293b;border-radius:8px;padding:16px}}table{{width:100%;border-collapse:collapse;margin:20px 0}}th{{background:#1e293b;text-align:left;padding:8px}}td{{padding:8px;border-bottom:1px solid #334155}}</style></head>"""
+    html += f"""<body><div class="container"><h1>AstroFin Sentinel v5 — KARL Report</h1>"""
+    html += f"""<div class="timestamp">Generated: {datetime.now().isoformat()}</div>"""
+    html += f"""<div class="signal-box"><div class="signal-action">{action}</div><div>Confidence: {confidence}/100 | Price: ${price:,.2f} | Symbol: {result.get("symbol","BTC")}</div><div>Regime: {regime}</div></div>"""
+    html += f"""<div class="grid"><div class="card"><div class="metric-label">Decision ID</div><div class="metric">{record.get("decision_id","N/A")}</div></div>"""
+    html += f"""<div class="card"><div class="metric-label">Q*</div><div class="metric">{q_star:.4f}</div></div>"""
+    html += f"""<div class="card"><div class="metric-label">Uncertainty</div><div class="metric">{unc.get("total",0):.3f}</div></div></div>"""
+    html += f"""<h2>Agent Breakdown</h2><table><th colspan=4>Signals</th>{bh}</table>"""
+    entry_zone = synth.get("metadata", {}).get("entry_zone", "N/A")
+    stop_loss = synth.get("metadata", {}).get("stop_loss", "N/A")
+    targets = synth.get("metadata", {}).get("targets", [])
+    position = synth.get("metadata", {}).get("position_size", 0)
+    html += f"""<h2>Entry Levels</h2><table><tr><td>Entry Zone</td><td>{entry_zone}</td></tr><tr><td>Stop Loss</td><td>{stop_loss}</td></tr>"""
+    for i, t in enumerate(targets[:3]): html += f"""<tr><td>Target {i+1}</td><td>${t:,.2f}</td></tr>"""
+    html += f"""<tr><td>Position Size</td><td>{position*100:.2f}%</td></tr></table></div></body></html>"""
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as f:
-        f.write(html)
+    with open(output_path, "w") as f: f.write(html)
     return output_path
-
-
-async def run_continuous_backtest(symbol: str = "BTCUSDT", max_iterations: int = 6):
-    from orchestration.sentinel_v5 import run_sentinel_v5_karl
-    import requests
-    
-    print("=" * 70)
-    print(f"CONTINUOUS BACKTEST — {symbol} — max {max_iterations} iterations")
-    print("=" * 70)
-    results = []
-    
-    for i in range(max_iterations):
-        print(f"\n[Iteration {i+1}/{max_iterations}] ", end="", flush=True)
-        try:
-            resp = requests.get(f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}", timeout=5)
-            price = float(resp.json()["price"])
-        except:
-            price = 50000.0
-        
-        try:
-            result = await run_sentinel_v5_karl(
-                user_query=f"Analyze {symbol}",
-                symbol=symbol, timeframe="SWING", current_price=price,
-                include_technical=True, include_astro=True, include_electional=False,
-            )
-            synth = result.get("final_recommendation", {})
-            record = result.get("decision_record", {})
-            amre = result.get("amre_output", {})
-            action = synth.get("signal", "?")
-            confidence = synth.get("confidence", 0)
-            print(f"→ {action} (conf={confidence}) | price={price:,.0f}")
-            if record:
-                print(f"   decision_id={record.get('decision_id', 'N/A')}  uncertainty={amre.get('uncertainty', {}).get('total', 0):.3f}")
-            results.append(result)
-            if record:
-                save_decision_to_jsonl(record)
-        except Exception as e:
-            print(f"ERROR: {e}")
-        
-        if i < max_iterations - 1:
-            await asyncio.sleep(1)
-    
-    print("\n" + "=" * 70)
-    print("CONTINUOUS BACKTEST COMPLETE")
-    print("=" * 70)
-    if results:
-        actions = [r.get("final_recommendation", {}).get("signal", "?") for r in results]
-        print(f"Total: {len(results)} | LONG={actions.count('LONG')} SHORT={actions.count('SHORT')} NEUTRAL={actions.count('NEUTRAL')}")
-        print(f"Records saved: data/karl_decisions.jsonl")
-    return results
-
-
-async def main():
-    print_banner()
-    
-    if len(sys.argv) < 2:
-        print("\nUsage:")
-        print("  python -m orchestration.karl_cli <query> [symbol] [timeframe]   # Single KARL run")
-        print("  python -m orchestration.karl_cli --continuous [symbol]            # Continuous backtest")
-        print("  python -m orchestration.karl_cli --diag                          # Diagnostics")
-        print("  python -m orchestration.karl_cli --report                        # HTML report")
-        sys.exit(1)
-    
-    cmd = sys.argv[1]
-    
-    if cmd == "--diag":
-        from orchestration.sentinel_v5 import karl_diagnostics
-        await karl_diagnostics()
-    elif cmd == "--continuous":
-        symbol = sys.argv[2] if len(sys.argv) > 2 else "BTCUSDT"
-        await run_continuous_backtest(symbol=symbol, max_iterations=6)
-    elif cmd == "--report":
-        print("Use: python -m orchestration.karl_cli <query> [symbol] [timeframe] --html")
-        print("HTML report is auto-generated after each --karl run")
-    else:
-        from orchestration.sentinel_v5 import run_sentinel_v5_karl
-        query = sys.argv[1]
-        symbol = sys.argv[2] if len(sys.argv) > 2 else "BTCUSDT"
-        timeframe = sys.argv[3] if len(sys.argv) > 3 else "SWING"
-        
-        result = await run_sentinel_v5_karl(query, symbol, timeframe)
-        
-        synth = result.get("final_recommendation", {})
-        record = result.get("decision_record", {})
-        amre = result.get("amre_output", {})
-        diagnostics = result.get("karl_diagnostics", {})
-        
-        print_decision_summary(record or {}, amre or {}, synth or {})
-        print_signal_breakdown(synth or {})
-        print_karl_diagnostics(diagnostics or {})
-        
-        if record:
-            save_decision_to_jsonl(record)
-            report_path = generate_html_report(result)
-            print(f"\nHTML report: {report_path}")
-            print(f"JSONL record: data/karl_decisions.jsonl")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
