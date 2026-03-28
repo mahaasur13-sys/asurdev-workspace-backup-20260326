@@ -173,4 +173,11 @@ ec_01_hubris_cap
 
 ---
 
+### Vedic Astrology (Muhurta/Panchanga)
+| ID | Концепция | Файл |
+|----|---------|------|
+| [[concepts/muhurta]] | Muhurta — выбор момента | `Logseq/concepts/muhurta.md` |
+| [[concepts/panchanga]] | Panchanga — 5 элементов | `Logseq/concepts/panchanga.md` |
+| [[concepts/choghadiya]] | Choghadiya — периоды дня | `Logseq/concepts/choghadiya.md` |
+
 ## 🗄️ Databases

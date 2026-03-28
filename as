@@ -1,0 +1,1 @@
+"""amre/__init__.py — AMRE (Adaptive Market Regime Engine)

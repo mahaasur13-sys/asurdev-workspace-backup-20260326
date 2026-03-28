@@ -1,0 +1,262 @@
+# AstroFin Sentinel — Agents Memory
+
+**Project:** AstroFin Sentinel  
+**Version:** 2.1  
+**Status:** Active — Self-Learning Enabled  
+**Updated:** 2026-03-20
+
+---
+
+## 🎯 Что нового в v2.1
+
+### Три ключевых улучшения для A-tier:
+
+1. **Self-Learning** — Feedback Loop + Agent Weights
+2. **Persistent Memory** — ChromaDB RAG Pipeline  
+3. **Modern UI** — React + Tailwind + Recharts
+
+---
+
+## 🏗️ Архитектура v2.1
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    REACT UI (Port 3000)                     │
+│                   Tailwind + Recharts                       │
+└──────────────────────────┬───────────────────────────────────┘
+                           │ REST API
+┌──────────────────────────▼───────────────────────────────────┐
+│                  FASTAPI BACKEND (Port 8000)                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
+│  │ /api/      │  │ /api/       │  │ /api/performance    │ │
+│  │  analyze   │  │  feedback   │  │                     │ │
+│  └──────┬─────┘  └──────┬──────┘  └──────────┬──────────┘ │
+└─────────┼───────────────┼─────────────────────┼─────────────┘
+          │               │                     │
+┌─────────▼───────────────▼─────────────────────▼──────────────┐
+│                   ORCHESTRATOR (Main Agent)                  │
+│  • Coordinates all 8 agents                                  │
+│  • Dynamic agent weighting based on performance              │
+│  • C.L.E.A.R. synthesis                                     │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+    ┌──────────────────────┼──────────────────────┐
+    │                      │                      │
+    ▼                      ▼                      ▼
+┌─────────┐          ┌─────────┐          ┌─────────┐
+│ Market  │          │  Bull   │          │  Bear   │
+│ Analyst │          │Researcher│          │Researcher│
+│  (LLM) │          │  (LLM) │          │  (LLM) │
+└────┬────┘          └────┬────┘          └────┬────┘
+     │                    │                    │
+     └────────────────────┼────────────────────┘
+                          │
+    ┌─────────────────────┼─────────────────────┐
+    │                     │                     │
+    ▼                     ▼                     ▼
+┌─────────┐          ┌─────────┐          ┌─────────┐
+│Andrews │          │  Dow   │          │  Gann  │
+│ Agent  │          │Theory  │          │ Agent  │
+│(Rules) │          │(Rules) │          │(Rules) │
+└─────────┘          └─────────┘          └─────────┘
+         │                │                │
+         └────────────────┼────────────────┘
+                          │
+                          ▼
+                   ┌─────────────┐
+                   │ Astrologer  │
+                   │ (PyEphem)   │
+                   └─────────────┘
+                          │
+                          ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    SELF-LEARNING ENGINE                      │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
+│  │ Prediction  │  │   Agent     │  │     Patterns        │ │
+│  │  Tracker    │  │  Weights    │  │      Learner        │ │
+│  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘ │
+└─────────┼────────────────┼─────────────────────┼─────────────┘
+          │                │                     │
+          ▼                ▼                     ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   CHROMADB VECTOR MEMORY                     │
+│  Collections: analysis | feedback | outcomes | patterns      │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 Agent Weights (Dynamic)
+
+Weights auto-adjust based on prediction accuracy:
+
+| Агент | Base Weight | Boost Factor | Accuracy Weighting |
+|-------|-------------|--------------|-------------------|
+| MarketAnalyst | 0.20 | 0.5-2.0x | High |
+| BullResearcher | 0.10 | 0.5-2.0x | Medium |
+| BearResearcher | 0.10 | 0.5-2.0x | Medium |
+| Andrews | 0.15 | 0.5-2.0x | High |
+| DowTheory | 0.10 | 0.5-2.0x | Medium |
+| Gann | 0.10 | 0.5-2.0x | Medium |
+| Astrologer | 0.15 | 0.5-2.0x | High |
+| CycleAgent | 0.10 | 0.5-2.0x | Low |
+
+---
+
+## 🧠 Self-Learning Loop
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    FEEDBACK LOOP                            │
+│                                                             │
+│   1. Agent makes prediction                                 │
+│      └─► Stored in Prediction Tracker                       │
+│                                                             │
+│   2. After timeframe (e.g., 24h)                           │
+│      └─► Outcome resolved (correct/partial/wrong)          │
+│                                                             │
+│   3. Agent weight updated                                   │
+│      └─► Accuracy-based rebalancing                        │
+│                                                             │
+│   4. Pattern learned (if consistent)                       │
+│      └─► Stored in ChromaDB patterns collection             │
+│                                                             │
+│   5. Next analysis uses updated weights                     │
+│      └─► Better signal synthesis                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 💾 Persistent Memory (ChromaDB)
+
+### Collections:
+
+| Collection | Purpose | Indexing |
+|------------|---------|----------|
+| `analysis` | Past agent analyses | symbol, agent, signal |
+| `feedback` | User feedback | agent_id, rating |
+| `outcomes` | Prediction outcomes | symbol, direction |
+| `patterns` | Learned patterns | pattern_type, confidence |
+
+### RAG Pipeline:
+
+```
+Query → Embed → ChromaDB → Similar Results → Context → LLM → Response
+```
+
+---
+
+## 🎨 Modern React UI
+
+### Stack:
+- **React 18** + TypeScript
+- **Tailwind CSS** (dark theme)
+- **Recharts** (performance charts)
+- **Zustand** (state management)
+- **TanStack Query** (API caching)
+- **Lucide Icons**
+
+### Components:
+- `AgentCard` — Individual agent display
+- `SignalGauge` — Radial confidence gauge
+- `AstroWidget` — Astrology data
+- `FeedbackPanel` — User rating
+- `PerformanceChart` — Bar chart of accuracy
+
+### Run:
+```bash
+cd ui_react
+npm install
+npm run dev  # http://localhost:3000
+```
+
+---
+
+## 📁 Структура v2.1
+
+```
+AstroFinSentinel/
+├── agents/
+│   ├── _impl/
+│   │   ├── base_agent.py       # BaseAgent, AgentResponse
+│   │   ├── market_analyst.py   # Technical analysis (LLM)
+│   │   ├── bull_researcher.py  # Bull case (LLM)
+│   │   ├── bear_researcher.py  # Bear case (LLM)
+│   │   ├── astrologer.py       # Moon/Nakshatra/Choghadiya
+│   │   ├── cycle_agent.py      # Timing Solution
+│   │   ├── synthesizer.py       # C.L.E.A.R. verdict
+│   │   ├── andrews_agent.py    # Pitchfork rules
+│   │   ├── dow_agent.py        # Dow Theory rules
+│   │   └── gann_agent.py       # Gann Square of 9
+│   ├── orchestrator.py          # Main coordinator
+│   └── __init__.py
+├── memory/
+│   └── vector_store.py         # ChromaDB RAG
+├── feedback/
+│   └── learner.py              # Self-Learning Engine
+├── ui_react/                    # Modern React UI
+│   ├── src/
+│   │   ├── components/          # AgentCard, SignalGauge, etc.
+│   │   ├── hooks/               # useAnalysis, useFeedback
+│   │   ├── services/            # API client
+│   │   ├── stores/              # Zustand store
+│   │   └── App.tsx
+│   ├── package.json
+│   └── vite.config.ts
+├── api/
+│   └── main.py                  # FastAPI backend
+├── andrews/                     # Andrews Pitchfork library
+├── gann/                        # Gann tools
+├── dow/                         # Dow Theory
+├── quality/                     # Quality Protocol
+└── docs/                        # Documentation
+```
+
+---
+
+## 🚀 Запуск v2.1
+
+### Option 1: Docker Compose
+```bash
+docker-compose up -d
+```
+
+### Option 2: Manual
+```bash
+# Terminal 1: API Backend
+cd api && uvicorn main:app --reload --port 8000
+
+# Terminal 2: React UI
+cd ui_react && npm install && npm run dev
+
+# Terminal 3: Start agents
+python -m agents.orchestrator
+```
+
+---
+
+## 📈 Оценка после v2.1
+
+| Категория | Было | Стало |
+|-----------|------|-------|
+| Self-Learning | 3.5 | **7.0** ✅ |
+| Persistent Memory | 0 | **8.0** ✅ |
+| UI/UX | 5.0 | **8.0** ✅ |
+| **ИТОГО** | 68 | **78** |
+
+**Grade: B+ → A-** 🎉
+
+---
+
+## 🔮 Roadmap к v3.0
+
+- [ ] RAG fine-tuning on historical predictions
+- [ ] Multi-user support with auth
+- [ ] Telegram bot integration
+- [ ] Backtesting UI
+- [ ] Auto-trading (paper mode)
+
+---
+
+*Обновлено: 2026-03-20*

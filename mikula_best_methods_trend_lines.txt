@@ -1,0 +1,1843 @@
+Patrik Mikula / Patrick Mikula
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik 
+
+CHast' 1 
+
+Wwedenie 
+
+Mne powezlo pridti k treydingu do togo, kak komp'yutery zakhwatili
+tekhnicheskiy analiz, i ya chital mnogo knig po treydingu, napisannykh
+mezhdu 1950 i 1980 godami. W starykh knigakh gorazdo luchshe, chem w
+nyneshnikh, obsuzhdayutsya metody torgowli po liniyam trenda. Moe perwoe
+znakomstwo s Alanom Endryusom sluchilos' w 1986, po knige Dzhona Merfi
+"Tekhnicheskiy Analiz F'yuchersnykh Rynkow". S toy pory ya tschatel'no
+izuchal metody postroeniya liniy trenda Alana Endryusa i seychas khochu
+podelit'sya swoimi rezul'tatami. W moey knige Alan Endryus (Alan
+Andrews) budet upominat'sya prosto, kak Endryu. 
+
+W swoey konsul'tatiwnoy rabote w kachestwe Sowetnika po torgowle
+towarami (STA) ya stolknulsya s neskol'kimi lyud'mi, poseschawshimi
+seminar Endryusa po Deystwiyu-Protiwodeystwiyu. Eti wstrechi dali mne
+wozmozhnost' issledowat' awtorskiy material Endryusa, no esche wazhno
+to, chto mne udalos' poobschat'sya s treyderami, ispol'zowawshimi metody
+liniy trenda Endryusa w techenie mnogikh let. 
+
+Na seminarakh Endryu goworil, chto ego metody postroeniya liniy trenda
+osnowany na rabotakh Rodzhera Bebsona (Roger Babson). W 30-kh godakh
+Rodzher Bebson proslawilsya tem, chto publichno predskazal krakh 1929
+goda tochnee, chem kto-libo drugoy. CHto imenno Rodzher Bebson pokazywal
+Endryusu, uzhe nikto ne uznaet. Moi issledowaniya dayut powod
+predpolozhit', chto Rodzher Babson dal Endryusu kontzeptziyu deystwiya i
+protiwodeystwiya w finansakh. Wposledstwii, osnowywayas' na etoy idee,
+Endryus razrabotal swoi metody postroeniya liniy trenda. 
+
+Metody, ispol'zuemye Rodzherom Bebsonom i Endryusom, wozmozhno, i byli
+osnowany na odnoy i toy zhe teorii Deystwiya-Protiwodeystwiya, no ikh
+fakticheskie metody ochen' razlichayutsya. Rodzher Bebson izmeryal,
+naskol'ko daleko tzena ushla wyshe ili nizhe linii, prowedennoy cherez
+tzentr predyduschego kolebaniya tzeny. Eto pozwolyalo Bebsonu wychislit'
+srednee rasstoyanie wyshe ili nizhe linii tzentra, kotoroe tzena dolzhna
+proyti prezhde, chem izmenit' naprawlenie. Schitaetsya, chto Bebson
+ispol'zowal imenno etot metod, chtoby sdelat' sostoyanie na rynkakh,
+opoznawaya, kogda rynki moglm rasshiryat'sya wwerkh ili wniz.
+Schitaetsya takzhe, chto, soglasno etomu metodu on w 1929 godu
+publikowal mnozhestwo preduprezhdeniy o tom, chto rynok aktziy ochen'
+rasshiren i gryadet sil'noe padenie. Kogda w 1929, nakonetz, nastupil
+krakh, Bebson byl priznan geniem. 
+
+Metody, ispol'zuemye Endryusom, kazhutsya osnowannymi na toy zhe samoy
+idee otnositel'no tzeny, dwizhuscheysya wokrug linii tzentra, no oni
+otlichayutsya ot metodow, ispol'zuemykh Bebsonom. Metody Bebsona
+prednaznachalis' dlya dolgosrochnogo analiza rynka aktziy i ekonomiki w
+tzelom, w to wremya kak metody Endryusa podkhodyat dlya kratkosrochnoy
+torgowli. Okonchatel'nye rezul'taty Bebsona i Endryusa skhozhi, ibo
+izwestno, chto Endryus takzhe sdelal ochen' mnogo deneg na torgowle. Te
+treydery, poseschawshie seminary Endryusa, s kotorymi ya obschalsya,
+goworili, chto on sdelal na rynke bolee milliona dollarow. 
+
+Biograficheskaya informatziya ob Endryuse, interesnaya s tochki zreniya
+treyderow, dowol'no skudna. Endryus ne delilsya swoimi metodami
+postroeniya liniy trenda i swoimi ideyami, poka ne otoshel ot aktiwnoy
+torgowli. YA ne wstrechal inwestorow, znakomykh s Endryusom, do serediny
+60-kh. Dokumentatziya po ego Kursu Deystwiya-Protiwodeystwiya i ego
+seminaram datirowana 60-mi i 70-mi. Imenno w etot 20-letniy period,
+widimo, Endryus stal izwesten, kak finansowyy pedagog i treyder. 
+
+Eta kniga sostoit iz dwukh razdelow. Perwyy razdel predostawlyaet
+material, kotoryy mozhet byt' pripisan neposredstwenno Endryusu. YA
+wozderzhalsya ot wstawki swoikh mneniy i idey w perwyy razdel, ostawiw w
+nem lish' metody Endryusa. W rabotakh Endryusa est' idei i metody,
+predlozhennye ego uchenikami. Endryus pooschryal swoikh uchenikow
+razwiwat' idei. Eti materialy ne woshli w knigu, potomu chto tekhniki,
+predlozhennye uchenikami Endryusa, ne yawlyayutsya temi metodami, s
+pomosch'yu kotorykh Endryus sdelat' sostoyanie na rynke. 
+
+Wtoroy razdel etoy knigi poswyaschen nowym razrabotkam w dele
+postroeniya liniy trenda, sdelannym w Ostinskoy Finansowoy Gruppe
+(Austin Financial Group). Takim obrazom, chitatel' smozhet chetko
+otdelit' original'nye idei Endryusa ot innowaiy. Kogda ya stal STA,
+menya poprosili razrabotat' metod torgowli f'yuchersami na Ewrodollar,
+chto ya i sdelal. S togo wremeni razrabotka torgowykh ili
+prognosticheskikh modeley stala wazhneyshey chast'yu moey raboty w
+kachestwe STA. Wo wtorom razdele etoy knigi priwedeny pyat' nowykh
+sposobow primeneniya liniy trenda. 
+
+Bylo wremya, kogda ya dumal, chto komp'yutery zamenyat wse ustarewshie
+metody torgowli. Gody nablyudeniya za tem, kak prodwinutye komp'yuternye
+modeli prikhodyat i ukhodyat, priweli k tomu, chto ya bol'she ne weryu w
+eto. Kogda Wy prochitaete etu knigu, ya nadeyus', Wy soglasites', chto
+metody liniy trenda, kak starye, tak i nowye, po-prezhnemu nesut
+treyderam bol'shuyu finansowuyu wygodu. Komp'yuter - moschnyy instrument
+dlya wypolneniya rutinnoy raboty i sokrascheniya wremeni resheniya
+zadach, no nichto ne zamenit prostye rabotayuschie metody i opyt
+treydera.
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 2
+
+Patrick Mikula
+
+Grafiki barow i razworotnye tochki
+
+W etoy knige, chtoby predstawit' metody liniy trenda, my budem
+ispol'zowat' standartnyy finansowyy grafik barow. Grafik, pokazannyy
+nizhe - grafik barow. SHkala tzen nakhoditsya s lewoy storony. SHkala
+wremeni - wnizu. Kazhdaya wertikal'naya liniya - otdel'nyy tzenowoy bar.
+W etoy knige my budem chasto upominat' razworotnuyu tochku tzeny - piwot
+(pivot). Piwot -tochka, gde tzenowye bary menyayut naprawlenie. Na
+grafike nizhe est' otmetka "Werkhnyaya Razworotnaya tochka" ("Top
+Pivot") i otmetka "Nizhnyaya Razworotnaya tochka" ("Bottom Pivot"). Imi
+predstawleny prostye primery razworotnykh tochek.
+
+ 
+
+Risunok nizhe pokazywaet otdel'nyy tzenowoy bar. Bar imeet otkrytie,
+otmechennoe chertoy slewa, i zakrytie, otmechennoe chertoy s prawoy
+storony. Maksimum i minimum tzeny ispol'zuyutsya dlya sozdaniya samogo
+wertikal'nogo bara.
+
+ 
+
+Linii trenda High - High i Low - Low
+
+Grafik nizhe pokazywaet chetyre linii trenda. Odna iz nikh soedinyaet
+razworotnye tochki W i C. Eta liniya trenda imeet dwe kharakteristiki.
+Ona naklonena wwerkh i soedinyaet dwe werkhnie razworotnye tochki. Eta
+liniya opredelyaetsya, kak woskhodyaschaya liniya trenda High - High.
+Takzhe na etom grafike prisutstwuet liniya trenda, soedinyayuschaya
+razworotnye tochki A i D. Ona kharakterizuetsya tem, chto naklonena
+wwerkh i soedinyaet dwe nizhnie razworotnye tochki. Eta liniya
+opredelyaetsya, kak woskhodyaschaya liniya trenda Low - Low.
+
+Kogda liniya trenda soedinyaet dwe razworotnye tochki odnogo tipa - dwe
+werkhnie razworotnye tochki ili dwe nizhnie, suschestwuet shest'
+osnownykh liniy trenda. Eto: 1) niskhodyaschaya high - high, 2)
+niskhodyaschaya low - low, 3) woskhodyaschaya high - high, 4)
+woskhodyaschaya low - low, 5) gorizontal'naya high - high i, nakonetz,
+6) gorizontal'naya low - low.
+
+ 
+
+Linii trenda High - Low i Low - High
+
+Grafik nizhe pokazywaet liniyu trenda, prowedennuyu cherez razworotnye
+tochki A i B. Eta liniya imeet dwa priznaka. Ona naklonena wwerkh i
+soedinyaet nizhnyuyu i werkhnyuyu razworotnye tochki. Takzhe na etom
+grafike imeetsya liniya trenda, soedinyayuschaya razworotnye tochki S i
+D. Eta liniya naklonena wniz i soedinyaet werkhnyuyu i nizhnyuyu
+razworotnye tochki.
+
+Kogda liniya trenda soedinyaet dwe razworotnye tochki protiwopolozhnogo
+tipa, werkhnyuyu i nizhnyuyu, suschestwuet shest' wozmozhnykh liniy
+trenda. Eto: 1) woskhodyaschaya high - low, 2) woskhodyaschaya low -
+high, 3) niskhodyaschaya high - low, 4) niskhodyaschaya low - high, 5)
+gorizontal'naya high - low i 6) gorizontal'naya low - high.
+
+ 
+
+Mul'tipiwotnaya liniya
+
+Endryus ispol'zowal liniyu trenda, kotoruyu nazywal mul'tipiwotnoy. Eto
+liniya trenda, kotoraya soedinyaet bol'she, chem dwe razworotnye tochki.
+Eta liniya trenda ne obyazana tochno kasat'sya maksimuma ili minimuma,
+trebuetsya lish' ee blizkoe raspolozhenie k kazhdoy razworotnoy tochke.
+Endryus polagal, chto, chem cherez bol'shee chislo razworotnykh tochek
+proshla liniya trenda, tem bolee ona wazhna dlya obnaruzheniya
+buduschikh urowney podderzhki i soprotiwleniya i razworotnykh tochek.
+
+Grafik nizhe pokazywaet General Motors (GM). Na etom grafike est' liniya
+trenda, kotoraya soedinyaet pyat' razworotnykh tochek. Eto -
+Mul'tipiwotnaya Liniya, kotoraya dolzhno schitat'sya bolee wazhnoy, chem
+standartnaya liniya, ispol'zuyuschaya tol'ko dwe razworotnykh tochki.
+
+ 
+
+Sredinnaya Liniya
+
+Liniya trenda, blagodarya kotoroy Endryus stal znamenit - Sredinnaya
+Liniya (Median Line). Grafik nizhe pokazywaet woskhodyaschuyu Sredinnuyu
+Liniyu. CHtoby prowesti Sredinnuyu Liniyu, neobkhodimy tri razworotnye
+tochki. Dwe iz nikh dolzhny yawlyat'sya maksimumom i minimumom tzenowogo
+kolebaniya. Seredinu mezhdu etimi perwymi dwumya tochkami nuzhno
+rasschitat'. Diapazon mezhdu maksimumom i minimumom delitsya na dwa i
+rezul'tat pribawlyaetsya k znacheniyu minimuma. To zhe samoe delaetsya
+dlya wremeni mezhdu maksimumom i minimumom. Na grafike nizhe, chtoby
+prowesti Sredinnuyu Liniyu, ispol'zuetsya seredina mezhdu razworotnymi
+tochkami W i S.
+
+Zatem wybiraetsya tret'ya razworotnaya tochka, raspolagayuschayasya
+pered tzenowym kolebaniem, opisannym w paragrafe wyshe. Obychno, eto
+razworotnaya tochka, predshestwuyuschaya tzenowomu kolebaniyu, no mozhet
+byt' lyuboy razworotnoy tochkoy. Etot tretiy piwot - otprawnaya tochka
+Sredinnoy Linii. Na grafike nizhe, razworotnaya tochka A - nachalo
+Sredinnoy Linii. Sredinnaya Liniya prowoditsya, soedinyaya startowuyu
+razworotnuyu tochku A i seredinu tzenowogo kolebaniya W - S.
+
+ 
+
+Teoriya Sredinnoy Linii
+
+Endryus, wsegda utwerzhdal, chto Sredinnaya Liniya osnowana na zakonakh
+fiziki. On polagal, chto printzipy fiziki mogut primenyat'sya na
+finansowykh rynkakh. Diagrammy nizhe pokazywayut printzip, na kotorom
+osnowywaetsya Sredinnaya Liniya. Eti printzipy zaklyuchayutsya w tom,
+chto prirodnye tzikly wozwraschayutsya k swoim tzentram, a dlya kazhdogo
+deystwiya suschestwuet protiwodeystwie.
+
+Na skhemakh pokazany sinusoidal'nye tzikly. Slewa - nezawershennyy,
+sprawa - zakonchennyy Startowaya razworotnaya tochka oboznachena, kak A,
+Sredinnaya Liniya prowedena cherez tzentr mezhdu W i C. Na prawykh
+diagrammakh wolna idet obratno k Sredinnoy Linii w tochke X. W etoy
+tochke sinusoida zakanchiwaet tzikl. Kogda kolebanie na finansowykh
+rynkakh wozwraschaetsya k Sredinnoy Linii, eto takzhe zakanchiwaet
+tzikl. Endryus weril, chto tzena wozwraschaetsya k Sredinnoy Linii
+priblizitel'no w 80 % sluchaew.
+
+ 
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 3
+
+Patrick Mikula
+
+Printzipy Torgowli po Sredinnoy Linii 1-3
+
+Endryus sdelal neskol'ko wazhnykh dlya treyderow nablyudeniy po powodu
+Sredinnoy Linii. Eto ne absolyutnye prawila; no lish' obschie
+nablyudeniya, sdelannye Endryusom, kotorye pomogut treyderu znat', chego
+ozhidat' pri ispol'zowanii Sredinnoy Linii.
+
+Torgowyy Printzip Sredinnoy Linii 1: Kogda Sredinnaya Liniya prowoditsya
+po samym poslednim kolebaniyam, tzena dolzhna wernut'sya k Sredinnoy
+Linii priblizitel'no w 80 protzentakh sluchaew.
+
+Torgowyy Printzip Sredinnoy Linii 2: Kogda tzena wozwraschaetsya k
+Sredinnoy Linii, eto mesto chasto stanowitsya nowoy razworotnoy tochkoy
+na Sredinnoy Linii.
+
+Torgowyy Printzip Sredinnoy Linii 3: Kogda tzena wozwraschaetsya k
+Sredinnoy Linii, ona chasto formiruet neskol'ko malykh kolebaniy wokrug
+Sredinnoy Linii pered dal'neyshim dwizheniem.
+
+Wot neskol'ko primerow etikh printzipow torgowli po Sredinnoy Linii.
+Nizhe - dnewnoy grafik mayskikh 2002 goda f'yuchersow na pshenitzu.
+Sredinnaya Liniya prowoditsya cherez razworotnye tochki A, B i C. Posle
+tochki C rynok dwizhetsya obratno do Sredinnoy Linii w tochke D. Kogda
+tzena dostigaet mediany, poyawlyaetsya werkhnyaya razworotnaya tochka,
+za kotoroy sleduet bystryy protiwokhod wniz.
+
+ 
+
+Perwyy grafik nizhe pokazywaet nedel'nyy chart dlya General Motors (GM).
+Sredinnaya Liniya prowoditsya cherez tochki A, B i C. Posle tochki C
+tzena dwizhetsya wwerkh i wozwraschaetsya k Sredinnoy Linii w tochke D.
+
+ 
+
+Nizhe - grafik f'yuchersow medi na may 2002 so Sredinnoy Liniey,
+prowedennoy cherez razworotnye tochki A, B i C. Posle tochki C tzena
+wozwraschaetsya k Sredinnoy Linii w tochke D. Kogda Sredinnaya Liniya
+prowoditsya ot samogo swezhego kolebaniya tzen, tzena w bol'shinstwe
+sluchaew wozwraschaetsya k Sredinnoy Linii.
+
+ 
+
+Printzip Torgowli po Sredinnoy Linii 4
+
+Drugoe nablyudenie, sdelannoe Endryusom w otnoshenii Sredinnoy Linii,
+kasaetsya situatziy, kogda tzena okazywaetsya ne w sostoyanii doyti do
+Sredinnoy linii. W etikh situatziyakh Endryus nablyudal izmenenie
+naprawleniya tzeny i ee dwizhenie na bol'shuyu distantziyu, chem
+predyduschee kolebanie. Eto nablyudenie mozhet ispol'zowat'sya, chtoby
+ustanowit' tzel' tzeny posle togo, kak tzena ne doshla do Sredinnoy
+Linii.
+
+Torgowyy Printzip Sredinnoy Linii 4: Esli tzena ne dokhodit do Sredinnoy
+Linii, tzena dwizhetsya w protiwopolozhnom naprawlenii na rasstoyanie
+bol'shee, chem predyduschee kolebanie.
+
+Grafik nikhe pokazywaet f'yuchersy ewrodollara na iyun' 2002. Etot
+grafik pokazywaet Sredinnuyu Liniyu, prowedennuyu cherez razworotnye
+tochki A, B i C. Posle tochki C tzena padaet, no ne dokhodit do
+Sredinnoy Linii. Posle togo, kak tzena ne smogla doyti do mediany,
+perwaya tzel' tzeny - eto maksimum tzeny w tochke C. Etot grafik
+pokazywaet, chto tzena prodwinulas' wyshe tzeli tzeny w tochke C.
+
+ 
+
+Sleduyuschiy grafik pokazywaet McDonalds (MCD), so Sredinnoy Liniey,
+prowedennoy cherez razworotnye tochki A, B i C. Posle tochki C tzena
+padaet, no ne dokhodit do Mediany. Posle togo, kak tzena okazalas' ne w
+sostoyanii kosnut'sya Sredinnoy Linii, perwoy ee tzel'yu stanowitsya
+maksimum tzeny w tochke C. TZena prodwigaetsya wwerkh i kasaetsya etogo
+urownya dwazhdy pered tem, kak probit' ego.
+
+ 
+
+Grafik nizhe - eto Compaq (CPQ), gde Sredinnaya Liniya prowedena cherez
+razworotnye tochki A, B i C. Posle tochki C, tzena prodwigaetsya wwerkh,
+no ne mozhet dostich' Sredinnoy Linii. Posle togo, kak tzena
+okazywaetsya ne w sostoyanii wyyti k mediane, perwaya tzel' tzeny - eto
+minimum w tochke C. Etot grafik pokazywaet, kak tzena padaet nizhe etoy
+tzeli tzeny.
+
+ 
+
+Sleduyuschiy grafik - Xilinx Inc.(XLNX). Sredinnaya Liniya prowedena
+cherez razworotnye tochki A, B i C. Posle tochki C tzena padaet, no ne
+mozhet dostich' Sredinnoy Linii. Posle togo, kak tzena okazywaetsya ne w
+sostoyanii wyyti k mediane, perwaya tzel' tzeny - eto maksimum tzeny w
+tochke C. Grafik pokazywaet, kak tzena podnimaetsya wyshe tzeli.
+
+ 
+
+Grafik nizhe - Ameritrade (AMTD), so Sredinnoy Liniey, prowedennoy
+cherez razworotnye tochki A, B i C. Posle tochki C tzena prodwigaetsya
+wwerkh, no ne mozhet kosnut'sya mediany. Posle etogo perwoy tzel'yu
+tzeny stanowitsya minimum tzeny w tochke C. Na etom grafike tzena padaet
+nizhe etoy tzeli.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 4
+
+Patrick Mikula
+
+Prawila torgowli dlya Wil i Signal'nykh liniy
+
+Nizhe predstawleny nekotorye prawila Endryusa po ispol'zowaniyu Wil i
+Signal'nykh Liniy.
+
+Prawilo Pokupki 1: Kogda tzena probiwaetsya wyshe niskhodyaschey
+werkhney parallel'noy linii, eto ukazywaet na silu rynka i mozhet
+schitat'sya signalom pokupki.
+
+Prawilo Prodazhi 1: Kogda tzena prokhodit nizhe woskhodyaschey nizhney
+parallel'noy linii, eto ukazywaet na slabost' rynka i mozhet schitat'sya
+signalom prodazhi.
+
+Prawilo Pokupki 2: Na niskhodyaschikh Wilakh i werkhney Signal'noy
+Linii, esli tzena ne dostigaet Sredinnoy Linii, a zatem rastet i
+probiwaetsya wyshe werkhney Signal'noy Linii, eto signal pokupki.
+
+Prawilo Prodazhi 2: Na woskhodyaschikh Wilakh i nizhney Signal'noy
+Linii, esli tzena ne w sostoyanii podnyat'sya do Sredinnoy Linii, a
+zatem padaet nizhe nizhney Signal'noy Linii, eto - signal prodazhi.
+
+Nizhe - perwyy primer etikh prawil. Etot grafik pokazywaet mayskie
+f'yuchersy na zerno 2001. Na etom grafike widny woskhodyaschie Wily,
+prowedennye iz tochek A, B i C, plyus nizhnyaya Signal'naya Liniya.
+TZena dwizhetsya wwerkh ot razworotnoy tochki S, no ne dokhodit do
+Sredinnoy Linii. Kogda tzena padaet nizhe nizhney parallel'noy linii
+Wil, eto mozhet schitat'sya rannim signalom prodazhi ili prosto
+ukazaniem, chto nizhnyaya Signal'naya Liniya, wozmozhno, wskore dast
+signal prodazhi. Kogda tzena padaet nizhe nizhney Signal'noy Linii,
+poyawlyaetsya signal prodazhi.
+
+ 
+
+Grafik nizhe pokazywaet martowskie 2002 f'yuchersy na soewoe maslo s
+Wilami, prowedennymi iz tochek A, B i C. Est' zdes' takzhe werkhnyaya
+Signal'naya Liniya. Posle razworotnoy tochki C tzena padaet, no ne
+mozhet doyti do Sredinnoy Linii. Kogda tzena prokhodit wyshe werkhney
+parallel'noy linii Wil, eto ukazywaet na buduschiy signal pokupki. Kogda
+tzena probiwaet werkhnyuyu Signal'nuyu Liniyu, srabatywaet signal
+pokupki.
+
+ 
+
+Sleduyuschiy grafik - iyun'skie 2002 f'yuchersy na syruyu neft' s
+niskhodyaschimi Wilami, prowedennymi iz tochek A, B i C, naryadu s
+werkhney Signal'noy Liniey. Posle razworotnoy tochki C tzena padaet, no
+ne dokhodit do Sredinnoy Linii. Kogda tzena dwizhetsya wyshe werkhney
+parallel'noy linii Wil, eto ukazywaet na priblizhayuschiysya signal
+pokupki. Kogda tzena probiwaet werkhnyuyu Signal'nuyu Liniyu,
+fiksiruetsya signal pokupki.
+
+ 
+
+Grafik nizhe demonstriruet iyun'skie 2002 Ewrof'yuchersy s
+niskhodyaschimi Wilami, prowedennymi iz tochek A, B i C i werkhnyuyu
+Signal'nuyu Liniyu. Posle razworotnoy tochki C tzena ne kasaetsya
+Sredinnoy Linii. Kogda tzena prodwigaetsya wyshe werkhney parallel'noy
+linii Wil, eto ukazywaet na buduschiy signal pokupki. Kogda tzena
+probiwaetsya wyshe werkhney Signal'noy Linii, aktiwiruetsya signal
+pokupki.
+
+ 
+
+Grafik nizhe demonstriruet iyun'skie 2002 f'yuchersy na zoloto s
+niskhodyaschimi Wilami, prowedennymi iz tochek A, B i C i werkhnyuyu
+Signal'nuyu Liniyu. Posle razworotnoy tochki C, tzena padaet, no ne
+dokhodit do Sredinnoy Linii. Kogda tzena prodwigaetsya wyshe werkhney
+parallel'noy linii Wil, eto ukazywaet na buduschiy signal pokupki. Kogda
+tzena probiwaetsya wyshe werkhney Signal'noy Linii, poyawlyaetsya signal
+pokupki.
+
+ 
+
+Grafik nizhe - Intel (INTC), s niskhodyaschimi Wilami i werkhney
+Signal'noy Liniey. Posle razworotnoy tochki C tzena padaet, no ne
+dokhodit do Sredinnoy Linii. Kogda tzena dwizhetsya wyshe werkhney
+parallel'noy linii Wil, eto ukazywaet na priblizhayuschiysya signal
+pokupki. Kogda tzena probiwaet werkhnyuyu Signal'nuyu Liniyu,
+fiksiruetsya signal pokupki.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 5
+
+Patrick Mikula
+
+Mini-Mediana
+
+Sleduyuschaya liniya trenda po Endryusu - eto Mini-Mediana. Eta
+Sredinnaya Liniya prowoditsya pochti tak zhe, kak i obychnaya, no na
+samykh malykh razworotnykh tochkakh. Grafik nizhe demonstriruet
+Mini-Medianu. Ona postroena wsego po semi swecham. Kolebaniya tzeny pri
+prowedenii Mini-Mediany - ot dwukh do pyati barow. Mini-Mediana
+primenyaetsya na grafike, chtoby obnaruzhit' signal bol'shey Sredinnoy
+Linii. Mini- Mediana chasto generiruet signal ran'she bolee krupnoy
+Sredinnoy Linii. Signaly, generiruemye Mini- Medianoy, mogut
+ispol'zowat'sya kak sami po sebe, tak i w kachestwe rannego
+opowescheniya o skorom poyawlenii signala po bol'shoy Sredinnoy Linii.
+
+Prawila Pokupki i Prodazhi po Mini- Mediane - takie zhe kak i po
+normal'nym Sredinnym Liniyam.
+
+ 
+
+Grafik nizhe - Micron Technology (ML). Bol'shie Wily prowedeny po
+tochkam A, B i S, a Mini-wily - po razworotnym tochkam C, D i E.
+Mini-wily nakhodyatsya wnutri normal'nykh Wil bol'shego razmera. TZel'
+primeneniya Mini-wil - nayti signal bol'shikh Wil. Eto oznachaet, chto
+Mini-wily obychno primenyayutsya, kogda tzena nakhoditsya na odnoy iz
+liniy ili wnutri bol'shikh Wil. Na grafike nizhe tzena padaet posle
+razworotnoy tochki C, no ne mozhet doyti do Sredinnoy Linii. Eto priznak
+sily i ukazanie iskat' signal pokupki. W etoy situatzii treyder mozhet
+narisowat' Mini-wily po malym kolebaniyam, chtoby zametit' samoe rannee
+ukazanie na signal pokupki. Strelka i nadpis' "Mini Buy Signal"
+ukazywaet tochku, gde tzena probiwaetsya wyshe werkhney parallel'noy
+linii Mini-wil i daet ranniy signal pokupki. Signaly pokupki po
+Mini-wilam mogut ispol'zowat'sya libo dlya wkhoda w rynok, libo kak
+ukazanie na to, chto bol'shie Wily skoro dadut swoy signal. Strelka i
+nadpis' " Large Buy Here" ukazywaet tochku, gde tzena probiwaetsya wyshe
+werkhney parallel'noy linii bol'shikh Wil i daet signal pokupki.
+
+ 
+
+Grafik nizhe - Solectron (SLR) gde po tochkam A, B i S prowedeny
+bol'shie Wily, a po razworotnym tochkam C, D i E - Mini-wily. Posle
+razworotnoy tochki C tzena okazalas' ne w sostoyanii podnyat'sya k
+bol'shoy Mediane. Eto ukazywaet na slabost'. Kogda tzena nachinaet
+otstupat' po naprawleniyu k nizhney parallel'noy linii, prowodyatsya
+Mini-wily. TZena prodwigaetsya ot razworotnoy tochki F wwerkh k
+Mini-Mediane, a zatem bystro padaet nizhe nizhney parallel'noy linii
+Mini-wil. Strelka i nadpis' "Mini-Sell Signal" ukazywaet tochku, gde
+tzena probiwaetsya nizhe nizhney parallel'noy linii Mini-wil i
+generiruet signal prodazhi. Etot signal prodazhi po Mini-wilam mozhet
+ispol'zowat'sya dlya wkhoda w rynok, ili kak ukazanie, chto wskore mogut
+dat' signal prodazhi bol'shie Wily. TZena prodolzhaet padat', poka eto
+ne prob'et nizhnyuyu parallel'nuyu liniyu bol'shikh Wil. Eto daet drugoy
+signal prodazhi. Strelka i tekst "Sell Signal" ukazywaet na mesto, gde
+tzena ukhodit nizhe nizhney parallel'noy linii bol'shikh Wil, generiruya
+signal prodazhi.
+
+ 
+
+Posle razworotnoy tochki C tzena dwizhetsya do bol'shoy Sredinnoy Linii
+i nachinaet dwigat'sya bokom. W eto wremya prowodyatsya Mini-wily,
+chtoby nayti ukazaniya o tom, chto rynok sobiraetsya podnyat'sya k
+werkhney parallel'noy linii bol'shikh wil ili wernut'sya obratno wniz.
+Woskhodyaschie Mini-wily prowodyatsya cherez razworotnye tochki D, E i
+F. Krome togo, cherez razworotnye tochki D i F prowoditsya nizhnyaya
+signal'naya mini-liniya. Zamet'te, chto tzena ne w sostoyanii
+podnyat'sya do Mini-Mediany posle razworotnoy tochki F, a zatem padaet
+nizhe nizhney signal'noy Mini-linii, chto yawlyaetsya signalom prodazhi.
+Etot mini signal prodazhi mozhet ispol'zowat'sya, chtoby woyti w rynok,
+ili w kachestwe preduprezhdeniya o skorom poyawlenii bol'shogo signala
+na prodazhu.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 6
+
+Patrick Mikula
+
+Preduprezhdayuschie linii
+
+Posle prowedeniya werkhney i nizhney parallel'nykh liniy pri postroenii
+Wil, Endryus stroil dopolnitel'nye parallel'nye linii wyshe i nizhe Wil.
+Eti linii nazywayutsya Preduprezhdayuschimi Liniyami. Na grafike nizhe
+dobawleny dwe Preduprezhdayuschie linii wyshe werkhney i nizhe nizhney
+parallel'noy linii Wil. Polozhenie werkhney Preduprezhdayuschey linii
+opredelyaetsya rasstoyaniem ot Sredinnoy Linii do werkhney parallel'noy
+linii. Eto rasstoyanie otkladywaetsya wyshe werkhney parallel'noy linii
+i Preduprezhdayuschaya Liniya prowoditsya na kazhdom priraschenii. To
+zhe samoe werno i dlya nizhnikh Preduprezhdayuschikh liniy. Rasstoyanie
+ot Sredinnoy Linii do nizhney parallel'noy linii otkladywaetsya ot nee
+wniz. Na kazhdom priraschenii prowoditsya nizhnyaya Preduprezhdayuschaya
+Liniya.
+
+ 
+
+ 
+
+Grafik pokazywaet MBNA Corporation (KRB). Wily i nizhnyaya Signal'naya
+Liniya prowedeny cherez razworotnye tochki A, B i C. Otmet'te, chto
+posle razworotnoy tochki C tzena ne prodwigaetsya wwerkh i ne dokhodit
+do Sredinnoy Linii. Kogda tzena padaet nizhe nizhney Signal'noy linii,
+generiruetsya signal prodazhi. Posle etogo signala tzena rezko padaet i
+risuet ostroe dno srazu nad Preduprezhdayuschey Liniey 3 w tochke D. Po
+mere swoego prodwizheniya wwerkh posle tochki D tzena oboznachaet
+snizheniya naprotiw Preduprezhdayuschikh Liniy w tochkakh E, G i H, a
+wershiny - naprotiw Preduprezhdayuschikh Liniy w tochkakh F i I.
+Obratite wnimanie, chto posle tochki D Preduprezhdayuschikh Linii 2 i 3
+rabotayut kak kanal liniy trenda, poka tzena ne prob'etsya nizhe
+Preduprezhdayuschey Linii 3 wniz, k tochke G. Zatem w kachestwe kanala
+nachinayut rabotat' Preduprezhdayuschie Linii 3 i 4.
+
+Nizhe my widim dolgosrochnyy nedel'nyy grafik Philip Morris (MO). Wily i
+odna Preduprezhdayuschaya Liniya prowedeny po tochkam A, B i C. Posle
+razworotnoy tochki C tzena dwizhetsya wniz dwumya wolnami. Perwaya wolna
+delaet dno w tochke D, na nizhney parallel'noy linii Wil. Wtoraya wolna
+opredelyaet dno na Preduprezhdayuschey Linii w tochke E. Posle dna na
+etoy Preduprezhdayuschey Linii tzena pochti tzelyy god idet wwerkh.
+
+ 
+
+ 
+
+Grafik wyshe - Abbott Laboratories (AWT). Wily i chetyre werkhnie
+Preduprezhdayuschie Linii prowedeny s pomosch'yu razworotnykh tochek A,
+B i C. Posle razworotnoy tochki C tzena ne padaet do Sredinnoy Linii,
+chto yawlyaetsya priznakom sily rynka. Po mere swoego prodwizheniya
+wwerkh, tzena delaet wershinu protiw Preduprezhdayuschey Linii 1 w
+tochke D, a takzhe protiw Preduprezhdayuschey Linii 2 w tochke E i
+protiw Preduprezhdayuschey Linii 4 w tochke G. Etot rynok takzhe delaet
+dwa dna protiw Preduprezhdayuschey Linii 3 w tochkakh F i H.
+
+Nizhe priweden grafik Comcast corporation (CMCSK). Na etom grafike Wily
+i dwe nizhnie Preduprezhdayuschie Linii prowedeny s pomosch'yu
+razworotnykh tochek A, B, i C. Posle razworotnoy tochki C tzena idet
+wwerkh i delaet wershinu w tochke D protiw Sredinnoy Linii. Zatem tzena
+delaet wtoruyu wershinu protiw Sredinnoy Linii w tochke E. Posle tochki
+E tzena rezko padaet i swoyu sleduyuschuyu wershinu delaet protiw
+nizhney parallel'noy linii Wil w tochke F. Posle tochki F tzeny bystro
+idet wniz k Preduprezhdayuschey Linii 2 w tochke G. Nakonetz, tzena
+dwizhetsya wwerkh i oboznachaet wershinu protiw Preduprezhdayuschey
+Linii 1 w tochke H. Eto pokazywaet, chto pochti wse suschestwennye
+kolebaniya sdelany protiw odnoy iz liniy Wil ili Preduprezhdayuschikh
+Liniy.
+
+ 
+
+ 
+
+Wyshe priweden prosteyshiy primer etogo, s pomosch'yu grafika Allstate
+(ALL). Wily i neskol'ko Preduprezhdayuschikh Liniy prowedeny s
+pomosch'yu razworotnykh tochek A, B, i C. Posle razworotnoy tochki C
+rynok rastet do Sredinnoy Linii w tochke D. Zatem tzena padaet do
+Preduprezhdayuschey Linii 1 w tochke E i delaet dno. Posle tochki E
+nizhnyaya parallel'naya liniya Wil i Preduprezhdayuschaya Linii 1
+rabotayut, kak kanal woskhodyaschego trenda.
+
+Sleduyuschiy grafik pokazywaet aktzii Boeing (BA). Wily i chetyre
+Preduprezhdayuschie Linii prowedeny iz razworotnykh tochek A,B, i C.
+Posle razworotnoy tochki C tzena rastet do wershiny srazu pod werkhney
+parallel'noy linii Wil w tochke D. Zatem tzena padaet i wkhodit w zonu
+bokowoy konsolidatzii protiw nizhney parallel'noy linii Wil w tochke E.
+W kontze kontzow, iz tochki E tzena idet wniz do Preduprezhdayuschey
+Linii 4 i delaet dno w tochke F. Eto pokazywaet nam, chto urowni tzeny,
+opredelyaemye Wilami i Preduprezhdayuschimi Liniyami - neplokhaya
+otzenka razmerow buduschikh kolebaniy Boeing.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 7
+
+Patrick Mikula
+
+Pattern Rasshiryayuschikhsya Kolebaniy
+
+Est' lish' odin pattern, kotoryy Endryus schel dostatochno wazhnym,
+chtoby wklyuchit' ego w swoy kurs. Eto pattern rasshiryayuschikhsya
+kolebaniy, kotoryy pokazan na grafike nizhe. Etot pattern proiskhodit,
+kogda serii kolebaniy tzeny stanowyatsya wse shire i shire. Na grafike
+wy widite, chto khod ot W do S - bol'she, chem swing ot A do B.
+Kolebanie ot S do D - bol'she, chem predshestwuyuschiy emu khod, a swing
+D-E - samyy shirokiy. Endryus weril, chto takaya model' formiruetsya na
+rynke, kotoryy stanowitsya nestoykim, i skoro posleduet rezkiy proryw
+wniz.
+
+ 
+
+Nizhe priweden primer modeli rasshiryayuschikhsya kolebaniy po Endryusu.
+Eto model' wershiny, obychno ona sluchaetsya, kogda rynok bolee
+nepostoyanen, chem obychno. Etot pattern ukazywaet, chto rynok
+stanowitsya nestoykim i wot-wot proizoydet proryw. CHernaya liniya pod
+barami tzeny identifitziruet werkh i niz kolebaniy tzeny,
+sostawlyayuschikh etu model'. Kazhdoe sleduyuschee kolebanie bol'she
+predyduschego. Etot pattern zdes' imeet dopolnitel'nuyu znachimost',
+potomu chto formiruetsya na dolgosrochnoy Sredinnoy Linii. Posle togo,
+kak model' sformiruetsya, tzena idet wniz.
+
+ 
+
+Metod Deystwiya-Reaktzii (Action Reaction Method) 1
+
+Na seminarakh i w swoem kurse po Deystwiyu-Reaktzii Endryus powtoryal,
+chto, esli treydery poymut lish' tol'ko odin etot metod, oni mogut
+sdelat' million dollarow.
+
+SHag 1: Liniya TZentra
+
+Metod Deystwiya-Reaktzii 1 ispol'zuet tri razlichnykh roda liniy, Liniyu
+TZentra, Linii Deystwiya i Linii Reaktzii. Perwyy shag w primenenii
+etogo metoda - wybrat' Liniyu TZentra. Liniya TZentra mozhet byt'
+Sredinnoy Liniey, liniey trenda ili Mul'tipiwotnoy Liniey. Liniya
+TZentra ne mozhet byt' odnoy iz parallel'nykh liniy, naprimer, werkhney
+ili nizhney parallel'noy liniey Wil ili Preduprezhdayuschey Liniey.
+Grafik nizhe - nedel'nyy grafik Halliburton (HAL). Na etom grafike
+prowedena prostaya liniya trenda, soedinyayuschaya razworotnye tochki A
+i B. Eta liniya trenda A-W ispol'zuetsya w kachestwe Linii TZentra. Sam
+metod my ob'yasnim na sleduyuschikh neskol'kikh stranitzakh.
+
+ 
+
+SHag 2: Linii Deystwiya
+
+Grafik nizhe - tot zhe HAL. Liniya trenda A-W - eto Liniya TZentra dlya
+Metoda Deystwiya-Reaktzii. Printzip Deystwiya-Reaktzii Endryusa na
+finansowykh rynkakh prost - dlya kazhdogo deystwiya est' reaktziya na
+nego. Deystwie - eto istoricheskaya chast' grafika wlewo ot Linii
+TZentra, a reaktziya - eto buduschaya chast' grafika sprawa ot Linii
+TZentra. Soglasno Endryusu, istoricheskim rynochnym tziklam i
+razworotnym tochkam slewa ot Linii TZentra sootwetstwuyut reaktzii w
+buduschem, sprawa ot Linii TZentra.
+
+Linii Deystwiya prowodyatsya s tem zhe naklonom, chto i Liniya TZentra.
+Linii Deystwiya prowodyatsya slewa ot Linii TZentra na istoricheskoy
+chasti grafika i razmeschayutsya tak, chtoby oni kasalis' werkhney ili
+nizhney razworotnoy tochki. Na grafike nizhe, Liniya Deystwiya 1
+razmeschena tak, chto ona kasaetsya nizhney razworotnoy tochki. Liniya
+Deystwiya 2 razmeschena tak, chto ona kasaetsya werkhney razworotnoy
+tochki. Eto yasno oboznacheno na grafike nizhe.
+
+ 
+
+SHag 3: Linii Reaktzii 
+
+Deystwie - eto istoricheskoe dwizhenie grafika, a reaktziya - eto
+buduschee dwizhenie tzeny. CHtoby prowesti Liniyu Reaktzii, izmeryaetsya
+rassoyanie ot Linii TZentra do Linii Deystwiya 1. Liniya Reaktzii
+prowoditsya na takom zhe rasstoyanii w buduschee ot Linii TZentra.
+Rasstoyanie ot Linii TZentra budet odinakowym do Linii Deystwiya 1 i
+Linii Reaktzii 1 s toy lish' raznitzey, chto Liniya Deystwiya 1
+prowedena s lewoy storony, a Liniya Reaktzii 1 - sprawa. Eta protzedura
+powtoryaetsya dlya Linii Deystwiya 2. Teper' ochewidno, pochemu Liniya
+TZentra nazywaetsya imenno tak. Liniya TZentra nakhoditsya w tzentre
+Liniy Deystwiya i Liniy Reaktzii. Grafik nizhe pokazywaet Liniyu TZentra
+s dwumya Liniyami Deystwiya i dwumya sootwetstwuyuschimi Liniyami
+Reaktzii. Linii Reaktzii imeyut tot zhe naklon, chto i Liniya TZentra i
+Linii Deystwiya.
+
+ 
+
+Grafik nizhe - eto prodolzhenie predyduschego grafika HAL. TZeny doshla
+do kontza grafika. Wdol' Linii Reaktzii 1 est' tri werkhnie razworotnye
+tochki - A, C i E. Dlya deystwiya istoricheskoy razworotnoy tochki,
+ispol'zuemoy, chtoby prowesti Liniyu Deystwiya 1, est' reaktziya trekh
+razworotnykh tochek wdol' Linii Reaktzii 1. Est' takzhe dwe nizhnie
+razworotnye tochki wdol' Linii Reaktzii 2. Dlya deystwiya istoricheskoy
+razworotnoy tochki, ispol'zuemoy, chtoby prowesti Liniyu Deystwiya 2,
+est' reaktziya dwukh razworotnykh tochek na Linii Reaktzii 2.
+Kontzeptziya deystwiya-reaktzii Endryusa - w tom, chto kazhdaya
+istoricheskaya razworotnaya tochka - eto deystwie, dlya kotorogo
+naydetsya buduschaya razworotnaya tochka reaktzii. Ispol'zuya etot
+metod, treyder ischet razworotnye tochki na Liniyakh Reaktzii.
+
+ 
+
+ 
+
+Grafik na etoy stranitze daet prostoy primer Metoda Reaktzii Deystwiya
+1. Eto grafik mayskikh 2002 f'yuchersow na serebro. Liniya trenda ot
+maksimuma k minimumu ispol'zuetsya, kak Liniya TZentra. Liniya Deystwiya
+- pod tem zhe uglom, chto i Liniya TZentra. Liniya Deystwiya
+nachinaetsya na perwom suschestwennom minimume kolebaniya pered Liniey
+TZentra. Liniya Reaktzii imeet tot zhe naklon, chto i Liniya TZentra i
+prowedena na takom zhe rasstoyanii ot Linii TZentra, chto i Liniya
+Deystwiya. Liniya Deystwiya predstawlyaet istoricheskoe deystwie tzikla,
+a Liniya Reaktzii predstawlyaet buduschuyu reaktziyu tzikla. Wershina
+rynka sluchilas' srazu, kak tol'ko tzena dostigla Linii Reaktzii. Eta
+wershina oboznachena bukwoy A.
+
+Grafik nizhe daet primer Metoda Deystwiya Reaktzii 1, ispol'zuya mayskie
+f'yuchersy na med' 2002. Perwyy shag pri ispol'zowanii etogo metoda -
+wybrat' Liniyu TZentra. W dannom sluchae dlya Linii TZentra
+ispol'zuetsya liniya trenda ot maksimuma k minimumu. CHetyre Linii
+Deystwiya na etom grafike imeyut tot zhe naklon, chto i Liniya TZentra i
+sopostawleny s predyduschimi wershinami ili nizami. Linii Deystwiya
+raspolagayutsya do Linii TZentra i predstawlyayut soboy istoricheskoe
+rynochnoe deystwie. Linii Reaktzii prowodyatsya na takom zhe rasstoyanii
+ot Linii TZentra, kak i Linii sootwetstwennogo Deystwiya i imeyut tot
+zhe naklon, chto i Liniya TZentra. Na etom grafike rynok sdelal wershinu
+protiw Linii Reaktzii 1 w tochke A. Rynok pokazal niz kolebaniya protiw
+Linii Reaktzii 2 w tochke W i wershinu protiw Linii Reaktzii 4 w tochke
+C.
+
+ 
+
+ 
+
+Nizhe pokazan grafik dlya mayskikh f'yuchersow na kofe 2002. W kachestwe
+Linii TZentra wybrana liniya trenda ot maksimuma k minimumu. Kazhdaya iz
+trekh Liniy Deystwiya na etom grafike sopostawlena s nizami kolebaniy,
+kotorye proiskhodili do Linii TZentra. Tri Linii Reaktzii na etom
+grafike sootwetstwuyut trem Liniyam Deystwiya. Linii Reaktzii imeyut tot
+zhe naklon, chto i Liniya TZentra i prowedeny na takom zhe rasstoyanii
+ot Linii TZentra, chto Liniya sootwetstwennogo Deystwiya. Liniya
+Reaktzii 1 - na takom zhe rasstoyanii ot Linii TZentra, chto i Liniya
+Deystwiya 1, i tak dalee. Zamet'te, chto rynok delaet wershinu, kogda
+dostigaet Linii Reaktzii 1 w tochke A. Rynok takzhe delaet dno na Linii
+Reaktzii 2 w tochke B. Nakonetz, rynok delaet wershinu na Linii reaktzii
+3 w tochke C.
+
+Zdes' pokazan grafik Sun Microsystems (SUNW). W kachestwe Linii TZentra
+wybrana liniya trenda ot maksimuma k minimumu. Na etom grafike est'
+tol'ko odna Liniya Deystwiya, pomechennaya AL1. Eta Liniya Deystwiya
+sopostawlena s minimumom kolebaniya. Na etom grafike est' tol'ko odna
+Liniya Reaktzii, pomechennaya RL1. Eta liniya reaktzii imeet tot zhe
+naklon, chto i Liniya TZentra i Liniya Deystwiya. Polozhenie Linii
+Reaktzii ustanowleno rasstoyaniem ot Linii TZentra do Linii Deystwiya.
+Liniya Reaktzii lezhit na rawnom rasstoyanii ot Linii TZentra, chto i
+Liniya Deystwiya. Na grafike nizhe minimum rynka proizoshel srazu posle
+togo, kak tzena upala nizhe Linii Reaktzii.
+
+ 
+
+ 
+
+Eto perwyy iz trekh grafikow indeksa S&P500. Perwyy shag w primenenii
+Metoda Deystwiya-Reaktzii - wybrat' Liniyu TZentra. Na grafike wyshe,
+Liniya TZentra soedinyaet maksimum i minimum kolebaniya ot posledney
+wershiny pered terroristicheskoy atakoy 11 sentyabrya na Wsemirnyy
+Torgowyy TZentr do minimuma posle ataki. Eto osnownye ekstremumy,
+kotorye sdelala pochti kazhdaya aktziya. Linii Deystwiya predstawleny na
+sleduyuschem grafike.
+
+Grafik nizhe - wtoroy iz trekh grafikow, poyasnyayuschikh Metod
+Deystwiya-Reaktzii 1 na indekse S&P500. Wtoroy shag pri primenenii
+Metoda Deystwiya-Reaktzii - wybrat' razmeschenie Liniy Deystwiya. Na
+etom grafike pyat' Liniy Deystwiya sopostawleny s pyat'yu wershinami,
+sluchiwshimisya do Linii TZentra. Posmotrite sleduyuschiy grafik, chtoby
+uwidet' sootwetstwuyuschie Linii Reaktzii.
+
+ 
+
+ 
+
+Grafik zdes' - tretiy, zaklyuchitel'nyy grafik etogo primera
+Deystwiya-Reaktzii S&P500. Pyat' Liniy Reaktzii na etom grafike
+sootwetstwuyut pyati Liniyam Deystwiya na predyduschem grafike. Kazhdaya
+Liniya Reaktzii imeet tot zhe naklon, chto i Liniya TZentra i
+raspolozhena na takom zhe rasstoyanii ot Linii TZentra, kak i Liniya
+sootwetstwennogo Deystwiya. Rynok delaet nebol'shuyu wershinu, kogda
+dostigaet Linii Reaktzii 1 w tochke A. Rynok delaet esche odnu
+nebol'shuyu wershinu, kogda dostigaet Linii Reaktzii 2 w tochke B. Rynok
+delaet minimum, kogda dostigaet Linii Reaktzii 4 w tochke S i, nakonetz,
+indeks S&P500 delaet wershinu, kogda dostigaet Linii Reaktzii 5 w tochke
+D.
+
+Nizhe - grafik Gap Inc (GPS). Na etom grafike est' Sredinnaya Liniya,
+ispol'zuemaya w kachestwe Linii TZentra. Perwyy shag w primenenii Metoda
+Deystwiya-Reaktzii - wybrat' Liniyu TZentra. Pri ispol'zowanii Sredinnoy
+Linii w kachestwe Linii TZentra, wyberite Sredinnuyu Liniyu na kotoroy
+rynok delaet razworot
+
+Na grafike nizhe, zamet'te, kak tzena prodwigaetsya wwerkh i kasaetsya
+Sredinnoy Linii w tochke W, proizwodya wershinu na Sredinnoy Linii.
+Kogda tzena razworachiwaetsya na Sredinnoy Linii, eto ukazywaet, chto
+Sredinnaya Liniya dolzhna khorosho rabotat' w kachestwe Linii TZentra.
+
+Wtoroy shag w primenenii Metoda Deystwiya-Reaktzii - prowesti Linii
+Deystwiya. Na grafike nizhe est' tol'ko odna Liniya Deystwiya. Ona
+sopostawlena s wershinoy w tochke A i imeet tot zhe naklon, chto i
+Sredinnaya Liniya.
+
+Zaklyuchitel'nyy shag - prowesti Linii Reaktzii, kotorye sootwetstwuyut
+Liniyam Deystwiya. Rasstoyanie ot Linii Deystwiya do Linii TZentra takoe
+zhe, kak rasstoyanie ot Linii TZentra do Linii Reaktzii. Obratite
+wnimanie, kak rynok bystro padaet ot Sredinnoy Linii w tochke W do Linii
+Reaktzii w tochke S, gde obrazuetsya dno.
+
+ 
+
+Grafik nizhe yawlyaetsya perwym iz trekh dlya Abbott Laboratories (AWT).
+Kazhdyy iz etikh trekh pokazow grafikow dolgosrochnogo primera dlya
+Metoda Deystwiya-Reaktzii 1 ispol'zuet Sredinnuyu Liniyu w kachestwe
+Linii TZentra. Perwyy grafik pokazywaet Sredinnuyu Liniyu, kotoraya
+wybrana w kachestwe Linii TZentra. Eta Sredinnaya Liniya wybrana potomu,
+chto rynok delaet na ney razworotnuyu tochku w tochke A. 
+
+ 
+
+Nizhe priweden wtoroy iz trekh grafikow dlya Abbott Laboratories. Posle
+wybora Linii TZentra, wtorym shagom w primenenii Metoda
+Deystwiya-Reaktzii sleduet prowesti Linii Deystwiya slewa ot Linii
+TZentra. Linii Deystwiya ispol'zuyut tot zhe naklon, chto i Liniya
+TZentra i sopostawleny s werkhney ili nizhney razworotnymi tochkami. Na
+grafike nizhe, Liniya Deystwiya 1 (AL1) sopostawlena s wershinoy
+kolebaniya, Liniya Deystwiya 2 (AL2) - s minimumom kolebaniya, Liniya
+Deystwiya 3 (AL3) - takzhe s nizom kolebaniya i, nakonetz, Liniya
+Deystwiya 4 (AL4) - s minimumom kolebaniya. Rasstoyanie ot kazhdoy Linii
+Deystwiya do Linii TZentra - izmerenie istoricheskogo tzikla,
+ispol'zuyuscheesya, chtoby prowesti w buduschem Liniyu sootwetstwennoy
+Reaktzii. 
+
+ 
+
+Grafik nizhe - tretiy, zaklyuchitel'nyy grafik dlya etogo primera s
+Abbott Laboratories. Linii Reaktzii na etom grafike sootwetstwuyut
+Liniyam Deystwiya predyduschego grafika. Liniya Reaktzii 1 (RL1) - na
+takom zhe rasstoyanii ot Linii TZentra, kak Liniya Deystwiya 1. Linii
+Reaktzii 2, 3, i 4 - na takom zhe rasstoyanii ot Linii TZentra, kak
+Linii Deystwiya 2, 3, i 4. Linii Reaktzii imeyut tot zhe naklon, chto i
+Liniya TZentra. TZena delaet minimum kolebaniya na Linii Reaktzii 1 w
+tochke A. TZena delaet nowyy minimum na Linii Reaktzii 2 w tochke B. A
+tretiy minimum tzena delaet na Linii Reaktzii 3 w tochke S i, nakonetz,
+rynok delaet wershinu na Linii Reaktzii 4 w tochke D.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 8
+
+Patrick Mikula
+
+Metod Deystwiya-Reaktzii (Action Reaction Method) 2 
+
+SHag 1: Liniya TZentra
+
+Raznitza mezhdu Metodami Deystwiya-Reaktzii 1 i 2 zaklyuchaetsya w
+chisle liniy Deystwiya i wychislenii raspolozheniya Liniy Reaktzii.
+Liniya Deystwiya i Linii Reaktzii budut obsuzhdat'sya dalee, a seychas
+my pogoworim o Linii TZentra.
+
+Perwyy shag w primenenii Metoda Deystwiya-Reaktzii 2 - wybrat' Liniyu
+TZentra. Prawila wybora Linii TZentra u Metodow Deystwiya-Reaktzii 1 i 2
+odinakowy. Liniya TZentra mozhet byt' Sredinnoy Liniey, liniey trenda
+ili Mul'tipiwotnoy Liniey. Liniya TZentra ne mozhet byt' odnoy iz
+parallel'nykh liniy, naprimer, werkhney ili nizhney parallel'noy liniey
+Wil ili Preduprezhdayuschey Liniey. Grafik nizhe predstawlyaet aktzii
+Walgreen (WAG). Na etom grafike mezhdu maksimumom i minimumom prowedena
+liniya trenda. Eta liniya ispol'zowana w kachestwe Linii TZentra, chtoby
+poyasnit' Metod Deystwiya-Reaktzii 2.
+
+ 
+
+SHag 2: Liniya Deystwiya
+
+Metod Deystwiya-Reaktzii 2 ispol'zuet lish' odnu Liniyu Deystwiya, s
+pomosch'yu kotoroy wychislyaetsya polozhenie wsekh Liniy Reaktzii.
+Liniya Deystwiya dolzhna prowodit'sya slewa ot Linii TZentra pod tem zhe
+uglom, chto i Liniya TZentra. Liniya Deystwiya dolzhna byt' sopostawlena
+s wershinoy ili minimumom predyduschego kolebaniya. Rasstoyanie mezhdu
+Liniey Deystwiya i Liniey TZentra izmeryaet istoricheskiy tzikl,
+ispol'zuemoe, chtoby prowesti Linii Reaktzii w buduschem. Grafik
+Walgreen nizhe demonstriruet odnu Liniyu Deystwiya, kotoraya
+sopostawlena s wershinoy kolebaniya.
+
+ 
+
+SHag 3: Linii Reaktzii
+
+W Metode Deystwiya-Reaktzii 2 suschestwuet lish' odna Liniya Deystwiya,
+kotoraya ispol'zuetsya, chtoby wychislit' raspolozhenie wsekh Liniy
+Reaktzii. Rasstoyanie ot Linii Deystwiya do Liniyu TZentra opredelyaet
+mesto wsekh Liniy Reaktzii. Liniya Reaktzii 1 prowoditsya na takom zhe
+rasstoyanii ot Linii TZentra kak i Liniya Deystwiya. Liniya Reaktzii 2
+prowoditsya wdwoe dal'she ot Linii TZentra, chem Liniya Deystwiya.
+Liniya Reaktzii 3 prowoditsya w tri raza dal'she ot Linii TZentra, chem
+Liniya Deystwiya. Rasstoyanie mezhdu Liniey Deystwiya i Liniey TZentra -
+eto rasstoyanie mezhdu sosednimi Liniyami Reaktzii. Na grafike nizhe
+rasstoyanie mezhdu Liniey Deystwiya i Liniey TZentra - takoe zhe, kak i
+rasstoyaniya mezhdu Liniey Reaktzii 2 i Liniey Reaktzii 3 ili Liniey
+Reaktzii 2 i Liniey Reaktzii 1 ili Liniey Reaktzii 1 i Liniey TZentra.
+Ispol'zuya etu wersiyu Metoda Deystwiya-Reaktzii, w buduschem mozhno
+narisowat' bezgranichnoe chislo Liniy Reaktzii. Wse - na rawnom
+rasstoyanii drug ot druga.
+
+ 
+
+jCu
+
+j1+-
+
+j [
+
+j?E
+
+j`!
+
+B
+
+8t. TZena bokom delaet wershinu, kogda kasaetsya Linii Reaktzii 2 w
+tochke W, a zatem snizhaetsya. Nakonetz, kogda tzena dostigaet Linii
+Reaktzii 3 w tochke C, ona delaet wershinu i padaet. Eto pokazywaet,
+chto rasstoyanie mezhdu Liniey Deystwiya 1 i Liniey TZentra, kak
+okazywaetsya, yawlyaetsya khoroshey meroy otzenki buduschikh tziklow.
+
+ 
+
+Grafik nizhe - dolgosrochnyy dnewnoy grafik Teradyne (TER). Na nem
+prodemonstrirowan Metod Deystwiya-Reaktzii 2. Liniya TZentra - eto
+liniya trenda mezhdu maksimumom i minimumom s lewoy storony etogo
+grafika. Prowedena lish' odna Liniya Deystwiya - na grafike slewa,
+sopostawlennaya s wershinoy kolebaniya w tochke A. Liniya Deystwiya
+pomechena bukwami "AL". Ispol'zuya rasstoyanie mezhdu Liniey Deystwiya i
+Liniey TZentra, na odnoy i toy zhe distantzii prowodyatsya tri Linii
+Reaktzii. Kogda tzena dostigaet Linii Reaktzii 1 (RL1), ona risuet dno w
+tochke W i wershinu w tochke C. Kogda tzena kasaetsya Linii Reaktzii 2
+(RL2), w tochke D poyawlyaetsya dno. TZena dwizhetsya bokom do RL3 w
+tochke E, gde delaet nebol'shoe dno i bystro dwizhetsya wwerkh. TZena
+snowa dostigaet RL3 w tochke F, gde zakanchiwaetsya swing wwerkh.
+
+ 
+
+Grafik nizhe demonstriruet lnfospace.com (INSP). Zdes' primenen Metod
+Deystwiya-Reaktzii 2. Liniya TZentra - liniya trenda mezhdu maksimumom i
+minimumom s lewoy storony etogo grafika. Prowedena odna Liniya Deystwiya
+- "AL", sopostawlennaya s wershinoy kolebaniya w tochke A. Ispol'zuya
+distantziyu mezhdu Liniey Deystwiya i Liniey TZentra, na rawnom
+rasstoyanii drug ot druga prowodyatsya chetyre Linii Reaktzii. Kogda
+tzena dostigaet Linii Reaktzii 1 (RL1), ona risuet wershinu w tochke B.
+Kogda tzena kasaetsya Linii Reaktzii 2 (RL2), poyawlyaetsya wershina w
+tochke C. Srazu posle Linii Reaktzii 4 (RL4) tzena pokazywaet dno w
+tochke D. 
+
+ 
+
+Skol'zyaschaya Liniya trenda
+
+Skol'zyaschaya liniya trenda unikal'na sredi metodow liniy trenda
+Endryusa, tak kak ona prowoditsya ne po fiksirowannym razworotnym
+tochkam, a po dwizhuscheysya linii trenda. Skol'zyaschaya Liniya trenda
+nachinaetsya ot Mul'tipiwotnoy Linii, Sredinnoy Linii ili prostoy liniya
+trenda, a zatem dubliruet startowuyu liniyu trenda. Eta dwoynaya liniya
+- Skol'zyaschaya Liniya trenda, kotoraya mozhet peremeschat'sya,
+stanowyas' podwizhnoy liniey, parallel'noy startowoy. Skol'zyaschaya
+Liniya trenda ispol'zuetsya dlya sozdaniya kanala liniy trenda.
+Skol'zyaschaya Liniya trenda dwigaetsya, chtoby pereopredelit' shirinu
+kanala liniy trenda. Skol'zyaschaya Liniya trenda ispol'zuetsya, chtoby
+ustanowit' werkhnyuyu i nizhnyuyu granitzy woskhodyaschego ili
+niskhodyaschego trenda.
+
+Grafik nizhe pokazywaet Advanced Micro Devices (AMD). Sploshnaya
+chernaya liniya - Mul'tipiwotnaya Liniya, yawlyayuschayasya startowoy
+liniey trenda. Wtoraya liniya na etom grafike - dwoynik linii trenda.
+Ispol'zuyuschayasya, kak Skol'zyaschaya Liniya trenda dlya sozdaniya
+kanala liniy niskhodyaschego trenda. Skol'zyaschaya Liniya trenda
+raspolozhena tak, chto sozdaet werkhnyuyu granitzu po wershinam
+kolebaniy etogo niskhodyaschego trenda. Poka tzeny ostayutsya wnutri
+etogo kanala, trend sokhranyaetsya.
+
+ 
+
+Sleduyuschiy grafik - Amazon.com (AMZN). Sploshnaya chernaya liniya -
+Mul'tipiwotnaya Liniya. Drugie dwe linii trenda na etom grafike -
+dublikaty etoy Mul'tipiwotnoy Linii, kotorye ispol'zuyutsya w kachestwe
+Skol'zyaschikh Liniy trenda. Skol'zyaschie Linii trenda raspolagayutsya
+tak, chto predstawlyayut soboy nizhnyuyu granitzu kolebaniy
+niskhodyaschego trenda. Poka tzena ostaetsya wnutri etogo kanala, trend
+ostaetsya niskhodyaschim.
+
+ 
+
+Grafik nizhe - KLA Instruments (KLAC). Sploshnaya chernaya liniya - eto
+Mul'tipiwotnaya Liniya. Drugie dwe linii trenda na etom grafike -
+dublikaty etoy Mul'tipiwotnoy Linii, kotorye ispol'zuyutsya w kachestwe
+Skol'zyaschikh Liniy trenda. Skol'zyaschie Linii trenda raspolagayutsya
+tak, chto predstawlyayut soboy werkhnyuyu i nizhnyuyu granitzy kolebaniy
+woskhodyaschego trenda. Poka tzena ostaetsya wnutri etogo kanala, trend
+naprawlen wwerkh.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 9
+
+Patrick Mikula
+
+Torgowlya patternow po wolnam Elliotta
+
+Wolnowoy printzip Elliotta byl populyaren wo wremena okonchaniya kar'ery
+Endryusa i on weril w etot metod. Endryus ispol'zowal linii trenda dlya
+predskazaniy razworotnykh tochek po wolnam Elliotta. Eta kniga ne daet
+glubokogo analiza teorii woln Elliotta, kotoraya mozhet zapolnit' soboy
+wsyu knigu. Teoriya woln Elliotta uchit, chto rynochnye trendy
+dwigayutsya pyat'yu wolnami. Primer takogo trenda priweden na grafike
+nizhe. Kolebaniya tzeny 1, 2, 3, 4, 5 sostawlyayut pyat' modeley woln
+Elliotta. Teoriya woln Elliotta uchit, chto posleduyuschaya korrektziya
+rynka budet dwigat'sya tremya wolnami w protiwopolozhnom naprawlenii. Na
+grafike nizhe tzenowye kolebaniya, pomechennye, kak a, b i s - tri
+kolebaniya protiw trenda. Ta zhe samaya model' opredelyaetsya i pri
+trende pyat'yu wolnami wniz i tremya wolnami protiw trenda.
+
+ 
+
+Endryus uchil, chto eta model' ne formiruetsya na kazhdom trende, no
+sluchaetsya dostatochno chasto, chtoby treydery byli uwereny w ney.
+Strategiya, kotoruyu Endryus predlagal dlya torgowli etoy model'yu,
+sostoit w tom, chtoby prowesti liniyu trenda, soedinyayuschuyu
+razworotnye tochki 0 i 4. Pri woskhodyaschem trende, tzena dolzhna
+upast' nizhe linii trenda 0 - 4, kogda trend razworachiwaetsya posle
+wershiny wolny 5. Treyder prodaet, kogda tzena padaet nizhe linii trenda
+0 - 4.
+
+Na trende wniz, kogda formiruetsya pyatiwolnowaya model', Endryus
+prowodil niskhodyaschuyu liniyu trenda 0-4. Posle okonchaniya wolny 5
+tzena dolzhna wyrasti wyshe linii trenda 0 - 4, chtoby sformirowat'
+woskhodyaschee dwizhenie a b s. Kogda tzena prorywaetsya wyshe linii
+trenda 0 - 4, strategiya Endryusa utwerzhdaet, chto nastalo wremya
+pokupat'.
+
+Sleduyuschiy grafik pokazywaet mayskie f'yuchersy na kofe 2002. Kontrakt
+delaet pyat' woln wwerkh. Eta model' pomechena ot 0 do 5, a liniya
+trenda prowedena, soedinyaya razworotnye tochki 0 i 4. Kogda tzena
+prorywaet etu liniyu trenda 0 - 4 wniz, poyawlyaetsya signal na
+prodazhu.
+
+ 
+
+Grafik nizhe pokazywaet 3Com (COM3). Eta aktziya delaet pyat' woln
+wwerkh, pomechennye ot 0 do 5. Liniya trenda prowoditsya, soedinyaya
+razworotnye tochki 0 i 4. Kogda tzena prorywaet etu liniyu trenda 0 - 4
+wniz, poyawlyaetsya signal na prodazhu.
+
+ 
+
+Sleduyuschiy grafik pokazywaet noyabr'skie f'yuchersy na soyu 2002. Etot
+kontrakt delaet pyat' woln wwerkh. Eta model' pomechena ot 0 do 5, a
+liniya trenda prowedena, soedinyaya razworotnye tochki 0 i 4. Kogda
+tzena prorywaet etu liniyu trenda 0 - 4 wniz, eto ukazywaet na nachalo
+wstrechnogo khoda wniz a b s.
+
+ 
+
+Grafik nizhe pokazywaet Double Click (DCLK). Eta aktziya delaet pyat'
+woln wwerkh. Pattern razmechen ot 0 do 5, a liniya trenda soedinyaet
+razworotnye tochki 0 i 4. Kogda tzena prorywaet etu liniyu trenda 0 - 4
+wniz, eto oboznachaet nachalo niskhodyaschego wstrechnogo khoda, prishlo
+wremya prodawat'.
+
+ 
+
+Sleduyuschiy grafik - nedel'nyy Gillette (G). Aktziya delaet pyat' woln
+wwerkh, pomechennye ot 0 do 5. Liniya trenda soedinyaet razworotnye
+tochki 0 i 4. Kogda tzena ukhodit nizhe etoy (0 - 4) linii trenda,
+prawila Endryusa ukazywayut, chto nachinaetsya niskhodyaschee dwizhenie
+protiw trenda.
+
+ 
+
+Grafik nizhe - Knight Trading (NITE). Eta aktziya delaet pyat' woln
+wwerkh. Pattern razmechen ot 0 do 5, a liniya trenda soedinyaet
+razworotnye tochki 0 i 4. Kogda tzena prorywaet etu liniyu trenda 0 - 4
+wniz, treyder mozhet prodawat' na khode wniz s uwerennost'yu w tom, chto
+nachinaetsya dwizhenie protiw trenda.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 10
+
+Patrick Mikula
+
+Razdel 2: Pyat' nowykh metodow torgowli po liniyam trenda
+
+Nowye Wily - Prawilo torgowli 1
+
+Prawilo Pokupki po Wilam 1: Prowedite niskhodyaschie Wily. Esli tzena
+dwizhetsya wdol' werkhney parallel'noy linii Wil, ne slishkom opuskayas'
+wnutr' Wil, eto priznak sily rynka. Kogda wes' bar tzeny tzelikom
+okazhetsya wyshe werkhney paralleli - eto signal pokupki.
+
+Prawilo Prodazhi po Wilam 1: Prowedite woskhodyaschie Wily. Esli tzena
+dwizhetsya wdol' nizhney parallel'noy linii Wil, ne slishkom powyshayas'
+wnutr' Wil, eto priznak slabosti rynka. Kogda wes' bar tzeny tzelikom
+okazhetsya nizhe nizhney paralleli - eto signal prodazhi.
+
+Grafik nizhe - Dell (DELL). Wily prowedeny cherez razworotnye tochki A,
+B i C. Posle razworotnoy tochki C tzenowye dwizhetsya wdol' werkhne1
+parallel'noy linii Wil. TZena ne ukhodit dazhe na polowinu rasstoyaniya
+do Sredinnoy Linii, chto yawlyaetsya priznakom sily etogo rynka. Kogda
+wes' bar okazywaetsya wyshe werkhney parallel'noy linii, daetsya signal
+pokupki. Strelka "Buy Here" ukazywaet na bar signala.
+
+ 
+
+Sleduyuschiy grafik - Solectron (SLR). Wily prowodyatsya, ispol'zuya
+razworotnye tochki A, B i C. Posle razworotnoy tochki C tzena idet wdol'
+nizhney parallel'noy linii. TZena ne podnimaetsya dazhe na polowinu puti
+do Sredinnoy Linii, chto yawlyaetsya priznakom slabosti etogo rynka.
+Kogda wes' bar okazywaetsya nizhe nizhney parallel'noy linii, daetsya
+signal prodazhi. Strelka "Sell Here" identifitziruet tochnyy bar
+signala.
+
+ 
+
+Grafik nizhe - Real Networks (RNWK). Wily prowedeny cherez razworotnye
+tochki A, B i C. Posle razworotnoy tochki C tzena idet wdol' nizhney
+parallel'noy linii, chto yawlyaetsya priznakom slabosti etogo rynka.
+Kogda wes' bar ukhodit nizhe nizhney parallel'noy linii, poyawlyaetsya
+signal prodazhi. Strelka "Sell Here" pokazywaet bar signala.
+
+ 
+
+Nowye Wily - Prawilo torgowli 2
+
+Est' neskol'ko modeley, kotorye ochen' khorosho rabotayut w kachestwe
+signalow k sdelkam, kogda formiruyutsya otnositel'no Sredinnoy Linii.
+Prawilo 2 i Prawilo 3 osnowany na dwizhenii tzeny okolo Sredinnoy Linii.
+
+Prawilo Pokupki po Wilam 2: Esli tzena idet wniz do Sredinnoy Linii, a
+zatem delaet gep wwerkh ili den' shirokogo diapazona daleko wwerkh ot
+Sredinnoy Linii, eto signal pokupki.
+
+Prawilo Prodazhi po Wilam 2: Esli tzena idet wwerkh do Sredinnoy Linii,
+a zatem delaet gep wniz ili den' shirokogo diapazona daleko wniz ot
+Sredinnoy Linii, eto signal prodazhi. 
+
+Grafik nizhe, Solectron (SLR), demonstriruet etu model' Sredinnuyu
+Linii. Wily prowedeny cherez razworotnye tochki A, B i C. Posle
+razworotnoy tochki C tzena idet wwerkh do Sredinnoy Linii, a zatem
+dwizhetsya bokom. Nakonetz, tzena delaet bol'shoy gep wniz i
+shirokodiapazonnyy den' daleko wniz ot Sredinnoy Linii. Etot sil'nyy
+khod wniz ot Sredinnoy Linii yawlyaetsya signalom prodazhi i khoroshim
+priznakom togo, chto, tzena upadet po krayney mere do nizhney paralleli,
+a, weroyatno, i nizhe.
+
+ 
+
+Nowye Wily - Prawilo torgowli 3
+
+Prawilo Pokupki po Wilam 3: Prowedite woskhodyaschuyu Sredinnuyu Liniyu.
+Esli tzena delaet shipoobraznuyu wershinu protiw Sredinnoy Linii, eto
+signal prodazhi.
+
+Prawilo Prodazhi po Wilam 3: Prowedite niskhodyaschuyu Sredinnuyu
+Liniyu. Esli tzena delaet shipoobraznoe dno protiw Sredinnoy Linii, eto
+signal pokupki.
+
+Grafik nizhe - Yahoo (YHOO). Wily prowodyatsya, ispol'zuya razworotnye
+tochki A, B i S (tochka A - wne ekrana). Posle razworotnoy tochki C
+tzena prodwigaetsya w naprawlenii Sredinnoy Linii. TZena bystro
+kasaetsya Sredinnoy Linii, delaet wershinu i srazu padaet obratno. Eto
+priznak togo, chto dwizhenie istoschilos', kosnuwshis' Sredinnoy Linii.
+Kogda eto proiskhodit, eto priznak togo, chto tzena poydet nizhe i
+signal na prodazhu.
+
+ 
+
+Grafik nizhe pokazywaet Royal Dutch Petroleum (RD). Niskhodyaschie Wily
+prowedeny iz razworotnykh tochek A, B i C. Posle razworotnoy tochki C
+tzena idet wniz k Sredinnoy Linii. TZena kasaetsya Sredinnoy Linii
+shipom, zatem razworachiwaetsya i idet wwerkh. Eto priznak togo, chto
+tzena poydet wyshe i signal na pokupku.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 11
+
+Patrick Mikula
+
+Sredinnaya Liniya - Torgowaya strategiya Momentum Swing
+
+Sleduyuschaya strategiya - metod swingowoy torgowli, razrabotannyy w
+Austin Financial Group. Etot metod kombiniruet Sredinnuyu Liniyu i
+indikator Slow Stochastic. Indikator Stochastic - naibolee shiroko
+ispol'zuemyy indikator impul'sa w finansowom analize. W etoy knige
+predpolagaetsya, chto chitatel' znaet ob indikatore Stochastic, poetomu
+obsuzhdenie formul etogo indikatora my opustim. Ustanowki indikatora
+Slow Stochastic, ispol'zuemogo w etom metode - 14 periodow, urowen'
+pereprodannosti - 20, a perekuplennosti - 80.
+
+Teoriya Sredinnoy Linii utwerzhdaet, chto, prowedya Sredinnuyu Liniyu ot
+poslednikh razworotnykh tochek, my uwidim, chto tzena dostigaet
+Sredinnoy Linii priblizitel'no w 80 % sluchaew.
+
+Teoriya stokhastikow schitaet, chto, kogda rynok dwizhetsya w
+tziklichnom rezhime i Medlennyy Stokhastik raspolagaetsya nizhe linii
+pereprodannosti, formiruetsya dno. Esli Medlennyy Stokhastik dwizhetsya
+wyshe linii perekuplennosti, formiruetsya wershina. Eto ne werno pri
+trendowykh rynkakh. Ispol'zuya dwe wysheupomyanutye rynochnye teorii, my
+mozhem nayti razworotnye tochki wysokoy weroyatnosti togo, chto tzena
+dostignet Sredinnoy Linii, kogda Stokhastik pereprodan ili perekuplen.
+
+Setap pokupki
+
+SHag 1: Prowedite niskhodyaschuyu Sredinnuyu Liniyu (Medianu) ot
+poslednikh razworotnykh tochek.
+
+SHag 2: Primenite k grafiku Medlennyy Stokhastik.
+
+SHag 3: Ischite momenty, kogda tzena podoshla k Sredinnoy Linii swerkhu,
+a Medlennyy Stokhastik w eto zhe wremya byl pereprodan.
+
+SHag 4: Esli wypolneny uslowiya SHaga 3, pokupayte w dlinnuyu na lyubykh
+priznakakh razworota rynka wwerkh.
+
+Setap prodazhi
+
+SHag 1: Prowedite woskhodyaschuyu Sredinnuyu Liniyu (Medianu) ot
+poslednikh razworotnykh tochek.
+
+SHag 2: Primenite k grafiku Medlennyy Stokhastik.
+
+SHag 3: Ischite momenty, kogda tzena podoshla k Sredinnoy Linii snizu, a
+Medlennyy Stokhastik w eto zhe wremya byl perekuplen.
+
+SHag 4: Esli wypolneny uslowiya SHaga 3, prodawayte w korotkuyu na
+lyubykh priznakakh razworota rynka wniz.
+
+Grafik nizhe pokazywaet Johnson & Johnson (JNJ). Niskhodyaschaya
+Sredinnaya Liniya prowedena ot razworotnykh tochek A, B i C. Na grafik
+nanesen Medlennyy Stokhastik. TZena padaet do Sredinnoy Linii w tochke
+D, a Medlennyy Stokhastik w etot moment nakhoditsya nizhe urownya
+pereprodannosti. Eto setap wysokoy weroyatnosti, kogda treyder pokupaet
+ot osnowaniya kolebaniya w tochke D i derzhit pozitziyu w techenie
+sleduyuschego khoda wwerkh.
+
+ 
+
+Sleduyuschiy grafik pokazywaet dannye J.P. Morgan (JPM). Woskhodyaschaya
+Liniya Mediany prowedena ot razworotnykh tochek A, B i S, k grafiku
+dobawlen Medlennyy Stokhastik. TZena rastet do Sredinnoy Linii w tochke
+D, a Medlennyy Stokhastik pri etom nakhoditsya wyshe urownya
+perekuplennosti. Eto setap wysokoy weroyatnosti. Treyder prodaet w
+korotkuyu ot wershiny kolebaniya w tochke D i derzhit w techenie
+sleduyuschego kolebaniya wniz.
+
+ 
+
+Nizhe pokazan esche odin grafik J.P. Morgan (JPM). Niskhodyaschaya
+Liniya Mediany prowedena ot razworotnykh tochek A, B i S, k grafiku
+dobawlen Medlennyy Stokhastik. Na etom grafike tzena padaet do Sredinnoy
+Linii w tochke D, a Medlennyy Stokhastik takzhe raspolagaetsya nizhe
+linii pereprodannosti. Eto setap wysokoy weroyatnosti, kogda treyder
+pokupaet ot osnowaniya kolebaniya w tochke D i derzhit pozitziyu w
+techenie sleduyuschego dwizheniya wwerkh.
+
+ 
+
+Nizhe my widim grafik dlya Merrill Lynch (MER). Niskhodyaschaya Liniya
+Mediany prowedena ot razworotnykh tochek A, B i S, k grafiku dobawlen
+Medlennyy Stokhastik. Na etom grafike tzena padaet do Sredinnoy Linii w
+tochke D, a Medlennyy Stokhastik takzhe lezhit nizhe urownya
+pereprodannosti. Eto setap wysokoy weroyatnosti, kogda treyder pokupaet
+ot nachala kolebaniya w tochke D i derzhit pozitziyu w techenie
+sleduyuschego khoda wwerkh.
+
+ 
+
+Rassmotrim grafik Royal Dutch Petroleum (RD). Sredinnaya Liniya
+prowedena ot razworotnykh tochek A, B i S, k grafiku dobawlen Medlennyy
+Stokhastik. Na etom grafike tzena padaet do Sredinnoy Linii w tochke D,
+a Medlennyy Stokhastik takzhe lezhit nizhe urownya pereprodannosti. Eto
+setap wysokoy weroyatnosti, kogda treyder pokupaet ot nachala kolebaniya
+w tochke D i derzhit pozitziyu w techenie sleduyuschego khoda wwerkh.
+
+ 
+
+Nizhe - grafik mayskikh 2002 f'yuchersow na serebro. Sredinnaya Liniya
+prowedena ot razworotnykh tochek A, B i S, k grafiku dobawlen Medlennyy
+Stokhastik. Na etom grafike tzena padaet do Sredinnoy Linii w tochke D,
+a Medlennyy Stokhastik takzhe lezhit nizhe urownya pereprodannosti. Eto
+setap wysokoy weroyatnosti, kogda treyder pokupaet ot nachala kolebaniya
+w tochke D i derzhit pozitziyu w techenie sleduyuschego khoda wwerkh.
+
+ 
+
+Dalee widim grafik Indeksa S&P500 (SPX). Razworotnye tochki A, B i S
+ispol'zowany dlya prowedeniya Sredinnoy Linii, na grafik nanesen
+Medlennyy Stokhastik. Na etom grafike tzena padaet do Sredinnoy Linii w
+tochke D, a Medlennyy Stokhastik takzhe raspolagaetsya nizhe linii
+pereprodannosti. Eto setap wysokoy weroyatnosti, kogda treyder pokupaet
+ot osnowaniya kolebaniya w tochke D i derzhit pozitziyu w techenie
+sleduyuschego dwizheniya wwerkh.
+
+ 
+
+Nizhe - grafik Tellabs (TAB). Sredinnaya Liniya prowedena ot
+razworotnykh tochek A, B i S, k grafiku dobawlen Medlennyy Stokhastik.
+TZena rastet ot razworotnoy tochki S do Sredinnoy Linii w tochke D, a
+Stokhastik raspolagaetsya wyshe urownya perekuplennosti. Eto Eto setap
+wysokoy weroyatnosti. Treyder prodaet w korotkuyu na wershine kolebaniya
+w tochke D i derzhit pozitziyu a techenie sleduyuschego kolebaniya wniz.
+Zatem prowoditsya wtoraya Sredinnaya Liniya, ispol'zuya razworotnye
+tochki W, S i D. TZena padaet ot razworotnoy tochki D do wtoroy
+Sredinnoy Linii w tochke E, prichem Stokhastik takzhe lezhit nizhe linii
+pereprodannosti. Eto esche odin setap wysokoy weroyatnosti. Na sey raz
+treyder pokupaet w dlinnuyu ot osnowaniya kolebaniya w tochke E i
+derzhit pozitziyu w techenie sleduyuschego khoda wwerkh.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 12
+
+Patrick Mikula
+
+50-ti protzentnye Wily 
+
+W nekotorykh sluchayakh Wily okazywayutsya chereschur krutymi, chtoby
+imet' kakoe-libo znachenie dlya torgowli. Togda mozhno primenyat' 50%-e
+Wily, razrabotannye w Austin Financial Group. Eti nowye Wily
+prowodyatsya na takikh zhe trekh opornykh tochkakh, kak i standartnye,
+no po nowym prawilam. Na perwom grafike nizhe tochki A, B i S
+predstawlyayut soboy tri razworotnye tochki, ispol'zuemye dlya
+prowedeniya standartnykh Wil. Gorizontal'naya liniya, oboznachennaya
+bukwoy D - seredina otrezka B-C. Esli tochka A raspolagaetsya nizhe D,
+kak eto widno na grafike, 50%-e Wily prowodyatsya iz 50%-y tochki mezhdu
+A i W wmesto A. Eto 50%-e rasstoyanie mezhdu A i W oboznachaetsya, kak
+X.
+
+ 
+
+Grafik nizhe pokazywaet 50%-e Wily, wychislennye, ispol'zuya tochki A, B
+i S, no prowedennye, ispol'zuya tochki X, W i C. Sredinnaya Liniya zdes'
+nachinaetsya ot X, a ne ot A. Esli srawnit' oba grafika, ochewidno, chto
+50%-e Wily, ispol'zuyuschie takie zhe tri tochki, A, B i S, mogut wydat'
+sowsem inoy wzglyad na situatziyu. Na werkhnem grafike Wily kruto
+nakloneny wwerkh, togda kak 50%-e Wily na nizhnem grafike postepenno
+snizhayutsya wniz.
+
+ 
+
+Na perwom grafike nizhe pokazany normal'nye Wily, prowedennye iz tochek
+A, B i C. Pri prowedenii 50%-kh Wil neobkhodimo prowerit', raspolozhena
+li startowaya tochka A wyshe ili nizhe serediny B-C - tochki D. Esli ona
+wyshe D, kak my widim na grafike nizhe, to risuyutsya 50%-e Wily iz
+tochki, lezhaschey na rasstoyanii 50% mezhdu A i S, wmesto A. Eta 50%-ya
+tochka mezhdu A i S oboznachaetsya bukwoy X.
+
+ 
+
+Grafik nizhe demonstriruet 50%-e Wily, rasschitannye iz tochek A, B i S,
+no prowedennye iz tochek X, W i C. Wazhno zametit', chto Sredinnaya
+Liniya nachinaetsya iz tochki X, a ne iz A. Esli srawnit' eti dwa
+grafika, budet widno, chto Wily na werkhnem grafike nakloneny wniz, a
+50%-e Wily na nizhnem grafike - wwerkh. Krome togo, Wily werkhnego
+grafika nakloneny pod bolee krutym uglom, chem 50%-e Wily nizhnego
+grafika. Eto pokazywaet, chto 50%-e Wily, ispol'zuyuschie takie zhe tri
+tochki - A, B i S, dayut sowsem drugoy nabor uglow.
+
+ 
+
+Nizhe dany dwa odinakowykh grafika tzen. Na werkhnem grafike pokazany
+normal'nye Wily, a na nizhnem - 50%-e. Normal'nye Wily imeyut slishkom
+krutoy ugol naklona i pokrywayut tol'ko kolebanie, neposredstwenno
+sleduyuschee za razworotnoy tochkoy C. 50%-e Wily raspolagayutsya menee
+kruto i namnogo luchshe korreliruyut s dal'neyshimi kolebaniyami tzeny
+posle tochki C. 50%-e Wily chasto rabotayut luchshe normal'nykh, kogda
+rynok dwizhetsya bokom. Bokowye rynki chasto ne luchshim obrazom
+sootnosyatsya s normal'nymi Wilami.
+
+ 
+
+Grafik nizhe - American Express (AXP). 50%-e Wily rasschitany po
+razworotnym tochkam A, B i S, a postroeny po tochkam X, B i C. Posle
+tochki C kolebaniya tzeny ostayutsya mezhdu werkhney i nizhey
+parallel'nymi liniyami 50%-kh Wil. Etot kanal liniy trenda, sozdannyy
+50%-i Wilami, korreliruet s tzenami na protyazhenii pochti pyati
+mesyatzew.
+
+ 
+
+Dalee pokazan grafik Cisco Systems (CSCO). Na grafike pokazany 50%-e
+Wily, rasschitannye po razworotnym tochkam A, B i S, no postroennye po
+tochkam X, B i C. Posle opornoy tochki C rynochnye kolebaniya idut wbok
+i delaet wershiny na werkhney parallel'noy linii, w tochkakh D, E i F.
+Bokowye rynki chasto ochen' khorosho korreliruyut s 50%-mi Wilami. Posle
+razworotnoy tochki F rynok padaet i delaet dno na nizhney parallel'noy
+linii, w tochke G. 
+
+ 
+
+Nizhe - grafik Motorola (MOT). Grafik demonstriruet 50%-e Wily,
+rasschitannye po razworotnym tochkam A, B i S, no postroennye po tochkam
+X, B i C. Posle tochki C rynok delaet wershinu na werkhney parallel'noy
+linii w tochke D, a zatem dno na nizhney parallel'noy linii w tochke E.
+Sleduyuschaya wershina woznikaet na Sredinnoy Linii w tochke F.
+
+ 
+
+Sleduyuschiy grafik postroen na dannykh Bank One (ONE). Na grafike
+pokazany 50%-e Wily, kotorye rasschitany po razworotnym tochkam A, B i
+S, a postroeny po tochkam X, B i C. Posle opornoy tochki C rynok delaet
+osnowaniya na nizhney parallel'noy linii, w tochkakh D i G. Wershiny
+raspolagayutsya na werkhney parallel'noy linii, w tochkakh E i F. Etot
+rynok posle tochki C dwizhetsya bokom, so slabym naklonom wwerkh. Eto
+goworit nam o tom, chto rynok, skoree wsego, budet luchshe korrelirowat'
+s 50%-mi Wilami, chem s normal'nymi. 
+
+ 
+
+Preduprezhdayuschie Linii tak zhe khorosho rabotayut na 50%-kh Wilakh,
+kak i na normal'nykh. Nizhe pokazan grafik Novellus Systems (NVLS). Na
+etom grafike my widim 50%-e Wily, rasschitannye po razworotnym tochkam
+A, B i S, no postroennye po tochkam X, B i C. Krome togo, k etomu
+grafiku dobawleny tri Preduprezhdayuschie Linii pod nizhney parallel'noy
+liniey. Posle tochki C eti 50%-e Wily ochen' khorosho korreliruyut s
+wershinami i osnowaniyami kolebaniy. Nekotorye razworotnye tochki
+pomecheny bukwami E, F, G, H i I. Widny takzhe dwe opornye tochki na
+Preduprezhdayuschey Linii 1 - w tochkakh D i J.
+
+ 
+
+Nizhe pokazan grafik Schlumberger Ltd., (SLB). Na grafike pokazany 50%-e
+Wily, kotorye rasschitany po razworotnym tochkam A, B i S, a postroeny
+po tochkam X, B i C. Posle tochki C rynok delaet znachimuyu wershinu na
+werkhney Preduprezhdayuschey Linii 1, w tochke D. Zatem rynok ochen'
+bystro padaet do Sredinnoy Linii i delaet dno w tochke E. 
+
+ 
+
+Dalee pokazan grafik Verisign, (VRSN). Na grafike my widim 50%-e Wily,
+rasschitannye po razworotnym tochkam A, B i S, no postroennye po tochkam
+X, B i C. Posle tochki C rynok delaet znachimuyu wershinu na werkhney
+Preduprezhdayuschey Linii 1 w tochke D. Zatem sleduet krutoe snizheniem
+do nizhney Preduprezhdayuschey Linii 1, gde oboznachaetsya dno w tochke
+E.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 13
+
+Patrick Mikula
+
+Razworotnaya Zona Sredinnoy Linii
+
+Kogda my ispol'zuem Sredinnuyu Liniyu dlya obnaruzheniya razworotnykh
+tochek, nam trebuetsya otzenit', kogda imenno tzena dolzhna doyti do
+etoy samoy Sredinnoy Linii. Endryus utwerzhdal, chto tzena dostigaet
+Sredinnoy Linii, prowedennoy ot samykh poslednikh kolebaniy,
+priblizitel'no w 80% sluchaew. No kak dolgo treyder dolzhen zhdat', poka
+tzena doydet do Mediany? Austin Financial Group razrabotala tekhniku,
+nazwannuyu "Razworotnaya Zona Sredinnoy Linii", chtoby mozhno bylo
+otzenit', skol'ko wremeni potrebuetsya tzene, chtoby doyti do Sredinnoy
+Linii. Grafik nizhe pokazywaet Sredinnuyu Liniyu, prowedennuyu s
+ispol'zowaniem tochek A, B i C. Perwyy shag dlya wychisleniya
+Razworotnoy Zony Sredinnoy Linii - prowesti etu Sredinnuyu Liniyu i
+poschitat' kolichestwo barow w dwukh kolebaniyakh - ot A do W i ot W do
+C.
+
+Na grafike nizhe razmer kolebaniya ot A do W sostawlyaet 10 barow, a
+razmer kolebaniya ot W do S - 15 barow. Nachinaya ot posledney
+razworotnoy tochki, ispol'zowannoy dlya prowedeniya Sredinnoy Linii, w
+dannom sluchae ot tochki C, otlozhim wpered chislo barow, rawnoe
+bol'shemu iz dwukh poschitannykh kolebaniy, i otmetim poluchiwshuyusya
+tochku na Sredinnoy Linii.
+
+Nakonetz, ot tochki S wniz do metki na Sredinnoy Linii narisuyte
+pryamougol'nik. Etot pryamougol'nik i est' Razworotnaya Zona Sredinnoy
+Linii. Issledowaniya Finansowoy Gruppy Austin pokazali, chto tzena
+obychno wykhodit k Sredinnoy Linii pered okonchaniem etoy Razworotnoy
+Zony. Wazhno otmetit', chto, kogda tzena kasaetsya Sredinnoy Linii w
+predelakh razworotnoy zony, eto ne garantiruet razworot. Razworotnaya
+Zona Sredinnoy Linii prizwana ukazat' na to, chto rynok dwizhetsya w
+tziklichnom rezhime i mozhno ispol'zowat' swingowuyu torgowlyu. Dalee my
+dadim nekotorye prawila po ispol'zowaniyu Razworotnoy Zony Sredinnoy
+Linii.
+
+ 
+
+Grafik nizhe pokazywaet, kak tzena podnimaetsya k Sredinnoy Linii ot
+minimuma w tochke. Eto prosto protiwopolozhnost' predyduschego grafika.
+
+ 
+
+Prawilo Razworotnoy Zony Sredinnoy Linii 1: Esli tzena ne dokhodit do
+Sredinnoy Linii wnutri Razworotnoy Zony, eto ukazywaet na to, chto
+rynok, wozmozhno, ne nakhoditsya seychas w podkhodyaschem polozhenii
+dlya swingowoy torgowli. W etoy situatzii treyderu sleduet predprinyat'
+dopolnitel'nye mery predostorozhnosti ili zhe podozhdat' sleduyuschego
+kolebaniya.
+
+Prawilo Razworotnoy Zony Sredinnoy Linii 2: Esli tzena dokhodit do
+Sredinnoy Linii wnutri Razworotnoy Zony, eto ukazywaet na to, chto rynok
+ochen' podkhodit dlya swingowoy torgowli. Treyder nachinaet ozhidat'
+razworotnuyu tochku.
+
+Prawilo Razworotnoy Zony Sredinnoy Linii 3: Kogda tzena dokhodit do
+Sredinnoy Linii wnutri Razworotnoy Zony, ona chasto kasaetsya Sredinnoy
+Linii bolee odnogo raza, prezhde chem sformiruetsya razworotnaya tochka.
+Poetomu treyderu sleduet podozhdat' razworotnuyu tochku, a ne slepo
+wkhodit' w rynok w nadezhde na nemedlennyy razworot.
+
+Dalee priwedeny dwa grafika dlya J.P. Morgan (JPM). Perwyy grafik
+illyustriruet ispol'zowanie Sredinnoy Linii, postroennoy po tochkam A, B
+i C. Swing ot W do S - naibol'shiy, sostoyaschiy iz 29 barow. Nachinaya
+ot tochki C, na grafik nanesen pryamougol'nik shirinoy 29 barow. Etot
+pryamougol'nik - Razworotnaya Zona Sredinnoy Linii. Prezhde, chem
+torgowat' sleduyuschim swingom, inwestor dolzhen uwidet' padenie tzeny
+do Sredinnoy Linii wnutri Razworotnoy Zony.
+
+ 
+
+Na sleduyuschem grafike tzena dokhodit do Sredinnoy Linii w Razworotnoy
+Zone. Kogda eto proizoshlo, treyder predpolagaet, chto rynok nakhoditsya
+w tziklicheskom rezhime i zhdet priznakow nizhney razworotnoy tochki,
+chtoby woyti w sdelku.
+
+ 
+
+I snowa my widim dwa grafika J.P. Morgan (JPM). Na perwom grafike
+Sredinnaya Liniya prowedena po tochkam A, B i C. Kolebanie ot W do S -
+bol'she, ono sostawlyaet 25 barow. Nachinaya ot tochki C, risuem
+pryamougol'nik shirinoy 25 barow. Etot pryamougol'nik - Razworotnaya
+Zona Sredinnoy Linii. Treyder zhdet, chtoby tzena dostigla Sredinnoy
+Linii wnutri Razworotnoy Zony, chtoby podtwerdilas' wozmozhnost' sdelki
+na sleduyuschem kolebanii.
+
+ 
+
+Na grafike nizhe, tzena J.P. Morgan dokhodit do Sredinnoy Linii w
+Razworotnoy Zone. Kogda eto proiskhodit, treyder predpolagaet, chto
+rynok nakhoditsya w tziklicheskom rezhime i zhdet priznakow werkhney
+razworotnoy tochki, chtoby woyti w sdelku.
+
+ 
+
+Dalee priwedeny dwa grafika Johnson & Johnson (JNJ). Werkhniy grafik
+pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam A, B i C.
+Kolebanie ot A do W yawlyaetsya naibol'shim, ono wklyuchaet w sebya 11
+barow. Nachinaya ot tochki C, stroitsya pryamougol'nik takoy zhe shiriny
+- 11 barow. Etot pryamougol'nik - Razworotnaya Zona Sredinnoy Linii.
+Prezhde, chem wkhodit' w sdelku na sleduyuschem kolebanii, treyder
+dolzhen uwidet', kak tzena upadet do Sredinnoy Linii wnutri Razworotnoy
+Zony.
+
+ 
+
+Na grafike nizhe wy mozhete widet', kak tzena dokhodit do Sredinnoy
+Linii w Razworotnoy Zone. Kogda eto proiskhodit, treyder predpolagaet,
+chto rynok nakhoditsya w tziklichnom rezhime, i zhdet priznakow nizhney
+razworotnoy tochki, chtoby woyti w sdelku.
+
+ 
+
+Dalee pokazany dwa grafika Merrill Lynch (MER). Werkhniy grafik
+pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam A, B i C.
+Kolebanie ot A do W yawlyaetsya naibol'shim, iz 31 bara. Nachinaya ot
+tochki C, risuem pryamougol'nuyu Razworotnuyu Zonu Sredinnoy Linii
+shirinoy 31 bar. TZene nuzhno doyti do Sredinnoy Linii wnutri
+Razworotnoy Zony, chtoby inwestor smog otkryt' pozitziyu na sleduyuschem
+swinge.
+
+ 
+
+Na grafike nizhe tzena dokhodit do Sredinnoy Linii w Razworotnoy Zone.
+Treyder predpolagaet, chto rynok nakhoditsya w tziklichnom rezhime, i
+zhdet priznakow nizhney razworotnoy tochki. Kogda eto proiskhodit,
+rassmatriwaetsya wozmozhnost' sowersheniya sdelki.
+
+ 
+
+Royal Dutch Petroleum (RD) - sleduyuschie dwa grafika. Werkhniy grafik
+pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam A, B i C. Swing ot
+W do S - bol'shiy, sostoit iz 18 barow. Nachinaya ot tochki C, stroitsya
+pryamougol'nik shirinoy 18 barow. Etot pryamougol'nik - Razworotnaya
+Zona Sredinnoy Linii. Pered rassmotreniem wozmozhnosti torgowli na
+sleduyuschem kolebanii, treyder dolzhen widet' padenie tzeny do
+Sredinnoy Linii wnutri Razworotnoy Zony.
+
+ 
+
+Na grafike nizhe wy mozhete widet', kak tzena dokhodit do Sredinnoy
+Linii w Razworotnoy Zone. Kogda eto proiskhodit, treyder predpolagaet,
+chto rynok nakhoditsya w tziklichnom rezhime, i zhdet priznakow nizhney
+razworotnoy tochki, chtoby woyti w sdelku.
+
+ 
+
+Sleduyuschiy grafik dlya izucheniya - Indeks S&P500 (SPX). Werkhniy
+grafik pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam A, B i C.
+Kolebanie ot W do S - naibol'shee, iz 15 barow. Nachinaya ot tochki C,
+risuem pryamougol'nuyu Razworotnuyu Zonu Sredinnoy Linii shirinoy 15
+barow. Pered tem, kak treyder budet rassmatriwat' wozmozhnost' sdelki na
+sleduyuschem swinge, emu wazhno, chtoby tzena doshla do Sredinnoy Linii
+wnutri Razworotnoy Zony.
+
+ 
+
+Na sleduyuschem grafike tzena dokhodit do Sredinnoy Linii na poslednem
+bare Razworotnoy Zony. Kogda eto proiskhodit, treyder delaet
+zaklyuchenie, chto rynok nakhoditsya w tziklichnom rezhime, i zhdet
+priznakow nizhney razworotnoy tochki, chtoby woyti w sdelku.
+
+ 
+
+Dalee predstawleny primery dlya Tellabs Inc. (TLAB). Werkhniy grafik
+pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam A, B i C.
+Kolebanie ot W do S yawlyaetsya naibol'shiy, iz 13 barow. Nachinayas' ot
+tochki C, na grafik nanesen pryamougol'nik shirinoy, sootwetstwuyuschey
+naibol'shemu swingu - 13 barow. Etot pryamougol'nik - Razworotnaya Zona
+Sredinnoy Linii. W etom primere, inwestor zhdet, chtoby tzena podnyalas'
+do Sredinnoy Linii wnutri Razworotnoy Zony pered rassmotreniem
+wozmozhnosti sowersheniya sdelki na sleduyuschem kolebanii.
+
+ 
+
+Na sleduyuschem grafike tzena dokhodit do Sredinnoy Linii za odin bar do
+kontza Razworotnoy Zony. 
+
+ 
+
+Dwa sleduyuschikh grafika Tellabs Inc. - prodolzhenie predyduschikh.
+Werkhniy grafik pokazywaet Sredinnuyu Liniyu, postroennuyu po tochkam B,
+C i D. Kolebanie ot S do D - bolee shirokoe, sostoit iz 20 barow.
+Nachinaya ot razworotnoy tochki D, na grafik nanositsya pryamougol'nik
+shirinoy 20 barow. I snowa, pered tem, kak inwestor budet rassmatriwat'
+sdelku na sleduyuschem kolebanii, tzene nuzhno upast' do Sredinnoy Linii
+wnutri etoy zony.
+
+ 
+
+Na grafike nizhe tzena dokhodit do Sredinnoy Linii w Razworotnoy Zone.
+Treyder predpolagaet, chto rynok nakhoditsya w tziklichnom rezhime, i
+zhdet priznakow nizhney razworotnoy tochki, chtoby woyti w sdelku.
+
+ 
+
+Luchshie metody liniy trenda Alana Endryusa plyus pyat' nowykh tekhnik
+
+CHast' 14
+
+Patrick Mikula
+
+Metod Deystwiya-Reaktzii (Action Reaction Method) 3
+
+Eto wariant Metoda Deystwiya-Reaktzii, kotoryy byl razrabotan w
+Finansowoy Gruppe Austin, kogda issledowalis' urowni podderzhki i
+soprotiwleniya. Eto ochen' spetzificheskoe primenenie gorizontal'nykh
+liniy deystwiya-reaktzii. Na grafike nizhe tolstoy chernoy liniey
+pokazany kolebaniya tzeny. Eti kolebaniya dayut suschestwennyy minimum w
+nizhney lewoy chasti grafika. Posle togo, kak tzena delaet
+suschestwennyy minimum, ona chasto delaet nebol'shoy swing wwerkh do
+nachala nowogo woskhodyaschego trenda. Maksimal'naya tzena etogo perwogo
+posle sil'nogo minimuma kolebaniya opredelyaet raspolozhenie Linii
+TZentra. Osnownoy minimum tzeny ispol'zuetsya dlya lokalizatzii Linii
+Deystwiya. Liniya Reaktzii zatem proektiruetsya na takom zhe rasstoyanii
+wyshe Linii TZentra, na kakom Liniya Deystwiya nizhe Linii TZentra. Na
+grafike nizhe pokazano raspolozhenie Linii TZentra, Linii Deystwiya i
+Linii Reaktzii. Liniya Reaktzii, prowedennaya po etomu metodu, imeet
+wysokuyu weroyatnost' stat' khoroshim urownem soprotiwleniya.
+
+Takoy zhe setap ispol'zuetsya i w sluchae znachimoy wershiny. Liniya
+TZentra razmeschaetsya na minimume tzeny perwogo kolebaniya wniz posle
+osnownoy wershiny, a sama wershina opredelyaet raspolozhenie Linii
+Deystwiya. Poluchiwshayasya w rezul'tate Liniya Reaktzii imeet
+prewoskhodnyy shans stat' sil'nym urownem podderzhki.
+
+ 
+
+Nizhe priwoditsya primer Metoda Deystwiya-Reaktzii 3, ispol'zuya grafik
+Teradyne (TER). Znachimyy minimum opredelyaetsya w lewoy nizhney chasti
+grafika. Liniya TZentra prowoditsya, kak gorizontal', cherez perwuyu
+wershinu kolebaniya wwerkh posle minimuma. Liniya Deystwiya prowoditsya
+gorizontal'no po osnownomu minimumu. Rasstoyanie mezhdu Liniey TZentra i
+Liniey Deystwiya proektiruetsya wwerkh ot Linii TZentra i na poluchennom
+urowne prowoditsya Liniya Reaktzii. Na grafike nizhe widno, chto tzena
+dwizhetsya wwerkh, poka ne dokhodit do Linii Reaktzii, gde risuet
+wershinu w tochke A.
+
+ 
+
+Grafik nizhe - EMC Inc, (EMC). Na grafike gorizontal'naya Liniya TZentra
+prowedena po wershine perwogo swinga wwerkh posle znachimogo minimuma.
+Liniya Deystwiya prowedena, kak gorizontal'naya liniya na urowne
+znachimogo minimuma. Liniya Reaktzii prowedena wyshe Linii TZentra na
+rasstoyanii, rawnom rasstoyaniyu mezhdu Liniey TZentra i Liniey
+Deystwiya. TZena idet wwerkh i delaet dwe znachimye wershiny na Linii
+Reaktzii w tochkakh A i B.
+
+ 
+
+Nizhe primer grafika NASDAQ 100 (QQQ). Liniya TZentra prowedena, kak
+gorizontal'naya liniya na urowne perwogo kolebaniya wniz posle
+znachimogo maksimuma. Liniya Deystwiya prowoditsya gorizontal'no na
+urowne osnownoy wershiny. Liniya Reaktzii prokhodit nizhe Linii TZentra
+na rasstoyanii, rawnom distantzii mezhdu Liniey TZentra i Liniey
+Deystwiya. W dannom sluchae tzena padaet do Linii Reaktzii i oboznachaet
+dno w tochke A.
+
+ 
+
+Sleduyuschiy grafik - Marriott (MAR). Zdes' gorizontal'naya Liniya
+TZentra prowedena na urowne wershiny perwogo nebol'shogo woskhodyaschego
+kolebaniya posle osnownogo minimuma. Liniya Deystwiya idet gorizontal'no
+na urowne minimuma. Rasstoyanie mezhdu etimi dwumya liniyami sluzhit
+dlya prowedeniya Linii Reaktzii wyshe Linii TZentra. TZena oboznachaet
+wershinu kolebaniya na Linii Reaktzii w tochke A.
+
+ 
+
+Super-Wily
+
+Pri ispol'zowanii Metodow Deystwiya-Reaktzii w Austin Financial Group
+bylo zamecheno, chto nekotorye istoricheskie razworotnye tochki na Linii
+Deystwiya rabotali luchshe drugikh. Linii Reaktzii, prowedennye po
+poslednim dannym, rabotali luchshe wsego. Drugimi slowami, luchshuyu
+korrelyatziyu s blizhayshim buduschim daet nedawnee proshloe.
+Osnowywayas' na etom nablyudenii, Wily i Metody Deystwiya-Reaktzii byli
+ob'edineny w Superwily.
+
+Grafik nizhe pokazywaet podrobnosti Superwil. Ispol'zowanie etoy
+tekhniki nachinaetsya s postroeniya Wil po razworotnym tochkam A, B i C.
+Zatem, liniya ot razworotnykh tochek W i S ispol'zuetsya, kak Liniya
+TZentra Metoda Deystwiya-Reaktzii. Razworotnaya tochka A ispol'zuetsya w
+kachestwe tochki rawneniya dlya Linii Deystwiya.
+
+Sleduyuschim shagom my primenyaem rasstoyanie ot razworotnoy tochki A do
+Linii TZentra kak meru dlya prowedeniya Liniy Reaktzii na rawnykh
+rasstoyaniyakh w buduschem. Grafik nizhe pokazywaet tri Linii Reaktzii,
+kotorye raspolagayutsya na rawnykh rasstoyaniyakh. Eto ob'edinyaet Wily
+i Metod Deystwiya-Reaktzii, ispol'zuya odni i te zhe tri razworotnye
+tochki A, B i S dlya oboikh metodow. Eto - Superwily.
+
+Tochka D na grafike nizhe ochen' wazhna. W etoy tochke tzena dostigaet
+Linii Mediany Superwil i Linii Reaktzii 1 w odno i to zhe wremya.
+Treyder khochet widet', chto rynok delaet razworotnuyu tochku tam, gde
+peresekayutsya dwe linii. Ochen' chasto mozhno widet' formirowanie
+razworotnykh tochek kak raz pered tem ili srazu posle togo, kak na
+Superwilakh peresekayutsya dwe linii.
+
+ 
+
+Sleduyuschiy grafik - Network Associates (NET). Superwily primenyayutsya
+k etomu grafiku, ispol'zuya razworotnye tochki A, B i C. TZena delaet
+razworotnuyu tochku w punkte D, gde Sredinnaya Liniya peresekaet Liniyu
+Reaktzii 1.
+
+ 
+
+Grafik nizhe - Knight Trading Group (NITE). Dlya prowedeniya Superwil
+ispol'zuyutsya razworotnye tochki A, B i S. TZena delaet razworotnuyu
+tochku w punkte D, gde Sredinnaya Liniya peresekaet Liniyu Reaktzii 1.
+
+ 
+
+Dalee - Verisign (VRSN). Superwily prowedeny cherez razworotnye tochki
+A, B i C. TZena delaet razworotnuyu tochku na Sredinnoy Linii w tochke
+D, kak raz pered Liniey Reaktzii 1. TZena takzhe delaet razworotnuyu
+tochku srazu posle Linii Reaktzii 2 w tochke E. Rynok chasto formiruet
+razworotnye tochki neposredstwenno do ili posle Liniy Reaktzii Superwil.
+
+ 
+
+Grafik nizhe - Staples Inc (SPLS). Dlya prowedeniya Superwil
+ispol'zuyutsya razworotnye tochki A, B i S. Posle razworotnoy tochki C
+rynochnye podnimaetsya do werkhney parallel'noy linii Superwil. Zatem,
+neskol'kimi barami bokowogo dwizheniya tzena dostigaet Linii Reaktzii 1
+w tochke D. Posle tochki D rynok rastet do tochki E, gde Liniya Reaktzii
+2 peresekaetsya s Preduprezhdayuschey Liniey 1. Posle tochki E tzena
+padaet k tochke F, gde Liniya Reaktzii 3 peresekaetsya s werkhney
+parallel'noy liniey Superwily. 
+
+ 
+
+Sleduyuschiy primer - Comcast Inc, (CMCSK). Superwily prowedeny cherez
+razworotnye tochki A, B i C. Posle tochki S tzena rastet do tochki D,
+gde Liniya Reaktzii 1 peresekaet Sredinnuyu Liniyu. TZena takzhe delaet
+wershinu w tochke E, gde Sredinnuyu Liniyu peresekaet Liniya Reaktzii 3.
+
+ 
+
+Nizhe - iyun'skie f'yuchersy 2002 na ewrodollary. Dlya prowedeniya
+Superwil ispol'zuyutsya razworotnye tochki A, B i S. Posle razworotnoy
+tochki C tzena padaet, oboznachaya dno w tochke D, gde Liniya Reaktzii 2
+peresekaet Preduprezhdayuschuyu Liniyu 1. 
+
+ 
+
+Grafik nizhe - Eli Lilly (LLY). Superwily prowedeny kak obychno, cherez
+razworotnye tochki A, B i C. Etot rynok delaet wershiny w tochkakh D, E,
+F i G na Liniyakh Reaktzii 1,2,3 i 4 sootwetstwenno.
+
+ 
+
+Zaklyuchenie
+
+Unikal'noe soderzhanie etoy knigi ne nayti ni w nikakoy drugoy na
+knizhnoy polke treydera. YA polagayu, chto eta kniga khorosha uzhe
+tol'ko etim. Za poslednie desyat' let ne bylo izdano prakticheski ni
+odnoy knigi, poswyaschennoy isklyuchitel'no metodam liniy trenda, i ya
+nikogda ne widel knigi, poswyaschennoy isklyuchitel'no issledowaniyu
+metodow liniy trenda Alana Endryusa. Po etoy prichine w kontze etoy
+knigi net nikakoy bibliografii, perechislyayuschey drugie istochniki
+dlya izucheniya rabot Endryusa. Naskol'ko ya znayu, net ni odnogo takogo
+istochnika, dostupnogo shirokoy publike.
+
+Esli Wy yawlyaetes' treyderom w techenie khotya by neskol'kikh let, ya
+uweren, chto Wy pereprobowali razlichnye widy liniy trenda. Naprimer,
+bol'shinstwo treyderow slyshalo ob uglakh wremeni i tzeny W. D. Ganna
+ili regressionnykh liniyakh trenda. Izuchaya metody liniy trenda bolee
+desyati let, ya ubezhden, chto metody liniy trenda po Endryusu -
+luchshee, chto Wy kogda-libo mogli widet'. Korrelyatzii s rynkom,
+kotorye mogut byt' naydeny, ispol'zuya drugie metody liniy trenda,
+wes'ma neustoychiwy. Drugie metody liniy trenda korreliruyut s rynkom
+dostatochno, chtoby porazit' washe woobrazhenie, no ne dostatochno,
+chtoby delat' pribyl'nye sdelki. Po moemu mneniyu, metody liniy trenda
+po Endryusu imeyut samuyu wysokuyu korrelyatziyu s dwizheniyami rynka po
+srawneniyu s lyubymi drugimi metodami liniy trenda, i mogut
+ispol'zowat'sya, kak baza dlya pribyl'nogo metoda torgowli.
+
+Grafiki w etoy knige byli sdelany s ispol'zowaniem programmy
+MarketWarrior. Informatziyu ob etoy programme mozhno nayti na sayte  
+HYPERLINK "http://www.MarketWarrior.com.</i>" \t "_blank" 
+http://www.MarketWarrior.com. 
+

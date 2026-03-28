@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/css/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="/css/common.css?rnd=66" />
+<link rel="stylesheet" type="text/css" href="/css/common_m.css?rnd=66" />
+<script type="text/javascript" src="/assets/504097ca/jquery.min.js"></script>
+<title>TransFiles - бесплатный файлообменник без регистрации</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+	<meta name="robots" content="index, follow" />
+	<meta name="description" content="Файлообменник, где Вы можете делиться файлами, загружать фото, закачивать видео. Лучший файлообменник без регистрации и ограничения скорости. Облако для обмена файлами. Файлообменник фотографий, получение уменьшенных изображений. Максимальный размер загрузки - 2 ГБ." />
+	<meta name="keywords" content="файлообменник, без регистрации, файловый обменник, лучший файлообменник, передать файл, поделиться файлами, загрузить фото, быстрый, файлообменник облако, передать файл большого размера, бесплатно, до 2 ГБ, до 2 GB, фото, видео, аудио, файлы, поделиться, закачать, загрузить, залить, разместить, отправить, переслать, обмен файлами, скачать уменьшенные фото" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!--		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="canonical" href="https://transfiles.ru/" />
+	
+	<meta property="og:site_name"		content="TransFiles" />
+	<meta property="og:title"			content="TransFiles - бесплатный файлообменник без регистрации" />
+	<meta property="og:description"		content="Файлообменник, где Вы можете делиться файлами, загружать фото, закачивать видео. Лучший файлообменник без регистрации и ограничения скорости. Облако для обмена файлами. Файлообменник фотографий, получение уменьшенных изображений. Максимальный размер загрузки - 2 ГБ." />
+	<meta property="og:type"			content="website" />
+	<meta property="og:image"			content="/images/icon_share.png" />
+	<meta property="og:locale"			content="ru_RU" />
+	<meta property="og:locale:alternate" content="en_US" />
+	<meta property="og:url"				content="TransFiles.ru" />
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"name": "TransFiles",
+		"url": "https://transfiles.ru"
+	}
+	</script>
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "TransFiles - бесплатный файлообменник без регистрации",
+		"description": "Файлообменник, где Вы можете делиться файлами, загружать фото, закачивать видео. Лучший файлообменник без регистрации и ограничения скорости. Облако для обмена файлами. Файлообменник фотографий, получение уменьшенных изображений. Максимальный размер загрузки - 2 ГБ.",
+		"url": "https://transfiles.ru/"
+	}
+	</script>
+
+	<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png" />
+	<link rel="icon" type="image/png" sizes="128x128" href="/images/icon-128.png" />
+	<link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+	<link rel="apple-touch-icon-precomposed" href="/images/apple-icon-precomposed.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-icon-144x144.png">
+	<link rel="image_src" href="/images/icon_share.png" />
+	<link rel="manifest" href="/manifest.json" />
+	<meta name="msapplication-config" content="/browserconfig.xml" />
+	<meta name="theme-color" content="#ffffff">
+	
+<!--	[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="/css/ie.css" media="screen, projection" />
+	<![endif]-->
+
+	
+						<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3777537815417449" crossorigin="anonymous"></script>
+			</head>
+
+<body>
+<script>
+	var LANG = 'ru';
+	var DESIGN = '0';
+	var password = 'Пароль';
+	var error_try_again = 'Ошибка. Попробуйте еще раз.';
+	var reload_page = 'Обновите страницу.';
+	var err_msg = 'Ошибка.';
+	var err_msg_tecworks = 'На сайте идут технические работы. Попробуйте позже.';
+	var error_msg = 'Произошла ошибка, попробуйте перезагрузить страницу.';
+	var g_ref = '';
+	var is_iframe = '0'*1;
+	var plink = 'https://usefulbox.ru/sadovod/';
+	var g_schema = 'https://';
+	var host_1 = 'https://transfiles1.ru';
+	var nt_msg_upload = 'Загрузка файлов завершена.';
+	var nt_msg_link = 'Ссылка скопирована в буфер обмена.';
+	var nt_msg_pass = 'Ссылка и пароль скопированы в буфер обмена.';
+	var to_notify = '1'*1;
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+	(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+		m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+	ym(33590114, "init", {
+		clickmap:true,
+		trackLinks:true,
+		accurateTrackBounce:true,
+		webvisor:true
+	});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/33590114" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- GoogleAnalytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-72075365-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- GoogleAnalytics -->
+
+
+
+<header class="wrapper">
+	<div id="menu_main">
+		<ul class="top_navigation" id="yw0">
+<li><a href="/">Главная</a></li>
+<li><a href="/contact">Обратная связь</a></li>
+<li><a href="/help">ЧаВо</a></li>
+<li><a data-pixtrim="pixtrim" target="_blank" href="https://pixtrim.com">Конвертер фото</a></li>
+<li><a data-donate="donate" target="_blank" href="/donate">Донат</a></li>
+</ul>		<button class="navbar_toggle_btn">
+			<span class="icon_bar"></span>
+			<span class="icon_bar"></span>
+			<span class="icon_bar"></span>
+		</button>
+	</div>
+	<div id="lang_selector">
+		<a onclick="changeLanguage(&quot;ru&quot;);return false;" href="#"><img title="Русский" class="selected" src="/images/ru.png" alt="Русский" /></a><a onclick="changeLanguage(&quot;en&quot;);return false;" href="#"><img title="Английский" class="" src="/images/en.png" alt="Английский" /></a>	</div>
+
+		<div id="menu_auth" class="auth_login">
+		<a class="login_icon" data-title="Войти для увеличения срока хранения и размера загрузки" href="/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M416 448h-84c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h84c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32h-84c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h84c53 0 96 43 96 96v192c0 53-43 96-96 96zm-47-201L201 79c-15-15-41-4.5-41 17v96H24c-13.3 0-24 10.7-24 24v96c0 13.3 10.7 24 24 24h136v96c0 21.5 26 32 41 17l168-168c9.3-9.4 9.3-24.6 0-34z"/></svg></a><a class="login_vk" data-title="Войти с VK ID" href="/auth/login/service/vkontakte"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M0 10.56C0 5.58197 2.38419e-07 3.09295 1.54648 1.54648C3.09295 0 5.58197 0 10.56 0H11.44C16.418 0 18.907 0 20.4535 1.54648C22 3.09295 22 5.58197 22 10.56V11.44C22 16.418 22 18.907 20.4535 20.4535C18.907 22 16.418 22 11.44 22H10.56C5.58197 22 3.09295 22 1.54648 20.4535C2.38419e-07 18.907 0 16.418 0 11.44V10.56Z" fill="#0077FF"/>
+										<path d="M11.7064 15.9002C6.684 15.9002 3.81931 12.4467 3.69995 6.7002H6.21574C6.29838 10.918 8.15306 12.7046 9.62214 13.073V6.7002H11.9911V10.3378C13.4418 10.1813 14.9658 8.52362 15.48 6.7002H17.849C17.4541 8.94724 15.8014 10.6049 14.6262 11.2864C15.8014 11.8389 17.6838 13.2848 18.4 15.9002H15.7923C15.2322 14.1504 13.8366 12.7967 11.9911 12.6125V15.9002H11.7064Z" fill="white"/>
+									</svg></a><a class="login_ya" data-title="Войти с помощью Яндекс" href="/auth/login/service/yandex_oauth"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<rect width="44" height="44" rx="12" fill="#FC3F1D"></rect>
+										<path d="M24.7406 33.9778H29.0888V9.04445H22.7591C16.3928 9.04445 13.0537 12.303 13.0537 17.1176C13.0537 21.2731 15.2186 23.6164 19.0531 26.1609L21.3831 27.6987L18.3926 25.1907L12.4666 33.9778H17.1817L23.5113 24.5317L21.3097 23.0672C18.6494 21.2731 17.3468 19.8818 17.3468 16.8613C17.3468 14.2069 19.2182 12.4128 22.7775 12.4128H24.7222V33.9778H24.7406Z" fill="white"></path>
+									</svg></a><a class="login_ggl" data-title="Войти с помощью Google" href="/auth/login/service/google_oauth"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+											<path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+										</svg></a>	</div>
+
+	
+	<div id="logo">
+		<a class="" href="/"></a>	</div>
+	<div id="title">
+		<a href="/">TransFiles</a>	</div>
+	
+			<!--			<div class="adsgoogle_cont_header_m">-->
+<!--				--><!--				--><!--			</div>-->
+		<!--			<div class="adsgoogle_cont_header">-->
+				<!--			</div>-->
+				
+	<div class="breadcrumbs">
+								</div>
+	<!-- breadcrumbs -->
+</header>
+<!--header-->
+	
+<div id="content">
+	
+
+<script>
+	var max_total_size = '2147483648';
+	var smallFileSize = '10485760';
+	var files_limit = '1000';
+
+	var DIP = 'https://transfiles.ru';
+	var uploaded_msg = 'Загружено';
+	var share_title = 'Мои файлы на TransFiles';
+	var err_msg_virus = 'Ошибка';
+	var err_msg_empty_email = 'Введите email адрес';
+	var err_msg_empty_comment = 'Введите описание';
+	var err_msg_name = 'Недопустимые символы';
+	var err_msg_email = 'Неверный email адрес';
+	var files_uploading = 'Загружаются файлы!';
+	var you_have_files = 'Вы загрузили файлы.';
+	var link_to_dl = 'Ссылка для скачивания';
+	var copy_link_pass = 'Скопировать ссылку и пароль';
+	var copy_link = 'Скопировать ссылку';
+	var create_pass = 'Создать пароль';
+	var delete_pass = 'Удалить пароль';
+	var link_sended_to = 'Ссылка на скачивание файлов отправлена на ';
+	var error_on_sending = 'Ошибка при отправке письма. Попробуйте еще раз.';
+	var conf_delete_all = 'При удалении загрузки будут удалены все файлы! Вы действительно хотите удалить всю загрузку?';
+	var rm_link = 'Ссылка для удаления загрузки';
+	var up_rm_error = 'Загрузка была удалена с помощью ссылки для удаления. Добавление файлов в данную загрузку невозможно.';
+	var create_url = '' + '/create';
+	var upload_url = '/upload/upload';
+</script>
+
+
+
+<div class="wrapper" id="upload_zone" >
+	<div class="w_0">
+		<div class="container">
+			<div class="main">
+
+
+			<div class="adsgoogle_cont_under_header">
+<!--			-->				<!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3777537815417449" crossorigin="anonymous"></script>-->
+	<!-- header_desktop -->
+	<ins class="adsbygoogle"
+		style="display:inline-block;width:728px;height:90px"
+		data-ad-client="ca-pub-3777537815417449"
+		data-ad-slot="8080509530"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+		</div>
+	
+
+<div class="drop_zone ">
+	
+	<div class="uploads">
+		<div class="up_arrow_right"></div>
+		<div id="container_browse_btn">
+			<span id="browse_btn" href="javascript:;">Выбрать файлы</span>
+		</div>
+		<div class="up_arrow_left"></div>
+		<div class="up_text">
+			<span>Чтобы выбрать файлы, нажмите на кнопку или перетащите их сюда</span>
+		</div>
+	</div>
+	
+	
+
+<form enctype="multipart/form-data" id="uploads-form" action="/" method="post">	
+	<div class="upload_form">
+		<div class="upload_row radio">
+			<input value="0" id="period0" data-title="Файлы будут удалены после первого скачивания" name="Uploads[period]" type="radio" /><label for="period0">1 раз</label><input value="1" id="period1" checked="checked" data-title="Срок хранения - 3 дня" name="Uploads[period]" type="radio" /><label for="period1">3 дня</label><input value="2" id="period2" data-title="Срок хранения - 1 неделя" name="Uploads[period]" type="radio" /><label for="period2">1 неделя</label><input value="3" id="period3" data-title="Срок хранения - 14 дней" name="Uploads[period]" type="radio" /><label for="period3">14 дней</label>
+			<div id="password" class="pass_passive" data-val="0" data-title="Создать пароль">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"/></svg>
+			</div>
+			<div id="qrcode" class="btn_qrcode" data-title="Показать QR-код">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 224h192V32H0v192zM64 96h64v64H64V96zm192-64v192h192V32H256zm128 128h-64V96h64v64zM0 480h192V288H0v192zm64-128h64v64H64v-64zm352-64h32v128h-96v-32h-32v96h-64V288h96v32h64v-32zm0 160h32v32h-32v-32zm-64 0h32v32h-32v-32z"/></svg>
+			</div>
+		</div>
+
+		<div class="upload_row" id="send_email">
+			
+			<div class="show_up_form" id="show_comment">
+				<b>+</b>
+				<label>Добавить описание</label>
+			</div>
+			<div class="upload_comment">
+				<textarea id="up_comment" maxlength="500" name="Uploads[comment]"></textarea>				<b class="btn_ok" data-title="Сохранить" data-el="textarea">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.2 16.4 6.2 22.6 0z"/></svg>
+				</b>
+			</div>
+			
+			<div class="show_up_form" id="show_name_email">
+				<b>+</b>
+				<label>Отправить ссылку</label>
+			</div>
+			<div class="upload_text">
+				<input id="up_name" placeholder="Имя отправителя" name="Uploads[name]" type="text" maxlength="45" value="" />			</div>
+			<div class="upload_text">
+				<input id="up_email" placeholder="Email получателя" name="Uploads[email]" type="email" value="" />				<b class="btn_ok_send" data-title="Отправить"></b>
+			</div>
+			
+		</div>
+	</div>
+	
+</form><!-- form -->	
+	<div id="filelist">
+		<div class="info">
+			<span>Файлов: </span>
+			<span class="filesCount"></span>
+			<span>Размер: </span>
+			<span class="filesSize"></span>
+		</div>
+		<div id="progress">
+			<div class="progress_bar"></div>
+			<div class="progress_percent"></div>
+		</div>
+		<div id="up_files">
+			<ul></ul>
+		</div>
+		<div id="close" data-title="Удалить всю загрузку">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"/></svg>
+		</div>
+	</div>
+</div>
+
+				
+<!--	<div class="adsgoogle_cont_footer_m" style="margin-top:50px;">
+			</div>-->
+<!--	<div class="adsgoogle_cont_footer" style="margin-top:50px;">
+			</div>-->
+
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<noindex>
+<div id="virus_wrapper">
+	<div id="virus_message">
+		<div>
+			Антивирус обнаружил в загрузке			<br>
+			<span class="virus_text">вредоносные файлы</span>,
+			<br>
+			поэтому они будут удалены.		</div>
+		<input type="button" value="OK">
+	</div>
+</div>
+</noindex>
+<noindex>
+<div id="captcha_wrapper">
+	<div class="cpt_block">
+		<div class="cpt_header">
+			Пожалуйста, подтвердите, что Вы не робот		</div>
+		<div id="cpt_image">
+			<img src="/securimage/show" />
+		</div>
+		<div class="cpt_row">
+			<b id="cpt_reload" title="Обновить">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M440.7 12.6l4 82.8A247.2 247.2 0 0 0 255.8 8C134.7 8 33.9 94.9 12.3 209.8A12 12 0 0 0 24.1 224h49.1a12 12 0 0 0 11.7-9.3 175.9 175.9 0 0 1 317-56.9l-101.5-4.9a12 12 0 0 0 -12.6 12v47.4a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0 -12-12h-47.4a12 12 0 0 0 -12 12.6zM255.8 432a175.6 175.6 0 0 1 -146-77.8l101.8 4.9a12 12 0 0 0 12.6-12v-47.4a12 12 0 0 0 -12-12H12a12 12 0 0 0 -12 12V500a12 12 0 0 0 12 12h47.4a12 12 0 0 0 12-12.6l-4.2-82.6A247.2 247.2 0 0 0 255.8 504c121.1 0 221.9-86.9 243.6-201.8a12 12 0 0 0 -11.8-14.2h-49.1a12 12 0 0 0 -11.7 9.3A175.9 175.9 0 0 1 255.8 432z"/></svg>
+			</b>
+		</div>
+		<div class="cpt_row">
+			<label for="cpt_code">Введите символы:</label>
+			<input type="text" id="cpt_code" name="code" maxlength="10" />
+			<span class="cpt_error">Неверный код</span>
+			<input id="cpt_verify_btn" name="yt0" type="button" value="OK" />		</div>
+	</div>
+</div>
+<!--captcha-->
+</noindex>
+
+
+<noindex>
+<div id="qrcode_wrapper">
+	<div class="qrc_block">
+		<div class="qrc_header">
+			Отсканируйте QR-код и получите на мобильное устройство ссылку:			<span class="qrc_link"></span>
+		</div>
+		<div class="qrc_image"></div>
+		<b class="qrc_close" title="Закрыть">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"/></svg>
+		</b>
+	</div>
+</div>
+<!--qrcode-->
+</noindex></div><!-- content -->
+<!--content-->
+
+<footer class="wrapper">
+
+	<div id="footer_1">
+		<div class="container">
+			<noindex>
+								<div id="up_link"></div>
+					<div id="up_password"></div>
+					<div id="up_rm_link"></div>
+
+					<!--buttons-->
+					<div class="link_btns many_btns">
+						<div title="Поделиться ссылкой">
+							<div id="share_vk">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M545 117.7c3.7-12.5 0-21.7-17.8-21.7h-58.9c-15 0-21.9 7.9-25.6 16.7 0 0-30 73.1-72.4 120.5-13.7 13.7-20 18.1-27.5 18.1-3.7 0-9.4-4.4-9.4-16.9V117.7c0-15-4.2-21.7-16.6-21.7h-92.6c-9.4 0-15 7-15 13.5 0 14.2 21.2 17.5 23.4 57.5v86.8c0 19-3.4 22.5-10.9 22.5-20 0-68.6-73.4-97.4-157.4-5.8-16.3-11.5-22.9-26.6-22.9H38.8c-16.8 0-20.2 7.9-20.2 16.7 0 15.6 20 93.1 93.1 195.5C160.4 378.1 229 416 291.4 416c37.5 0 42.1-8.4 42.1-22.9 0-66.8-3.4-73.1 15.4-73.1 8.7 0 23.7 4.4 58.7 38.1 40 40 46.6 57.9 69 57.9h58.9c16.8 0 25.3-8.4 20.4-25-11.2-34.9-86.9-106.7-90.3-111.5-8.7-11.2-6.2-16.2 0-26.2 .1-.1 72-101.3 79.4-135.6z"/></svg>
+							</div>
+							<div id="share_ok">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M275.1 334c-27.4 17.4-65.1 24.3-90 26.9l20.9 20.6 76.3 76.3c27.9 28.6-17.5 73.3-45.7 45.7-19.1-19.4-47.1-47.4-76.3-76.6L84 503.4c-28.2 27.5-73.6-17.6-45.4-45.7 19.4-19.4 47.1-47.4 76.3-76.3l20.6-20.6c-24.6-2.6-62.9-9.1-90.6-26.9-32.6-21-46.9-33.3-34.3-59 7.4-14.6 27.7-26.9 54.6-5.7 0 0 36.3 28.9 94.9 28.9s94.9-28.9 94.9-28.9c26.9-21.1 47.1-8.9 54.6 5.7 12.4 25.7-1.9 38-34.5 59.1zM30.3 129.7C30.3 58 88.6 0 160 0s129.7 58 129.7 129.7c0 71.4-58.3 129.4-129.7 129.4s-129.7-58-129.7-129.4zm66 0c0 35.1 28.6 63.7 63.7 63.7s63.7-28.6 63.7-63.7c0-35.4-28.6-64-63.7-64s-63.7 28.6-63.7 64z"/></svg>
+							</div>
+							<div id="share_tm">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"/></svg>
+							</div>
+															<div id="share_wa">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+								</div>
+								<div id="share_tw">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+								</div>
+								<div id="share_fb">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>
+								</div>
+							<!--							<div id="share_gp"></div>-->
+						</div>
+						<div id="zclip" title="Скопировать ссылку">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M433.9 65.9l-51.9-51.9A48 48 0 0 0 348.1 0H176c-26.5 0-48 21.5-48 48v48H48c-26.5 0-48 21.5-48 48v320c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48v-48h80c26.5 0 48-21.5 48-48V99.9a48 48 0 0 0 -14.1-33.9zM266 464H54a6 6 0 0 1 -6-6V150a6 6 0 0 1 6-6h74v224c0 26.5 21.5 48 48 48h96v42a6 6 0 0 1 -6 6zm128-96H182a6 6 0 0 1 -6-6V54a6 6 0 0 1 6-6h106v88c0 13.3 10.7 24 24 24h88v202a6 6 0 0 1 -6 6zm6-256h-64V48h9.6c1.6 0 3.1 .6 4.2 1.8l48.4 48.4a6 6 0 0 1 1.8 4.2V112z"/></svg>
+						</div>
+					</div>
+											<div class="donate_btn_cont">
+						<a class="donate_btn" href="/donate" target="_blank">
+							<div class="db_images">
+								<svg class="db_wallet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M461.2 128H80c-8.8 0-16-7.2-16-16s7.2-16 16-16h384c8.8 0 16-7.2 16-16 0-26.5-21.5-48-48-48H64C28.7 32 0 60.7 0 96v320c0 35.4 28.7 64 64 64h397.2c28 0 50.8-21.5 50.8-48V176c0-26.5-22.8-48-50.8-48zM416 336c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/></svg>
+								<svg class="db_card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"/></svg>
+								<svg class="db_phone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M272 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM160 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm112-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12v312z"/></svg>
+							</div>
+							<span class="db_text">Пожертвовать</span>
+						</a>
+					</div>
+						</noindex>
+		</div>
+	</div>
+
+	
+	<div id="footer_2">
+		<div class="container">
+			<div class="descr">
+				<h1>TransFiles - бесплатный файлообменник без регистрации и ограничения скорости.</h1>
+				<h2 class="tit_small">
+					Здесь Вы можете передавать файлы, делиться файлами быстро и легко,					<!--<br>-->
+					загружать фото, закачивать видео. Быстрый файлообменник облако. Лучший файлообменник фотографий!										 Получение уменьшенных фото.					Максимальный размер загрузки - 2 ГБ.					
+					<!--
+					<br>
+					<br>
+					<br>
+										-->
+				</h2>
+
+									<h3 class="tit_small">
+																																										
+						Авторизуйтесь, чтобы получить больше: 						4						 ГБ						 на 						2 месяца.
+					</h3>
+				
+							</div>
+		</div>
+	</div>
+	<div id="footer_3">
+		<div class="container">
+			<div class="cont_row">
+				<a href="/editor" target="_blank">Редактор</a>
+				<a href="/donate" target="_blank">Помощь проекту</a>
+				<a href="/help" target="_blank">ЧаВо</a>
+				<a href="/contact" target="_blank">Обратная связь</a>
+				<a href="/policy" target="_blank">Политика конфиденциальности</a>
+			</div>
+		</div>
+	</div>
+	<div id="footer_4">
+		<div class="container">
+			<div style="padding: 20px 20px 25px; text-align: center;">
+									<a href="https://siliconcat.net" target="_blank" style="color: #474723; font-size: 14px;">SiliconCat.net - Сравнение процессоров, видеокарт и мобильных процессоров, рейтинги и тесты</a>
+							</div>
+		</div>
+	</div>
+</footer>
+<!--footer-->
+
+<noindex>
+<div id="iframe_wrapper">
+	<div id="iframe_message">
+		<div>
+			Страница загружена в IFRAME, поэтому загрузка невозможна.			<br>
+			Пройдите по корректной ссылке:			<br>
+			<a href="https://transfiles.ru" target="_blank">https://transfiles.ru</a>
+		</div>
+	</div>
+</div>
+</noindex>
+
+<script type="text/javascript" src="/js/functions.js?rnd=66"></script>
+<script type="text/javascript" src="/js/upload.js?rnd=66"></script>
+<script type="text/javascript" src="/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/js/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/zclip/zclip.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+jQuery(function($) {
+
+		$('#menu_main .navbar_toggle_btn').click(function(){
+			$(this).toggleClass('active');
+			$('#menu_main, header, .adsgoogle_cont_header, .adsgoogle_cont_header_m').toggleClass('opened');
+			if($(this).hasClass('active'))
+				$('ul.top_navigation').delay(200).queue(function(){
+					$(this).addClass('opened');
+					$(this).dequeue();
+				});
+			else
+				$('ul.top_navigation').removeClass('opened');
+		});
+		
+		if(is_iframe){
+			$('#iframe_wrapper').show();
+		}
+		
+		if($('#cookie_wrapper').length)
+			$('#cookie_wrapper').fadeIn(500);
+		
+		/*
+		*/
+		window.onload = function(){
+			setTimeout(function() {
+				var ad = document.querySelector('ins.adsbygoogle');
+				if (ad && ad.innerHTML.replace(/\s/g, '').length == 0) {
+					ad.style.cssText = 'display:block !important';
+					ad.innerHTML = '<a href="'+plink+'" class="sd_banner" target="_blank"></a>';
+				} 
+				
+				var ad = document.querySelector('yatag'); 
+				if (ad && ad.innerHTML.replace(/\s/g, '').length == 0) {
+					ad.style.cssText = 'display:block !important';
+//					ad.innerHTML = '<a href="'+plink+'" class="sd_banner" target="_blank">'+plink+'</a>';
+					ad.innerHTML = '<a href="'+plink+'" class="sd_banner" target="_blank"></a>';
+				} 
+			}, 2000);
+		};
+		
+		$('body').delegate('.sd_banner', 'click', function(){
+			$.ajax({
+					url        : 'adsCountSd',
+					async      : true,
+					type       : 'POST',
+					dataType   : 'json',
+					success    : function(data, textStatus, xhr){},
+					error      : function(xhr, textStatus, errorObj){}
+				});
+		});
+
+});
+/*]]>*/
+</script>
+</body>
+</html>
