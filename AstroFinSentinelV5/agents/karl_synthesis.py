@@ -45,6 +45,21 @@ from agents._impl.amre import (
     # Delisted fallback
     DelistFallback,
 )
+# ATOM-019: PostgreSQL integration
+try:
+    from db import (
+        is_postgres_available,
+        DecisionRecordRepository,
+        AgentSignalRepository,
+        AstroPositionRepository,
+        get_all_stats,
+    )
+    PG_AVAILABLE = is_postgres_available()
+except Exception:
+    PG_AVAILABLE = False
+    DecisionRecordRepository = None
+    AgentSignalRepository = None
+    AstroPositionRepository = None
 from agents._impl.amre.trajectory import MarketState, market_state_hash, trajectory_from_state
 
 
@@ -239,6 +254,24 @@ class KARLSynthesisAgent:
         # ── Step 8: Record to audit log ──────────────────────────────────────
         audit_log = get_audit_log()
         audit_log.record(record)
+
+        # ATOM-019: Save to PostgreSQL if available
+        if PG_AVAILABLE and DecisionRecordRepository:
+            try:
+                DecisionRecordRepository.save(record.to_dict())
+                # Save individual agent signals
+                for s in all_signals:
+                    if AgentSignalRepository:
+                        AgentSignalRepository.save(
+                            session_id=state.get("session_id", "unknown"),
+                            agent_name=_sig_get(s, "agent_name", "unknown"),
+                            signal=_sig_get(s, "signal", "NEUTRAL"),
+                            confidence=_sig_get(s, "confidence", 50),
+                            reasoning=_sig_get(s, "reasoning", "")[:500],
+                            metadata=_sig_get(s, "metadata", {}),
+                        )
+            except Exception as e:
+                print(f"[KARL] PostgreSQL save failed: {e}")
 
         # ── Step 8: Update OAP optimizer ─────────────────────────────────────────
         self.oap.sync_with_audit()

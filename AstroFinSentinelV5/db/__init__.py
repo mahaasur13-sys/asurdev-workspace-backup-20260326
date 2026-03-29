@@ -1,32 +1,25 @@
-"""db/ - Database connection and utilities for AstroFin V5"""
-import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from contextlib import contextmanager
+"""db/ — AstroFin V5 Database Layer (ATOM-019)
 
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "postgresql://astrofin:astrofin_secret@localhost:5432/astrofin"
+Modules:
+    session.py       - PostgreSQL connection pooling + scoped sessions
+    models.py        - SQLAlchemy 2.0 models
+    repositories.py   - CRUD operations for all entities
+    karl_replay.py   - PostgresReplayBuffer (KARL trajectories)
+    safe_json.py     - Safe JSON/JSONL operations (SQLite fallback)
+"""
+from db.session import get_engine, pg_session, is_postgres_available, get_db_stats
+from db.repositories import (
+    DecisionRecordRepository,
+    AgentSignalRepository,
+    AstroPositionRepository,
+    AuditLogRepository,
+    get_all_stats,
 )
+from db.karl_replay import PostgresReplayBuffer, get_default_pg_buffer
 
-engine = create_engine(DATABASE_URL, pool_size=10, max_overflow=20, echo=False)
-Session = scoped_session(sessionmaker(bind=engine))
-
-@contextmanager
-def get_session():
-    session = Session()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.remove()
-
-def init_db():
-    """Initialize database connection."""
-    from .models import Base
-    Base.metadata.create_all(engine)
-
-__all__ = ["engine", "Session", "get_session", "init_db"]
+__all__ = [
+    "get_engine", "pg_session", "is_postgres_available", "get_db_stats",
+    "DecisionRecordRepository", "AgentSignalRepository",
+    "AstroPositionRepository", "AuditLogRepository", "get_all_stats",
+    "PostgresReplayBuffer", "get_default_pg_buffer",
+]
