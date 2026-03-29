@@ -45,3 +45,4 @@ from mas_factory.topology import (
     ConditionEvaluator
 )
 from mas_factory.engine import TopologyExecutor, MetaQuestioningIntegrator, OAPIntegrator
+from .visualizer import TopologyVisualizer, visualize_topology, print_topology_viz

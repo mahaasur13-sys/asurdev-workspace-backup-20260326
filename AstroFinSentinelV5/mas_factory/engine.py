@@ -254,7 +254,7 @@ class TopologyExecutor:
         registry = get_registry()
         
         for role in self.topology.roles:
-            agent = registry.get_agent(role.agent_type)
+            agent = registry.get_role(role.agent_type)
             if agent:
                 try:
                     if asyncio.iscoroutinefunction(agent.run):
