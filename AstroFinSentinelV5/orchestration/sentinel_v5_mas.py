@@ -5,7 +5,8 @@ import time
 from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 
-from mas_factory import MASFactoryArchitect, TopologyExecutor, MetaQuestioningEngine
+from mas_factory import MASFactoryArchitect, TopologyExecutor
+from mas_factory import get_meta_questioning_engine as get_meta_questioning
 from mas_factory.topology import Topology
 from agents.base_agent import AgentResponse, SignalDirection
 from orchestration.router import route_query
@@ -61,22 +62,24 @@ async def run_sentinel_v5_mas(
     karl_context = {"enable_meta_questioning": enable_meta_questioning, "symbol": symbols[0], "timeframe": timeframe}
     topology = architect.build(intention=user_query, context=karl_context)
     print("[MASFactory] Topology:", topology.hash[:8])
-    print("[MASFactory] Roles:", [r.id for r in topology.roles])
+    print("[MASFactory] Roles:", [r.name for r in topology.roles])
     print("[MASFactory] Switches:", len(topology.switch_nodes))
 
     meta_questions = []
     if enable_meta_questioning:
         print()
-        print("[MetaQuestioning] Analyzing decision context...")
-        meta = MetaQuestioningEngine()
-        bias_detected, questions = meta.analyze(state, topology)
-        meta_questions = questions
-        if bias_detected:
-            print("[MetaQuestioning] Bias detected! Questions:", len(questions))
-            state["meta_question_bias"] = True
-            state["meta_questions"] = questions
-            topology = architect.build(intention=user_query, context={**karl_context, "bias_detected": True})
-            print("[MetaQuestioning] Updated topology:", topology.hash[:8])
+        print("[MetaQuestioning] Generating meta-questions...")
+        meta = get_meta_questioning()
+        ctx = {"confidence": 50, "regime": state.get("regime", "NORMAL")}
+        questions = meta.generate_questions(ctx)
+        if questions:
+            print("[MetaQuestioning] Generated", len(questions), "questions")
+            answers = meta.ask(questions, state)
+            passed = meta.evaluate(answers)
+            if not passed:
+                print("[MetaQuestioning] Self-questioning FAILED")
+                state["meta_question_bias"] = True
+                state["meta_questions"] = answers
 
     topology.state = state
     print()
@@ -107,7 +110,7 @@ async def run_sentinel_v5_mas(
         "timeframe": timeframe,
         "current_price": current_price,
         "query_type": route_output.query_type.value,
-        "flows_run": {"mas_factory": True, "roles": [r.id for r in topology.roles]},
+        "flows_run": {"mas_factory": True, "roles": [r.name for r in topology.roles]},
         "agent_count": len(results),
         "final_recommendation": synth_result,
         "final_report": synth_result,

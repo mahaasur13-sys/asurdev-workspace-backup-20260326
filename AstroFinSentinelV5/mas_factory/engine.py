@@ -66,14 +66,25 @@ class TopologyExecutor:
                     role.weight = action["weight"]
                     self._log(f"  Action: Set {role.name} weight = {role.weight}")
     async def _execute_role(self, role: Role):
-        agent = self.registry.get_role(role.agent_type)
-        if not agent:
-            self._log(f"Role {role.name}: No agent found, skipping")
+        runner = get_agent_runner(role.agent_type)
+        if not runner:
+            self._log(f"Role {role.name}: No runner for {role.agent_type}, skipping")
             return
-        self._log(f"Executing {role.name} (weight={role.weight})")
+        self._log(f"Executing {role.name} ({role.agent_type})")
         t0 = time.time()
         try:
-            result = await agent(self.state)
+            if isinstance(runner, type):
+                instance = runner()
+                if hasattr(instance, 'run'):
+                    result = instance.run(self.state) if asyncio.iscoroutinefunction(instance.run) else await instance.run(self.state)
+                else:
+                    result = {"error": "No run method"}
+            elif hasattr(runner, 'run'):
+                result = runner.run(self.state) if asyncio.iscoroutinefunction(runner.run) else await runner.run(self.state)
+            elif asyncio.iscoroutinefunction(runner):
+                result = await runner(self.state)
+            else:
+                result = runner(self.state)
             elapsed = time.time() - t0
             self.results[role.name] = result
             self._log(f"  {role.name} done in {elapsed:.3f}s -> {result.get('signal', '?') if isinstance(result, dict) else 'OK'}")
@@ -96,3 +107,31 @@ class TopologyExecutor:
             "messages_exchanged": len(self.messages),
             "execution_log": self._execution_log,
         }
+
+
+# Agent runner lookup (standalone function)
+def get_agent_runner(agent_type: str):
+    """Get the actual agent runner function for this agent_type."""
+    import importlib
+    AGENT_RUNNERS = {
+        "FundamentalAgent": ("agents._impl.fundamental_agent", "run_fundamental_agent"),
+        "TechnicalAgent": ("agents._impl.market_analyst", "run_market_analyst"),
+        "MacroAgent": ("agents._impl.macro_agent", "run_macro_agent"),
+        "QuantAgent": ("agents._impl.quant_agent", "run_quant_agent"),
+        "SentimentAgent": ("agents._impl.sentiment_agent", "run_sentiment_agent"),
+        "OptionsFlowAgent": ("agents._impl.options_flow_agent", "run_options_flow_agent"),
+        "BullResearcher": ("agents._impl.bull_researcher", "run_bull_researcher"),
+        "BearResearcher": ("agents._impl.bear_researcher", "run_bear_researcher"),
+        "AstroCouncilAgent": ("agents.astro_council_agent", "run_astro_council"),
+        "ElectoralAgent": ("agents._impl.electoral_agent", "run_electoral_agent"),
+        "SynthesisAgent": ("agents._impl.synthesis_agent", "SynthesisAgent"),
+    }
+    entry = AGENT_RUNNERS.get(agent_type)
+    if not entry:
+        return None
+    module_name, func_name = entry
+    try:
+        module = importlib.import_module(module_name)
+        return getattr(module, func_name)
+    except (ImportError, AttributeError):
+        return None

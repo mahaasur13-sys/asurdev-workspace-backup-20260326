@@ -31,3 +31,11 @@ __all__ = [
     "TopologyExecutor",
     "AgentRegistry", "get_registry",
 ]
+
+
+# Meta-Questioning Engine
+def get_meta_questioning_engine():
+    from agents._impl.amre.meta_questioning import MetaQuestioningEngine
+    return MetaQuestioningEngine()
+
+

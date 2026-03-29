@@ -572,6 +572,8 @@ async def run_sentinel_v5_karl(
     return final_output
 
 
+
+# ATOM-R-025: MASFactory
 async def _fetch_price(symbol: str) -> float:
     """Fetch current price from Binance."""
     try:
@@ -622,6 +624,16 @@ async def karl_diagnostics():
 
 
 if __name__ == "__main__":
-    # Delegate to karl_cli for all CLI entry points
-    from orchestration import karl_cli
-    asyncio.run(karl_cli.main())
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == '--masfactory':
+        # MASFactory mode (ATOM-R-025)
+        from orchestration.sentinel_v5_mas import run_sentinel_v5_mas
+        asyncio.run(run_sentinel_v5_mas(
+            user_query=' '.join(sys.argv[2:]) if len(sys.argv) > 2 else 'Analyze BTC',
+            symbol='BTCUSDT',
+            timeframe='SWING',
+        ))
+    else:
+        # Delegate to karl_cli for all CLI entry points
+        from orchestration import karl_cli
+        asyncio.run(karl_cli.main())
