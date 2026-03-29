@@ -57,3 +57,27 @@ __all__ = [
     "process_amre", "check_delisted_fallback", "apply_fallback", "get_karl_diagnostics",
     "DelistFallback", "AMREOutput",
 ]
+from .astro_reward import (
+    compute_astro_reward,
+    get_lunar_phase_score,
+    get_planetary_aspect_score,
+    get_nakshatra_score,
+    get_astro_market_phase,
+    LUNAR_PHASES,
+    PLANETARY_ASPECTS,
+    ZODIAC_ARC,
+    NAKSHATRA_SCORES,
+)
+from .karl_diagnostics import (
+    KARLHealthMetrics,
+    compute_karl_health,
+    get_system_status,
+    get_recommendations,
+    format_diagnostics_rich,
+)
+from .karl_optimizer import (
+    KARLOptimizer,
+    KARLPerfProfile,
+    AsyncPipeline,
+    get_karl_optimizer,
+)
