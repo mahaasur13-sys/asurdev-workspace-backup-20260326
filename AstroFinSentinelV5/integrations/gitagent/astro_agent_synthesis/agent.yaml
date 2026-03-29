@@ -1,0 +1,23 @@
+name: astro_agent_synthesis
+description: AstroFin Sentinel Synthesis Agent with KARL AMRE loop
+version: 1.0.0
+model:
+  provider: openai
+  name: gpt-4o
+skills:
+  - karll-amre
+  - astro-timming
+  - market-synthesis
+tools:
+  - swiss_ephemeris
+  - binance_api
+  - coingecko_api
+compliance:
+  audit: true
+  karll_enabled: true
+  volatility_guards: true
+sub_agents:
+  - synthesis_role
+workflows:
+  - synthesize
+  - route_uncertainty
