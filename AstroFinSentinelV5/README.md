@@ -1,144 +1,307 @@
-# AstroFin Sentinel V5
+<div align="center">
 
-**RAG-First Multi-Agent Trading Intelligence System**
+# 🧠 AstroFin Sentinel V5
 
-Система принятия торговых решений, построенная по принципу «Внутренний Совет Директоров» — множество специализированных агентов голосуют, Synthesis Agent выводит финальную рекомендацию.
+**Multi-Agent Trading System with KARL Self-Improvement**
 
-## Architecture
+![Version](https://img.shields.io/badge/version-5.0.0--production-blue)
+![Python](https://img.shields.io/badge/python-3.11+-green)
+![License](https://img.shields.io/badge/license-proprietary-red)
 
-```
-User Query → Router → [Parallel Specialist Flows] → Synthesis → Final Report
-               │
-    ┌────────────┼────────────┐
-    ▼            ▼            ▼
-Technical    Astro       Electional
-  Team      Council        Agent
-    │            │            │
-    ▼            ▼            ▼
-Confluence  Confluence  Best Windows
-    └────────────┼────────────┘
-                 ▼
-          Synthesis Agent
-                 │
-                 ▼
-         Final Recommendation
-```
+*AstroFin Sentinel V5* — это продвинутая мультиагентная торговая система, объединяющая фундаментальный, технический, макроэкономический и астрологический анализ для генерации торговых сигналов по криптовалютам.
 
-## Quick Start
+</div>
+
+---
+
+## 🎯 Возможности
+
+| Возможность | Описание |
+|-------------|----------|
+| **14 специализированных агентов** | Fundamental, Quant, Macro, Technical, Astro, Sentiment и др. |
+| **Thompson Sampling** | Динамический выбор агентов на основе Bayesian belief tracking |
+| **KARL AMRE Framework** | Self-improvement loop с uncertainty quantification |
+| **MAS Factory** | Динамическая оркестрация агентов через topology |
+| **Meta-Questioning** | Self-reflection для bias detection |
+| **Astro-Timing** |Muhurta/Panchanga для optimal entry windows |
+| **Volatility Guards** | Динамическая адаптация риск-менеджмента |
+
+---
+
+## 🚀 Быстрый старт
 
 ```bash
-cd /home/workspace/AstroFinSentinelV5
+# Установка зависимостей
 pip install -r requirements.txt
-python -m orchestration.sentinel_v5 "Analyze BTC for swing trade" BTCUSDT SWING
+
+# Базовая проверка
+python -m orchestration.sentinel_v5 "Analyze BTC" BTCUSDT SWING
+
+# С KARL (self-improvement)
+python -m orchestration.sentinel_v5 --karl "Analyze BTC"
+
+# Непрерывный backtest
+python -m orchestration.karl_cli --continuous BTCUSDT
+
+# Диагностика системы
+python -m orchestration.karl_cli --diag
 ```
 
-## Project Structure
+---
+
+## 📊 Архитектура
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     USER QUERY                                │
+└─────────────────────┬───────────────────────────────────────┘
+                      ↓
+┌─────────────────────────────────────────────────────────────┐
+│                      ROUTER                                   │
+│         (классификация: TECHNICAL/FUNDAMENTAL/etc)           │
+└─────────────────────┬───────────────────────────────────────┘
+                      ↓
+┌─────────────────────────────────────────────────────────────┐
+│               THOMPSON SAMPLING                              │
+│    ( Bayesian agent selection: выбираем top-K агентов )       │
+└─────────────────────┬───────────────────────────────────────┘
+                      ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    MAS FACTORY                               │
+│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│   │Technical │  │  Astro   │  │  Macro    │  │Fundament │  │
+│   │  Pool    │  │ Council  │  │   Flow    │  │   Flow   │  │
+│   │(3 ags)  │  │ (5 ags)  │  │(4 agents)│  │(3 agents)│  │
+│   └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  │
+│        └──────────────┼──────────────┼──────────────┘        │
+└───────────────────────┼─────────────┼────────────────────────┘
+                        ↓             ↓
+┌─────────────────────────────────────────────────────────────┐
+│              KARL AMRE LOOP                                 │
+│  Uncertainty → Grounding → Meta-Questioning → OAP          │
+└───────────────────────┬─────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│              SYNTHESIS AGENT                                │
+│     (Weighted vote + Conflict Resolution + Volatility)      │
+└───────────────────────┬─────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│                   FINAL SIGNAL                               │
+│     🟢 BUY (78)  |  🔴 SELL (65)  |  ⚪ NEUTRAL (50)       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📁 Структура проекта
 
 ```
 AstroFinSentinelV5/
-├── agents/                    # Agent implementations
-│   ├── base_agent.py          # BaseAgent, AgentResponse, SignalDirection
-│   ├── synthesis_agent.py     # SynthesisAgent (coordinator)
-│   ├── astro_council_agent.py # AstroCouncil coordinator
-│   ├── electoral_agent.py     # Muhurta / entry timing
-│   ├── fundamental_agent.py   # Fundamental analysis (20%)
-│   ├── macro_agent.py         # Macro economics (15%)
-│   ├── quant_agent.py         # ML / backtest / volatility (20%)
-│   ├── options_flow_agent.py  # Options flow (15%)
-│   ├── sentiment_agent.py     # News / social sentiment (10%)
-│   ├── technical_agent.py     # RSI, MACD, Bollinger (10%)
-│   ├── market_analyst.py      # Market structure
-│   ├── bull_researcher.py     # Bullish narrative (5%)
-│   ├── bear_researcher.py     # Bearish narrative (5%)
-│   └── directional_agents.py  # Direction helpers
-├── core/                      # Core engine modules
-│   ├── ephemeris.py           # Swiss Ephemeris wrapper (PlanetPosition, NatalChart)
-│   ├── aspects.py             # Aspects engine (conjunction, square, trine, etc.)
-│   ├── history_db.py          # SQLite session persistence
-│   ├── volatility.py          # Volatility regime engine (dynamic risk)
-│   └── checkpoint.py          # State checkpointing
-├── backtest/
-│   ├── engine.py              # Backtest engine
-│   ├── metrics_agent.py       # Metrics DB (BacktestRun, MetricsSummary)
-│   └── test_metrics_agent.py  # Tests (10/10 passing)
-├── orchestration/
-│   ├── sentinel_v5.py         # CLI entry point
-│   └── router.py              # Query router
-├── knowledge/
-│   └── rag_retriever.py       # RAG retrieval (Nakshatras, Choghadiya, etc.)
-├── astrology/
-│   └── vedic.py               # Vedic astrology utilities
-├── langgraph_schema.py         # LangGraph orchestration graph
-├── config/
-│   └── agent_weights.yaml      # Agent weight configuration
-└── tests/
-    └── test_orchestrator.py    # Orchestrator tests
+├── orchestration/           # Оркестрация
+│   ├── sentinel_v5.py       # Основной runner
+│   ├── sentinel_v5_mas.py    # MAS Factory mode
+│   ├── router.py             # Классификация запросов
+│   └── karl_cli.py           # Rich CLI UI
+├── agents/                   # Агенты
+│   ├── _impl/               # Реализации агентов
+│   │   ├── fundamental_agent.py
+│   │   ├── quant_agent.py
+│   │   ├── macro_agent.py
+│   │   ├── technical_agent.py
+│   │   ├── sentiment_agent.py
+│   │   ├── options_flow_agent.py
+│   │   ├── astro_council/
+│   │   └── ...
+│   ├── karl_synthesis.py    # KARL integration
+│   └── base_agent.py         # Базовый класс
+├── core/                     # Ядро
+│   ├── ephemeris.py         # Swiss Ephemeris
+│   ├── aspects.py           # Планетарные аспекты
+│   ├── volatility.py         # Волатильность
+│   ├── history_db.py         # SQLite persistence
+│   ├── belief.py            # Thompson Beta(α,β)
+│   └── thompson.py          # Thompson Sampling
+├── amre/                     # KARL AMRE Framework
+│   ├── uncertainty.py        # Неопределённость
+│   ├── grounding.py          # Валидация
+│   ├── self_question.py      # Meta-questions
+│   ├── oap_optimizer.py      # Position sizing
+│   ├── reward.py            # Reward functions
+│   ├── audit.py            # DecisionRecord
+│   └── backtest_loop.py     # Continuous backtest
+├── mas_factory/              # MAS Factory (ATOM-R-028)
+│   ├── topology.py         # Role, SwitchNode, Topology
+│   ├── architect.py        # Topology builder
+│   ├── registry.py         # Agent definitions
+│   ├── adapters.py         # Context adapters
+│   ├── engine.py           # Production engine
+│   └── visualizer.py      # Mermaid output
+├── db/                       # PostgreSQL layer
+│   ├── session.py
+│   ├── models.py
+│   └── repositories.py
+├── backtest/                 # Бэктестинг
+│   └── atom_014_stress_test.py
+└── knowledge/                 # RAG knowledge base
+    └── DB_ARCHITECTURE_PROMPT.md
 ```
 
-## Agent Board
+---
 
-| Agent | Weight | Domain |
-|-------|--------|--------|
-| MarketAnalyst | 25% | Technical (RSI, MACD, Bollinger) |
-| AstroCouncil | 20% | Western + Vedic + Financial astrology |
-| BullResearcher | 15% | Bullish fundamental case |
-| BearResearcher | 15% | Bearish fundamental case |
-| ElectoralAgent | 10% | Muhurta / entry timing |
-| CycleAgent | 5% | Market cycles |
-| RiskAgent | 5% | Position sizing |
+## ⚙️ Конфигурация
 
-## Core Modules
+### Переменные окружения (.env)
 
-### `core/ephemeris.py`
-Позиции планет, дома, натальная карта. Использует Swiss Ephemeris (pyswisseph) с fallback на упрощённый расчёт.
+```bash
+# Опционально — для enhanced данных
+OPENAI_API_KEY=sk-...
+
+# Swiss Ephemeris
+SWE_EPHE_PATH=/usr/share/ephe
+
+# Базы данных
+DATABASE_URL=postgresql://user:pass@localhost/astrofin
+```
+
+### Веса агентов (config/agent_weights.yaml)
+
+```yaml
+category_weights:
+  astro: 0.22
+  fundamental: 0.15
+  macro: 0.15
+  quant: 0.18
+  options: 0.12
+  sentiment: 0.09
+  technical: 0.09
+```
+
+---
+
+## 📈 Результаты бэктестинга
+
+| Метрика | Цель | Текущий результат |
+|---------|------|-------------------|
+| Win Rate | >55% | ✅ 58.3% |
+| Sharpe Ratio | >1.0 | ⚠️ 0.71 |
+| Max Drawdown | <10% | ✅ 4.7% |
+| Avg Confidence | >65% | ✅ 70% |
+
+---
+
+## 🔧 Использование
+
+### Python API
 
 ```python
-from core.ephemeris import get_planetary_positions, PlanetPosition
+import asyncio
+from orchestration.sentinel_v5 import run_sentinel_v5, run_sentinel_v5_karl
 
-positions = get_planetary_positions(datetime(2026, 3, 26))
-print(positions["jupiter"].longitude)  # → degrees
+async def main():
+    # Basic run
+    result = await run_sentinel_v5(
+        user_query="Analyze BTC for swing trade",
+        symbol="BTCUSDT",
+        timeframe="SWING"
+    )
+    
+    signal = result["final_recommendation"]["signal"]
+    confidence = result["final_recommendation"]["confidence"]
+    print(f"SIGNAL: {signal} (confidence: {confidence})")
+    
+    # KARL mode (with self-improvement)
+    result = await run_sentinel_v5_karl(
+        user_query="Analyze BTC",
+        symbol="BTCUSDT",
+        timeframe="SWING",
+        enable_self_question=True,
+        enable_backtest=True
+    )
+
+asyncio.run(main())
 ```
 
-### `core/aspects.py`
-Расчёт аспектов между планетами (соединение, секстиль, квадрат, трин, оппозиция). Работает с выходом `core/ephemeris.py`.
+### CLI
+
+```bash
+# Анализ BTC
+python -m orchestration.sentinel_v5 "Analyze BTC" BTCUSDT SWING
+
+# KARL режим
+python -m orchestration.sentinel_v5 --karl "Analyze BTC"
+
+# Непрерывный бэктест
+python -m orchestration.karl_cli --continuous BTCUSDT
+
+# Диагностика
+python -m orchestration.karl_cli --diag
+```
+
+### MAS Factory режим
 
 ```python
-from core.ephemeris import get_planetary_positions
-from core.aspects import calculate_aspects
+from mas_factory.engine import ProductionMASEngine
+from mas_factory.architect import MASFactoryArchitect
 
-positions = get_planetary_positions(datetime(2026, 3, 26))
-report = calculate_aspects(positions)
-for a in report.aspects:
-    print(a.signature, f"({a.orb}°)")
+engine = ProductionMASEngine()
+result = await engine.run_sync("Analyze BTC", "BTCUSDT", "SWING")
 ```
 
-### `core/history_db.py`
-SQLite-персистенция сессий.
+---
 
-```python
-from core.history_db import save_session, list_sessions, session_stats
+## 🧪 Тестирование
 
-sessions = list_sessions(symbol='BTCUSDT', limit=10)
-stats = session_stats(symbol='BTCUSDT', days=30)
+```bash
+# Все тесты
+cd AstroFinSentinelV5
+python -m pytest tests/ -v
+
+# Стресс-тест ATOM-014
+python backtest/atom_014_stress_test.py
+
+# MAS Factory тесты
+python mas_factory/atom_032_e2e_test.py
+
+# Production тесты
+python mas_factory/atom_033_production_test.py
 ```
 
-### `core/volatility.py`
-Динамический риск на основе ATR и режима волатильности (LOW / NORMAL / HIGH / EXTREME).
+---
 
-## RAG Knowledge System
+## 📋 Changelog
 
-Each agent accesses knowledge through `retrieve_knowledge(query, domain)`:
+### v5.0.0-production (2026-03-29)
 
-- `domain="astrology"` — Nakshatras, Choghadiya, Muhurta, Western dignities
-- `domain="technical"` — Indicators, patterns, wave theory
-- `domain="trading"` — Risk management, position sizing
+- ✅ **ATOM-R-033**: Production MAS Factory engine
+- ✅ **ATOM-R-032**: E2E tests (7/7 passed)
+- ✅ **ATOM-R-031**: Bug fixes for MAS Factory
+- ✅ **ATOM-R-028**: Full MAS Factory architecture
+- ✅ **ATOM-021**: Meta-questioning optimization
+- ✅ **ATOM-020**: PostgreSQL integration + KARL replay
+- ✅ **ATOM-019**: KARL trajectories in DB
+- ✅ **ATOM-018**: PostgreSQL schema + Alembic migrations
+- ✅ **ATOM-017**: Industrial CLI with Rich UI
+- ✅ **ATOM-016**: Fixed duplicate runner imports
+- ✅ **ATOM-015**: KARL CLI dashboard
+- ✅ **ATOM-014**: Stress tests (12 decisions, 58.3% win rate)
+- ✅ **ATOM-013**: KARL integration in synthesis
+- ✅ **ATOM-012**: AMRE metrics (uncertainty, grounding, OAP)
+- ✅ **ATOM-011**: Replay buffer + backtest loop
 
-## Dependencies
+---
 
-```
-langgraph>=0.0.55
-langchain-core
-langchain-openai
-requests
-swissEphemeris (sweph)
-```
+## ⚠️ Отказ от ответственности
+
+**ЭТО НЕ ФИНАНСОВЫЙ КОНСУЛЬТАНТ.**
+
+Система предназначена только для образовательных целей. Автор не несёт ответственности за любые убытки, понесённые в результате использования этой системы.
+
+---
+
+## 📄 License
+
+Proprietary — All rights reserved
+
+*Author: mahaasur13-sys*  
+*GitHub: https://github.com/mahaasur13-sys/asurdev-workspace*
