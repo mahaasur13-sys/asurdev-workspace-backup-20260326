@@ -43,21 +43,22 @@ from agents._impl.macro_agent import run_macro_agent
 from agents._impl.quant_agent import run_quant_agent
 from agents._impl.options_flow_agent import run_options_flow_agent
 from agents._impl.sentiment_agent import run_sentiment_agent
-from agents._impl.technical_agent import run_technical_agent
 from agents.base_agent import AgentResponse, SignalDirection
 from orchestration.router import route_query
 from core.history_db import save_session
 from core.belief import update_beliefs_from_session
 from core.thompson import (
-    ThompsonSampler,
-    AgentPool,
-    TECHNICAL_POOL,
-    MACRO_POOL,
-    ELECTORAL_POOL,
-    ASTRO_POOL,
-    get_thompson_sampler,
-    thompson_select,
+    ThompsonSampler, AgentPool,
+    TECHNICAL_POOL, MACRO_POOL, ASTRO_POOL, ELECTORAL_POOL,
+    get_thompson_sampler, thompson_select,
 )
+# ATOM-020: PostgreSQL
+try:
+    from db import is_postgres_available, init_db_if_needed, get_all_stats
+    from db.repositories import DecisionRecordRepository, AgentSignalRepository
+    PG_AVAILABLE = is_postgres_available()
+except Exception:
+    PG_AVAILABLE = False
 
 
 # ─── Agent Weights ─────────────────────────────────────────────────────────────
@@ -412,6 +413,18 @@ async def run_sentinel_v5_karl(
     """
     if not session_id:
         session_id = str(uuid.uuid4())[:8]
+
+    # ATOM-020: Initialize PostgreSQL on first run
+    if PG_AVAILABLE:
+        db_init = init_db_if_needed()
+        if db_init.get("tables_created"):
+            print("[DB] PostgreSQL tables initialized")
+        elif db_init.get("postgres_available"):
+            print("[DB] PostgreSQL connected (tables exist)")
+        else:
+            print("[DB] PostgreSQL not available, using SQLite fallback")
+    else:
+        print("[DB] PostgreSQL not configured, using SQLite fallback")
 
     # ── Step 1: Route query ──────────────────────────────────────────────────
     route_output = route_query(user_query)
