@@ -38,6 +38,12 @@ from agents.karl_synthesis import KARLSynthesisAgent, get_karl_agent
 from agents._impl.market_analyst import run_market_analyst
 from agents._impl.bull_researcher import run_bull_researcher
 from agents._impl.bear_researcher import run_bear_researcher
+from agents._impl.fundamental_agent import run_fundamental_agent
+from agents._impl.macro_agent import run_macro_agent
+from agents._impl.quant_agent import run_quant_agent
+from agents._impl.options_flow_agent import run_options_flow_agent
+from agents._impl.sentiment_agent import run_sentiment_agent
+from agents._impl.technical_agent import run_technical_agent
 from agents.base_agent import AgentResponse, SignalDirection
 from orchestration.router import route_query
 from core.history_db import save_session
@@ -46,6 +52,7 @@ from core.thompson import (
     ThompsonSampler,
     AgentPool,
     TECHNICAL_POOL,
+    MACRO_POOL,
     ELECTORAL_POOL,
     ASTRO_POOL,
     get_thompson_sampler,
@@ -128,6 +135,62 @@ async def run_electoral_flow(
     return await run_electoral_agent(state)
 
 
+async def run_macro_flow(
+    state: dict,
+    selected_agents: Optional[list[str]] = None,
+) -> dict:
+    """
+    Run macro/fundamental analysis team (ATOM-017).
+    Selected agents come from MACRO_POOL:
+      FundamentalAgent, MacroAgent, QuantAgent, OptionsFlowAgent, SentimentAgent
+    """
+    pool_agents = selected_agents or MACRO_POOL.agents
+
+    tasks = []
+    names = []
+
+    if "FundamentalAgent" in pool_agents:
+        tasks.append(run_fundamental_agent(state))
+        names.append("FundamentalAgent")
+
+    if "MacroAgent" in pool_agents:
+        tasks.append(run_macro_agent(state))
+        names.append("MacroAgent")
+
+    if "QuantAgent" in pool_agents:
+        tasks.append(run_quant_agent(state))
+        names.append("QuantAgent")
+
+    if "OptionsFlowAgent" in pool_agents:
+        tasks.append(run_options_flow_agent(state))
+        names.append("OptionsFlowAgent")
+
+    if "SentimentAgent" in pool_agents:
+        tasks.append(run_sentiment_agent(state))
+        names.append("SentimentAgent")
+
+    if not tasks:
+        return {}
+
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    merged = {}
+    for name, r in zip(names, results):
+        if isinstance(r, dict):
+            # Try multiple key formats
+            sig = r.get(f"{name.lower()}_signal") or r.get("signal") or list(r.values())[0] if r else None
+            merged[f"{name.lower()}_signal"] = sig
+        elif isinstance(r, Exception):
+            merged[f"{name.lower()}_signal"] = AgentResponse(
+                agent_name=name,
+                signal=SignalDirection.NEUTRAL,
+                confidence=30,
+                reasoning=f"Agent error: {str(r)[:100]}",
+                sources=[],
+            ).to_dict()
+    return merged
+
+
 # ─── Thompson Sampling Helpers ─────────────────────────────────────────────────
 
 def _select_for_flow(
@@ -156,6 +219,7 @@ async def run_sentinel_v5(
     current_price: float = 0.0,
     birth_data: dict = None,
     include_technical: bool = True,
+    include_macro: bool = True,
     include_astro: bool = True,
     include_electional: bool = False,
     session_id: str = None,
@@ -169,21 +233,7 @@ async def run_sentinel_v5(
     select which agents to call, replacing static AGENT_WEIGHTS.
 
     Args:
-        user_query: Natural language query from user
-        symbol: Trading symbol (e.g., BTCUSDT)
-        timeframe: INTRADAY / SWING / POSITIONAL
-        current_price: Current price (auto-fetched if 0)
-        birth_data: Optional birth data for natal chart
-        include_technical: Run technical team
-        include_astro: Run AstroCouncil
-        include_electional: Run ElectoralAgent
-        session_id: Optional session ID for checkpointing
-        persist: Save session and update belief tracker
-        thompson_k: Default number of agents to select per pool
-                    (can be overridden per-pool via pool.max_select)
-
-    Returns:
-        dict with final_recommendation, all_signals, flows_run, thompson_selections
+        include_macro: Run MACRO_POOL (FundamentalAgent, MacroAgent, QuantAgent, OptionsFlowAgent, SentimentAgent)
     """
     if not session_id:
         session_id = str(uuid.uuid4())[:8]
@@ -225,6 +275,15 @@ async def run_sentinel_v5(
         technical_selected = _select_for_flow(TECHNICAL_POOL, k=thompson_k)
         thompson_selections["technical"] = technical_selected
 
+    if include_macro:
+        # Exclude agents already selected in technical (MACRO has overlap with TECHNICAL via Bull/Bear)
+        macro_selected = _select_for_flow(
+            MACRO_POOL,
+            excluded=technical_selected,
+            k=thompson_k,
+        )
+        thompson_selections["macro"] = macro_selected
+
     if include_astro:
         # Exclude agents already selected in technical (e.g. BullResearcher, BearResearcher)
         astro_selected = _select_for_flow(
@@ -247,6 +306,9 @@ async def run_sentinel_v5(
 
     if include_technical:
         flow_tasks.append(run_technical_flow(state, selected_agents=technical_selected))
+
+    if include_macro:
+        flow_tasks.append(run_macro_flow(state, selected_agents=thompson_selections.get("macro", [])))
 
     if include_astro:
         flow_tasks.append(run_astro_flow(state, selected_agents=astro_selected))
@@ -291,6 +353,7 @@ async def run_sentinel_v5(
             "technical": include_technical,
             "astro": include_astro,
             "electional": include_electional,
+            "macro": include_macro,
         },
         "thompson_selections": thompson_selections,
         "agent_count": len(state["all_signals"]),
@@ -315,6 +378,7 @@ async def run_sentinel_v5_karl(
     current_price: float = 0.0,
     birth_data: dict = None,
     include_technical: bool = True,
+    include_macro: bool = True,
     include_astro: bool = True,
     include_electional: bool = False,
     session_id: str = None,
@@ -335,6 +399,7 @@ async def run_sentinel_v5_karl(
     - Periodic sync_with_audit() every N decisions
 
     Args:
+        include_macro: Run MACRO_POOL (FundamentalAgent, MacroAgent, QuantAgent, OptionsFlowAgent, SentimentAgent)
         enable_self_question: Run SelfQuestioningEngine before synthesis
         enable_backtest: Add samples to ContinuousBacktest
         sync_interval: Run sync_with_audit() every N decisions
@@ -383,6 +448,15 @@ async def run_sentinel_v5_karl(
         technical_selected = _select_for_flow(TECHNICAL_POOL, k=thompson_k)
         thompson_selections["technical"] = technical_selected
 
+    if include_macro:
+        # Exclude agents already selected in technical (MACRO has overlap with TECHNICAL via Bull/Bear)
+        macro_selected = _select_for_flow(
+            MACRO_POOL,
+            excluded=technical_selected,
+            k=thompson_k,
+        )
+        thompson_selections["macro"] = macro_selected
+
     if include_astro:
         astro_selected = _select_for_flow(
             ASTRO_POOL,
@@ -403,6 +477,9 @@ async def run_sentinel_v5_karl(
 
     if include_technical:
         flow_tasks.append(run_technical_flow(state, selected_agents=technical_selected))
+
+    if include_macro:
+        flow_tasks.append(run_macro_flow(state, selected_agents=thompson_selections.get("macro", [])))
 
     if include_astro:
         flow_tasks.append(run_astro_flow(state, selected_agents=astro_selected))
@@ -461,6 +538,7 @@ async def run_sentinel_v5_karl(
             "technical": include_technical,
             "astro": include_astro,
             "electional": include_electional,
+            "macro": include_macro,
         },
         "thompson_selections": thompson_selections,
         "agent_count": len(state["all_signals"]),
