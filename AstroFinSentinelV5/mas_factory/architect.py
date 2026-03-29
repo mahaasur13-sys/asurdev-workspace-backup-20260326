@@ -79,7 +79,7 @@ class MASFactoryArchitect:
         self.registry = get_registry()
         self._topology_cache: Dict[str, Topology] = {}
     
-    async def build(self, intention: str, symbol: str = "BTCUSDT",
+    def build(self, intention: str, symbol: str = "BTCUSDT",
                    timeframe: str = "SWING", **kwargs) -> Topology:
         """
         Main entry point. Build declarative topology from intention.

@@ -88,6 +88,16 @@ class Connection:
     condition: Optional[str] = None  # e.g., "signal != NEUTRAL"
 
 @dataclass
+
+
+@dataclass
+class Message:
+    from_node: str
+    to_node: str
+    payload: Any
+    timestamp: str
+
+@dataclass
 class Topology:
     """Declarative agent topology blueprint"""
     intention: str
@@ -110,6 +120,10 @@ class Topology:
     def get_outgoing(self, node: str) -> List[Connection]:
         return [c for c in self.connections if c.from_node == node]
     
+    @property
+    def hash(self) -> str:
+        return self.compute_hash()
+
     def validate(self) -> List[str]:
         errors = []
         node_ids = {r.name for r in self.roles} | {s.id for s in self.switch_nodes}
