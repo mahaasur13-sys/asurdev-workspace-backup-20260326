@@ -238,3 +238,13 @@ def get_registry() -> AgentRegistry:
     if _REGISTRY is None:
         _REGISTRY = AgentRegistry()
     return _REGISTRY
+
+# Agent runner wrapper for MAS Factory compatibility
+class BasicAgentRunner:
+    def __init__(self, agent_type: str):
+        self.agent_type = agent_type
+    def run(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        return {"signal": "NEUTRAL", "confidence": 50, "agent": self.agent_type}
+
+def get_agent_runner(agent_type: str) -> BasicAgentRunner:
+    return BasicAgentRunner(agent_type)

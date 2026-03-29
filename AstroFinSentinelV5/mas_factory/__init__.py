@@ -1,48 +1,22 @@
-"""mas_factory/ - MAS Factory: Declarative Agent Architecture (ATOM-R-023a)
-
-Modules:
-    architect.py  - MASFactoryArchitect: generates topology.json from intention
-    engine.py     - TopologyExecutor: runs agents from declarative blueprint
-    topology.py   - Topology models (Role, Connection, SwitchNode, Adapter)
-    adapters.py  - Context adapters between agents
-    registry.py  - Agent registry with capabilities and constraints
-
-Migration from SkillMD to MAS Factory:
-    OLD: Hard-coded if/else in sentinel_v5.py
-    NEW: Declarative topology.json + dynamic execution
-
-Usage:
-    from mas_factory import MASFactoryArchitect, TopologyExecutor
-    
-    architect = MASFactoryArchitect()
-    topology = await architect.build("Analyze BTC for swing trade")
-    
-    executor = TopologyExecutor(topology)
-    result = await executor.run()
-"""
-from mas_factory.architect import MASFactoryArchitect, Intention
-from mas_factory.topology import Topology, Role, Connection, SwitchNode, Adapter
-from mas_factory.engine import TopologyExecutor
+"""mas_factory — ATOM-R-033: Production MAS Factory"""
+from mas_factory.topology import (
+    Role, SwitchNode, Connection, Topology,
+    NodeType, SwitchStrategy, SwitchAction,
+    TopologyChange, TopologyVersion, TopologyUpdater
+)
+from mas_factory.architect import MASFactoryArchitect, get_architect
 from mas_factory.registry import AgentRegistry, get_registry
 
+from mas_factory.engine import ProductionMASEngine, MASFactoryConfig, get_production_engine
+from mas_factory.visualizer import TopologyVisualizer
+
 __all__ = [
-    "MASFactoryArchitect", "Intention",
-    "Topology", "Role", "Connection", "SwitchNode", "Adapter",
-    "TopologyExecutor",
+    "Role", "SwitchNode", "Connection", "Topology",
+    "NodeType", "SwitchStrategy", "SwitchAction",
+    "TopologyChange", "TopologyVersion", "TopologyUpdater",
+    "MASFactoryArchitect", "get_architect",
     "AgentRegistry", "get_registry",
+    "get_agent_runner",
+    "ProductionMASEngine", "MASFactoryConfig", "get_production_engine",
+    "TopologyVisualizer",
 ]
-
-
-# Meta-Questioning Engine
-def get_meta_questioning_engine():
-    from agents._impl.amre.meta_questioning import MetaQuestioningEngine
-    return MetaQuestioningEngine()
-from mas_factory.topology import (
-    Topology, Role, Connection, SwitchNode, Adapter, Message,
-    TopologyChange, TopologyVersion, TopologyUpdater,
-    SwitchStrategy, SwitchAction, NodeType,
-    UncertaintySwitch, BiasSwitch, RegimeSwitch, OOSFailSwitch, LowConfidenceSwitch,
-    ConditionEvaluator
-)
-from mas_factory.engine import TopologyExecutor, MetaQuestioningIntegrator, OAPIntegrator
-from .visualizer import TopologyVisualizer, visualize_topology, print_topology_viz

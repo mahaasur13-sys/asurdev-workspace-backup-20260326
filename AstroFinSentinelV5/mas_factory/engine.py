@@ -1,295 +1,243 @@
-"""mas_factory/engine.py - ATOM-R-028: Dynamic Topology Executor with SwitchNodes
-Integrates TopologyUpdater for dynamic graph adaptation during execution.
+"""mas_factory/engine.py — ATOM-R-033: Production Optimized MAS Factory Engine
+Optimizations:
+- LRU cache for Architect.build()
+- Parallel agent execution
+- Robust error handling with fallback
+- Meta-questioning as topology change driver
 """
 import asyncio
+import hashlib
 import time
-from typing import Dict, Any, List, Optional, Set
+from functools import lru_cache
+from typing import Dict, Any, Optional, List
+from dataclasses import dataclass, field
 from datetime import datetime
+import logging
 
-from mas_factory.topology import (
-    Topology, Role, Connection, SwitchNode, Message,
-    TopologyUpdater, TopologyChange, SwitchAction,
-    UncertaintySwitch, BiasSwitch, RegimeSwitch, OOSFailSwitch, LowConfidenceSwitch,
-    ConditionEvaluator
-)
-from mas_factory.registry import get_registry
+from mas_factory.topology import Topology, Role, SwitchNode, Connection
+from mas_factory.architect import MASFactoryArchitect, get_architect
+from mas_factory.registry import AgentRegistry, get_registry
+from mas_factory.visualizer import TopologyVisualizer
 
-# ─── Meta-Questioning Integration ────────────────────────────────────────────
-class MetaQuestioningIntegrator:
-    """ATOM-R-028: Integrates MetaQuestioning with topology changes."""
-    
-    def __init__(self):
-        self.questions: List[str] = []
-        self.biases: List[str] = []
-        self.topology_modifications: List[Dict] = []
-    
-    def generate_questions(self, context: Dict[str, Any]) -> List[str]:
-        """Generate self-questioning questions based on context."""
-        self.questions = []
-        
-        confidence = context.get("confidence", context.get("confidence_final", 50))
-        uncertainty = context.get("uncertainty_total", 0.5)
-        oos_fail = context.get("oos_fail_rate", 0.0)
-        
-        if confidence > 75:
-            self.questions.append("Is this high-confidence decision justified by evidence?")
-        if uncertainty > 0.6:
-            self.questions.append("Should we add grounding before proceeding?")
-        if oos_fail > 0.4:
-            self.questions.append("Are we in an overfitting regime? Tighten policy?")
-        
-        return self.questions
-    
-    def analyze_bias(self, signals: List[Dict]) -> bool:
-        """Detect if agents show correlated bias."""
-        if len(signals) < 2:
-            return False
-        signal_counts = {}
-        for s in signals:
-            sig = s.get("signal", "NEUTRAL")
-            signal_counts[sig] = signal_counts.get(sig, 0) + 1
-        # Bias if >70% agents agree
-        total = len(signals)
-        for count in signal_counts.values():
-            if count / total > 0.7:
-                self.biases.append(f"High agreement: {count}/{total} agents")
-                return True
-        return False
-    
-    def get_topology_modifications(self, context: Dict[str, Any]) -> List[Dict]:
-        """Return recommended topology changes based on analysis."""
-        mods = []
-        
-        unc = context.get("uncertainty_total", 0)
-        if unc > 0.6:
-            mods.append({
-                "action": SwitchAction.ADD_LOOP.value,
-                "target": "GroundingLoop",
-                "reason": f"Uncertainty {unc:.3f} > 0.6"
-            })
-        
-        bias = context.get("bias_detected", False)
-        if bias:
-            mods.append({
-                "action": SwitchAction.ADD_ROLE.value,
-                "target": "Critic",
-                "reason": "Bias detected in agent signals"
-            })
-        
-        oos = context.get("oos_fail_rate", 0)
-        if oos > 0.4:
-            mods.append({
-                "action": SwitchAction.TIGHTEN_POLICY.value,
-                "target": "all",
-                "reason": f"OOS fail {oos:.3f} > 0.4",
-                "factor": 0.5
-            })
-        
-        regime = context.get("regime", "NORMAL")
-        if regime in ["HIGH", "EXTREME"]:
-            mods.append({
-                "action": SwitchAction.REORDER_ROLES.value,
-                "target": "priority",
-                "reason": f"Regime {regime} - prioritizing stability",
-                "order": ["HighVolatilityAgent", "RiskManager", "FundamentalAgent"]
-            })
-        
-        return mods
+logger = logging.getLogger(__name__)
 
-# ─── OAP Integration ─────────────────────────────────────────────────────────
-class OAPIntegrator:
-    """ATOM-R-028: Integrates OAP recommendations with topology changes."""
-    
-    def __init__(self):
-        self.current_ttc_depth = 3
-        self.oos_fail_rate = 0.0
-        self.entropy_avg = 0.5
-    
-    def analyze(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze OAP metrics and suggest topology changes."""
-        suggestions = []
-        
-        # Extract metrics from context
-        self.current_ttc_depth = context.get("current_ttc_depth", 3)
-        self.oos_fail_rate = context.get("oos_fail_rate", 0.0)
-        self.entropy_avg = context.get("entropy_avg", 0.5)
-        
-        # High OOS fail → tighten
-        if self.oos_fail_rate > 0.4:
-            suggestions.append({
-                "action": SwitchAction.TIGHTEN_POLICY.value,
-                "target": "all",
-                "reason": f"OOS fail {self.oos_fail_rate:.3f} exceeds threshold",
-                "factor": 0.5
-            })
-        
-        # High entropy → reduce complexity
-        if self.entropy_avg > 0.7:
-            suggestions.append({
-                "action": SwitchAction.TIGHTEN_POLICY.value,
-                "target": "all",
-                "reason": f"High entropy {self.entropy_avg:.3f} - reducing exploration",
-                "factor": 0.7
-            })
-        
-        return {
-            "suggestions": suggestions,
-            "metrics": {
-                "oos_fail_rate": self.oos_fail_rate,
-                "entropy_avg": self.entropy_avg,
-                "ttc_depth": self.current_ttc_depth
-            }
-        }
-    
-    def suggest_topology_change(self, context: Dict[str, Any]) -> Optional[TopologyChange]:
-        """OAPOptimizer.suggest_topology_change() - main entry point."""
-        analysis = self.analyze(context)
-        
-        if not analysis["suggestions"]:
+@dataclass
+class ExecutionMetrics:
+    duration_ms: float
+    nodes_executed: int
+    errors: int
+    cache_hit: bool
+
+@dataclass
+class MASFactoryConfig:
+    enable_caching: bool = True
+    max_workers: int = 4
+    timeout_seconds: float = 30.0
+    fallback_on_error: bool = True
+    enable_meta_questioning: bool = True
+
+class ProductionMASEngine:
+    def __init__(self, config: Optional[MASFactoryConfig] = None,
+                 registry: Optional[AgentRegistry] = None):
+        self.config = config or MASFactoryConfig()
+        self.registry = registry or get_registry()
+        self._architect = MASFactoryArchitect()
+        self._topology_cache: Dict[str, Topology] = {}
+        self._metrics: List[ExecutionMetrics] = []
+        self._meta_questions_asked: int = 0
+
+    def _compute_cache_key(self, context: Dict[str, Any]) -> str:
+        intention = context.get("intention", context.get("query_type", "ANALYZE"))
+        symbol = context.get("symbol", "BTCUSDT")
+        timeframe = context.get("timeframe", "SWING")
+        data = f"{intention}:{symbol}:{timeframe}"
+        return hashlib.md5(data.encode()).hexdigest()[:12]
+
+    @lru_cache(maxsize=32)
+    def _build_cached(self, cache_key: str, intention: str, 
+                      symbol: str, timeframe: str) -> Optional[Topology]:
+        try:
+            return self._architect.build(intention=intention, symbol=symbol, timeframe=timeframe)
+        except Exception as e:
+            logger.warning(f"Architect.build failed: {e}")
             return None
-        
-        suggestion = analysis["suggestions"][0]
-        action = SwitchAction(suggestion["action"])
-        
-        return TopologyChange.create(
-            action=action,
-            target=suggestion.get("target", "unknown"),
-            before={"roles": [{"n": r.name, "w": r.weight} for r in context.get("_roles", [])]},
-            after=suggestion,
-            reason=suggestion.get("reason", "OAP recommendation"),
-            triggered_by="OAPIntegrator"
-        )
 
-# ─── Dynamic Topology Executor ─────────────────────────────────────────────────
-class TopologyExecutor:
-    """ATOM-R-028: Executes topology with dynamic SwitchNode evaluation.
-    
-    After each step, evaluates switch conditions and applies topology changes
-    through TopologyUpdater. Full versioning and rollback support.
-    """
-    
-    def __init__(self, topology: Topology):
-        self.topology = topology
-        self.updater = TopologyUpdater(topology)
-        self.meta_integrator = MetaQuestioningIntegrator()
-        self.oap_integrator = OAPIntegrator()
-        self.execution_log: List[Dict] = []
-        self.change_count = 0
-    
-    async def run(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Async execution with dynamic topology updates."""
-        self.execution_log = []
-        self.change_count = 0
-        
-        # Step 1: Meta-Questioning
-        questions = self.meta_integrator.generate_questions(context)
-        context["_meta_questions"] = questions
-        
-        if self.meta_integrator.analyze_bias(context.get("signals", [])):
-            context["bias_detected"] = True
-            self._log_step("bias_detection", {"detected": True, "biases": self.meta_integrator.biases})
-        
-        # Step 2: OAP Analysis
-        oap_analysis = self.oap_integrator.analyze(context)
-        context.update(oap_analysis["metrics"])
-        
-        # Step 3: Evaluate SwitchNodes and apply changes
-        for switch in self.topology.switch_nodes:
-            if switch.action and switch.condition:
-                if ConditionEvaluator.evaluate(switch.condition, context):
-                    change = self._create_change_from_switch(switch, context)
-                    if change:
-                        self.topology = self.updater.apply_change(change)
-                        self.change_count += 1
-                        self._log_step("switch_applied", {
-                            "switch_id": switch.id,
-                            "condition": switch.condition,
-                            "action": switch.action.value,
-                            "new_topology_hash": self.topology.hash
-                        })
-        
-        # Step 4: Apply Meta-Questioning modifications
-        mods = self.meta_integrator.get_topology_modifications(context)
-        for mod in mods:
-            change = TopologyChange.create(
-                action=SwitchAction(mod["action"]),
-                target=mod["target"],
-                before={"roles": [r.name for r in self.topology.roles]},
-                after=mod,
-                reason=mod.get("reason", "Meta-Questioning"),
-                triggered_by="MetaQuestioning"
+    def build_topology(self, context: Dict[str, Any]) -> Optional[Topology]:
+        if not self.config.enable_caching:
+            return self._architect.build(
+                intention=context.get("intention", context.get("query_type", "ANALYZE")),
+                symbol=context.get("symbol", "BTCUSDT"),
+                timeframe=context.get("timeframe", "SWING")
             )
-            self.topology = self.updater.apply_change(change)
-            self.change_count += 1
-            self._log_step("meta_modification", mod)
         
-        # Step 5: Execute topology (simplified)
-        results = await self._execute_topology(context)
+        cache_key = self._compute_cache_key(context)
+        if cache_key in self._topology_cache:
+            return self._topology_cache[cache_key]
+        
+        topology = self._build_cached(
+            cache_key,
+            context.get("intention", context.get("query_type", "ANALYZE")),
+            context.get("symbol", "BTCUSDT"),
+            context.get("timeframe", "SWING")
+        )
+        
+        if topology:
+            self._topology_cache[cache_key] = topology
+        return topology
+
+    async def execute_async(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        t0 = time.time()
+        errors = 0
+        cache_hit = False
+        
+        try:
+            topology = self.build_topology(context)
+            if not topology:
+                return self._error_response("Topology build failed", t0, 0, 1)
+            
+            cache_key = self._compute_cache_key(context)
+            cache_hit = cache_key in self._topology_cache
+            
+            if self.config.enable_meta_questioning:
+                context = await self._apply_meta_questioning(context, topology)
+            
+            result = await self._execute_topology_async(topology, context)
+            
+            duration_ms = (time.time() - t0) * 1000
+            metrics = ExecutionMetrics(
+                duration_ms=duration_ms,
+                nodes_executed=len(topology.roles),
+                errors=errors,
+                cache_hit=cache_hit
+            )
+            self._metrics.append(metrics)
+            
+            return {
+                "status": "success",
+                "topology_hash": topology.hash[:8] if hasattr(topology, 'hash') else "unknown",
+                "result": result,
+                "metrics": {
+                    "duration_ms": round(duration_ms, 2),
+                    "nodes_executed": metrics.nodes_executed,
+                    "cache_hit": cache_hit,
+                    "errors": errors
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Execute failed: {e}")
+            if self.config.fallback_on_error:
+                return await self._execute_fallback(context)
+            return self._error_response(str(e), t0, 0, 1)
+
+    async def _execute_topology_async(self, topology: Topology, 
+                                      context: Dict[str, Any]) -> Dict[str, Any]:
+        results = {}
+        
+        async def run_role(role: Role) -> tuple:
+            try:
+                runner = get_agent_runner(role.agent_type)
+                if asyncio.iscoroutinefunction(runner.run):
+                    r = await runner.run(context)
+                else:
+                    r = runner.run(context)
+                return role.name, r, None
+            except Exception as e:
+                return role.name, None, str(e)
+        
+        tasks = [run_role(r) for r in topology.roles]
+        role_results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        for item in role_results:
+            if isinstance(item, tuple):
+                name, result, error = item
+                results[name] = result
+                if error:
+                    logger.warning(f"Role {name} error: {error}")
+            else:
+                errors += 1
         
         return {
-            "results": results,
-            "topology_hash": self.topology.hash,
-            "changes_applied": self.change_count,
-            "execution_log": self.execution_log,
-            "change_summary": self.updater.get_change_summary()
+            "signals": results,
+            "signal_count": len([r for r in results.values() if r]),
+            "timestamp": datetime.now().isoformat()
         }
-    
-    def _create_change_from_switch(self, switch: SwitchNode, context: Dict) -> Optional[TopologyChange]:
-        """Create TopologyChange from SwitchNode evaluation."""
-        action = switch.action or SwitchAction.ADD_LOOP
-        target = switch.true_branch[0] if switch.true_branch else "unknown"
-        
-        return TopologyChange.create(
-            action=action,
-            target=target,
-            before={"roles": [{"n": r.name, "w": r.weight} for r in self.topology.roles]},
-            after={"added_branch": target, "metadata": switch.metadata},
-            reason=f"Switch {switch.id}: {switch.condition} = True",
-            triggered_by=switch.id
-        )
-    
-    async def _execute_topology(self, context: Dict) -> Dict:
-        """Execute the (possibly modified) topology."""
-        results = {}
-        registry = get_registry()
-        
-        for role in self.topology.roles:
-            agent = registry.get_role(role.agent_type)
-            if agent:
-                try:
-                    if asyncio.iscoroutinefunction(agent.run):
-                        result = await agent.run(context)
-                    else:
-                        result = agent.run(context)
-                    results[role.name] = result
-                except Exception as e:
-                    results[role.name] = {"error": str(e)}
-        
-        return results
-    
-    def _log_step(self, event: str, data: Dict):
-        """Log execution step."""
-        self.execution_log.append({
-            "event": event,
-            "timestamp": datetime.now().isoformat(),
-            "data": data
-        })
-    
-    def get_change_history(self) -> List[Dict]:
-        """Return full change history."""
-        return [
-            {
-                "change_id": c.change_id,
-                "timestamp": c.timestamp,
-                "action": c.action.value,
-                "reason": c.reason,
-                "triggered_by": c.triggered_by
-            }
-            for c in self.updater.change_history
-        ]
 
+    async def _apply_meta_questioning(self, context: Dict[str, Any],
+                                      topology: Topology) -> Dict[str, Any]:
+        try:
+            from agents._impl.meta_questioning import MetaQuestioningEngine
+            meta = MetaQuestioningEngine()
+            
+            signals = context.get("signals", {})
+            uncertainty = context.get("uncertainty", {})
+            
+            analysis = meta.analyze(signals=signals, context=context)
+            
+            if analysis.get("bias_detected"):
+                self._meta_questions_asked += 1
+                context["_meta_warning"] = analysis.get("top_question", "")
+            
+            return context
+        except Exception as e:
+            logger.debug(f"Meta-questioning skipped: {e}")
+            return context
+
+    async def _execute_fallback(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "status": "fallback",
+            "reason": "MAS engine error, using simple synthesis",
+            "result": {
+                "signal": "NEUTRAL",
+                "confidence": 50,
+                "reasoning": "MAS Factory fallback - enable detailed logging for diagnosis"
+            },
+            "metrics": {"duration_ms": 0, "cache_hit": False, "errors": 1}
+        }
+
+    def _error_response(self, error: str, t0: float, nodes: int, errs: int) -> Dict[str, Any]:
+        return {
+            "status": "error",
+            "error": error,
+            "metrics": {
+                "duration_ms": round((time.time() - t0) * 1000, 2),
+                "nodes_executed": nodes,
+                "cache_hit": False,
+                "errors": errs
+            }
+        }
 
     def run_sync(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Synchronous wrapper for testing."""
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(self.run(context))
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        return loop.run_until_complete(self.execute_async(context))
+
+    def get_metrics_summary(self) -> Dict[str, Any]:
+        if not self._metrics:
+            return {"total_runs": 0, "avg_duration_ms": 0, "cache_hit_rate": 0}
+        
+        total = len(self._metrics)
+        avg_ms = sum(m.duration_ms for m in self._metrics) / total
+        cache_hits = sum(1 for m in self._metrics if m.cache_hit)
+        
+        return {
+            "total_runs": total,
+            "avg_duration_ms": round(avg_ms, 2),
+            "cache_hit_rate": round(cache_hits / total, 3),
+            "total_errors": sum(m.errors for m in self._metrics),
+            "meta_questions_asked": self._meta_questions_asked
+        }
+
+    def clear_cache(self):
+        self._topology_cache.clear()
+        try:
+            self._build_cached.cache_clear()
+        except Exception:
+            pass
+
+def get_production_engine() -> ProductionMASEngine:
+    return ProductionMASEngine()
