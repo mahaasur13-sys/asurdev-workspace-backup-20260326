@@ -28,7 +28,10 @@ class GitAgentManifest:
     def from_yaml(cls, path: Path) -> 'GitAgentManifest':
         with open(path) as f:
             data = yaml.safe_load(f) or {}
-        return cls(**{k: v for k, v in data.items()})
+        # Filter to only known fields
+        known_fields = {"name", "description", "version", "model", "skills", "tools", "compliance", "sub_agents", "workflows"}
+        filtered = {k: v for k, v in data.items() if k in known_fields}
+        return cls(**filtered)
 
 class MASFactoryToGitAgentAdapter:
     """Convert MASFactory Topology → GitAgent package structure"""
@@ -111,9 +114,12 @@ class GitAgentToMASFactoryAdapter:
     def __init__(self, package_path: str):
         self.package_path = Path(package_path)
     
-    def load(self) -> Optional['MASFactoryEngine']:
+    def load(self):
         """Load GitAgent package as MASFactory engine"""
-        if not MASFACTORY:
+        try:
+            from mas_factory.topology import Topology, Role
+            from mas_factory.engine import ProductionMASEngine as MASFactoryEngine
+        except ImportError:
             return None
         
         manifest = GitAgentManifest.from_yaml(self.package_path / "agent.yaml")
@@ -124,28 +130,30 @@ class GitAgentToMASFactoryAdapter:
             for role_dir in sorted(sub_agents_dir.iterdir()):
                 if role_dir.is_dir():
                     skill_md = role_dir / "SKILL.md"
-                    instructions = skill_md.read_text() if skill_md.exists() else ""
+                    instructions_text = skill_md.read_text() if skill_md.exists() else ""
                     roles.append(Role(
                         name=role_dir.name,
                         agent_type=role_dir.name,
-                        instructions=instructions,
-                        input_schema={},
-                        output_schema={},
+                        capabilities=[instructions_text[:100]] if instructions_text else [],
+                        inputs=[],
+                        outputs=[],
+                        timeout_ms=30000,
                     ))
         
-        nodes = []
-        for agent_name in (manifest.sub_agents or []):
-            nodes.append(Node(id=agent_name, type="agent", config={}))
-        for wf_name in (manifest.workflows or []):
-            nodes.append(SwitchNode(id=wf_name, type="switch", config={}, branches=[]))
-        
         topology = Topology(
-            name=manifest.name,
-            instructions=manifest.description,
+            intention=manifest.description or manifest.name,
+            symbol="BTCUSDT",
+            timeframe="SWING",
+            version=manifest.version,
             roles=roles,
-            nodes=nodes,
+            connections=[],
+            metadata={"description": manifest.description, "source": "gitagent"},
         )
-        return MASFactoryEngine(topology)
+        
+        try:
+            return MASFactoryEngine(topology)
+        except Exception:
+            return None
 
 
 def export_masfactory_to_gitagent(topology: 'Topology', output_dir: str, package_name: str) -> str:

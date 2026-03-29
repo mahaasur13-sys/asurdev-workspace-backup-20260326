@@ -1,0 +1,28 @@
+name: macro_agent
+description: Macro analysis agent — Fed rates, VIX, DXY, gold, Fear & Greed index monitoring
+version: 5.0.0
+model:
+  provider: openai
+  name: gpt-4o
+  temperature: 0.3
+skills:
+  - macro-indicators
+  - fed-rate-analysis
+  - risk-sentiment
+  - correlation-analysis
+tools:
+  - fear_greed_api
+  - dxy_data
+  - gold_price
+compliance:
+  audit: true
+  karll_enabled: true
+  max_position_pct: 10
+sub_agents: []
+workflows:
+  - fetch_macro_data
+  - analyze_vix
+  - analyze_dxy
+  - analyze_gold
+  - analyze_fear_greed
+  - generate_signal

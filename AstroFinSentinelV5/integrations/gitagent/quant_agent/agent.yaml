@@ -1,0 +1,27 @@
+name: quant_agent
+description: Quantitative analysis agent — backtesting, momentum, mean reversion, volatility regime detection
+version: 5.0.0
+model:
+  provider: openai
+  name: gpt-4o
+  temperature: 0.3
+skills:
+  - backtesting
+  - momentum-analysis
+  - mean-reversion
+  - volatility-regime
+  - correlation-analysis
+tools:
+  - binance_api
+  - backtest_engine
+compliance:
+  audit: true
+  karll_enabled: true
+  max_position_pct: 10
+sub_agents: []
+workflows:
+  - fetch_price_history
+  - compute_momentum
+  - detect_mean_reversion
+  - identify_volatility_regime
+  - generate_signal

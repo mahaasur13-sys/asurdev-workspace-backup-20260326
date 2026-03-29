@@ -1,0 +1,25 @@
+name: fundamental_agent
+description: Fundamental analysis agent — P/E, EPS, Revenue growth, DCF valuation, MVRV ratio
+version: 5.0.0
+model:
+  provider: openai
+  name: gpt-4o
+  temperature: 0.3
+skills:
+  - fundamental-analysis
+  - onchain-metrics
+  - valuation
+  - crypto-metadata
+tools:
+  - coingecko_api
+  - onchain_data
+compliance:
+  audit: true
+  karll_enabled: true
+  max_position_pct: 10
+sub_agents: []
+workflows:
+  - analyze_fundamentals
+  - fetch_onchain
+  - compute_valuation
+  - generate_signal

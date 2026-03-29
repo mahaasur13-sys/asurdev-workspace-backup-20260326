@@ -1,0 +1,37 @@
+name: astro_council
+description: AstroCouncil — multi-tradition astrological analysis (Western, Vedic, Financial) for trading timing
+version: 5.0.0
+model:
+  provider: openai
+  name: gpt-4o
+  temperature: 0.3
+skills:
+  - western-astrology
+  - vedic-astrology
+  - financial-astrology
+  - choghadiya
+  - nakshatra
+skills_tags:
+  - lilly-dignities
+  - muhurta-timing
+  - bradley-model
+tools:
+  - swiss_ephemeris
+  - western_chart
+  - vedic_chart
+  - choghadiya_calc
+compliance:
+  audit: true
+  karll_enabled: true
+  choghadiya_check: true
+  no_choghadiya_no_trade: true
+sub_agents:
+  - western_astrologer
+  - vedic_astrologer
+  - financial_astrologer
+workflows:
+  - calculate_western
+  - calculate_vedic
+  - assess_financial_astro
+  - compute_choghadiya
+  - synthesize_council_vote
