@@ -81,3 +81,8 @@ from .karl_optimizer import (
     AsyncPipeline,
     get_karl_optimizer,
 )
+
+from .meta_questioning import MetaQuestioningEngine, MetaQuestion, get_meta_engine
+
+__all__ += ['MetaQuestioningEngine', 'MetaQuestion', 'get_meta_engine']
+

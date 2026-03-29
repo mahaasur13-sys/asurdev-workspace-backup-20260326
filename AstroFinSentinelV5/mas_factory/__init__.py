@@ -37,5 +37,11 @@ __all__ = [
 def get_meta_questioning_engine():
     from agents._impl.amre.meta_questioning import MetaQuestioningEngine
     return MetaQuestioningEngine()
-
-
+from mas_factory.topology import (
+    Topology, Role, Connection, SwitchNode, Adapter, Message,
+    TopologyChange, TopologyVersion, TopologyUpdater,
+    SwitchStrategy, SwitchAction, NodeType,
+    UncertaintySwitch, BiasSwitch, RegimeSwitch, OOSFailSwitch, LowConfidenceSwitch,
+    ConditionEvaluator
+)
+from mas_factory.engine import TopologyExecutor, MetaQuestioningIntegrator, OAPIntegrator

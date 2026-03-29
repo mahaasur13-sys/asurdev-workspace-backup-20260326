@@ -1,137 +1,295 @@
-""""mas_factory/engine.py - ATOM-R-025: TopologyExecutor with Switch Nodes + Meta-Questioning"""
+"""mas_factory/engine.py - ATOM-R-028: Dynamic Topology Executor with SwitchNodes
+Integrates TopologyUpdater for dynamic graph adaptation during execution.
+"""
 import asyncio
-import json
 import time
-import hashlib
-import uuid
-from typing import Dict, Any, Optional, List
-from dataclasses import asdict
+from typing import Dict, Any, List, Optional, Set
 from datetime import datetime
-from mas_factory.topology import Topology, Role, Connection, SwitchNode, Message
+
+from mas_factory.topology import (
+    Topology, Role, Connection, SwitchNode, Message,
+    TopologyUpdater, TopologyChange, SwitchAction,
+    UncertaintySwitch, BiasSwitch, RegimeSwitch, OOSFailSwitch, LowConfidenceSwitch,
+    ConditionEvaluator
+)
 from mas_factory.registry import get_registry
-class TopologyExecutor:
-    def __init__(self, topology: Topology, state: dict):
-        self.topology = topology
-        self.state = state
-        self.results: Dict[str, Any] = {}
-        self.messages: List[Message] = []
-        self._execution_log = []
-        self.registry = get_registry()
-    def _log(self, msg: str):
-        ts = datetime.now().isoformat()
-        entry = f"[{ts}] {msg}"
-        self._execution_log.append(entry)
-        print(f"  [Executor] {msg}")
-    async def run(self) -> Dict[str, Any]:
-        self._log(f"Starting topology: {self.topology.hash[:8]} ({len(self.topology.roles)} roles)")
-        for node in self.topology.switch_nodes:
-            self._evaluate_switch(node)
-        for role in self.topology.roles:
-            await self._execute_role(role)
-        for conn in self.topology.connections:
-            await self._transfer(conn)
-        self._log(f"Completed: {len(self.results)} results")
-        return self.results
-    def _evaluate_switch(self, switch: SwitchNode):
-        ctx = self.state
-        if switch.condition == "uncertainty_threshold":
-            unc = ctx.get("uncertainty", {}).get("total", 0.5)
-            result = unc > 0.6
-            self._log(f"Switch [{switch.id}]: {switch.condition} {unc:.3f} > {0.6} = {result}")
-            if result:
-                for action in switch.then_actions:
-                    self._apply_action(action)
-        elif switch.condition == "oos_fail_threshold":
-            oos = ctx.get("oos_fail_rate", 0.0)
-            result = oos > 0.6
-            self._log(f"Switch [{switch.id}]: {switch.condition} {oos:.3f} > {0.6} = {result}")
-            if result:
-                for action in switch.then_actions:
-                    self._apply_action(action)
-        elif switch.condition == "bias_detected":
-            bias = ctx.get("meta_question_bias", False)
-            if bias:
-                self._log(f"Switch [{switch.id}]: bias_detected = True")
-                for action in switch.then_actions:
-                    self._apply_action(action)
-    def _apply_action(self, action: Dict[str, Any]):
-        if action["type"] == "add_role":
-            role = Role(name=action["role_id"], weight=action.get("weight", 0.1))
-            if not any(r.id == role.name for r in self.topology.roles):
-                self.topology.roles.append(role)
-                self._log(f"  Action: Added role {role.name} (weight={role.weight})")
-        elif action["type"] == "set_weight":
-            for role in self.topology.roles:
-                if role.name == action["role_id"]:
-                    role.weight = action["weight"]
-                    self._log(f"  Action: Set {role.name} weight = {role.weight}")
-    async def _execute_role(self, role: Role):
-        runner = get_agent_runner(role.agent_type)
-        if not runner:
-            self._log(f"Role {role.name}: No runner for {role.agent_type}, skipping")
-            return
-        self._log(f"Executing {role.name} ({role.agent_type})")
-        t0 = time.time()
-        try:
-            if isinstance(runner, type):
-                instance = runner()
-                if hasattr(instance, 'run'):
-                    result = instance.run(self.state) if asyncio.iscoroutinefunction(instance.run) else await instance.run(self.state)
-                else:
-                    result = {"error": "No run method"}
-            elif hasattr(runner, 'run'):
-                result = runner.run(self.state) if asyncio.iscoroutinefunction(runner.run) else await runner.run(self.state)
-            elif asyncio.iscoroutinefunction(runner):
-                result = await runner(self.state)
-            else:
-                result = runner(self.state)
-            elapsed = time.time() - t0
-            self.results[role.name] = result
-            self._log(f"  {role.name} done in {elapsed:.3f}s -> {result.get('signal', '?') if isinstance(result, dict) else 'OK'}")
-        except Exception as e:
-            self._log(f"  {role.name} ERROR: {e}")
-            self.results[role.name] = {"error": str(e)}
-    async def _transfer(self, conn: Connection):
-        src = conn.from_node
-        dst = conn.to_node
-        if src in self.results:
-            msg = Message(from_node=src, to_node=dst, payload=self.results[src], timestamp=datetime.now().isoformat())
-            self.messages.append(msg)
-            self._log(f"Transfer: {src} -> {dst}")
-    def get_execution_log(self) -> List[str]:
-        return self._execution_log
-    def get_execution_summary(self) -> Dict[str, Any]:
+
+# ─── Meta-Questioning Integration ────────────────────────────────────────────
+class MetaQuestioningIntegrator:
+    """ATOM-R-028: Integrates MetaQuestioning with topology changes."""
+    
+    def __init__(self):
+        self.questions: List[str] = []
+        self.biases: List[str] = []
+        self.topology_modifications: List[Dict] = []
+    
+    def generate_questions(self, context: Dict[str, Any]) -> List[str]:
+        """Generate self-questioning questions based on context."""
+        self.questions = []
+        
+        confidence = context.get("confidence", context.get("confidence_final", 50))
+        uncertainty = context.get("uncertainty_total", 0.5)
+        oos_fail = context.get("oos_fail_rate", 0.0)
+        
+        if confidence > 75:
+            self.questions.append("Is this high-confidence decision justified by evidence?")
+        if uncertainty > 0.6:
+            self.questions.append("Should we add grounding before proceeding?")
+        if oos_fail > 0.4:
+            self.questions.append("Are we in an overfitting regime? Tighten policy?")
+        
+        return self.questions
+    
+    def analyze_bias(self, signals: List[Dict]) -> bool:
+        """Detect if agents show correlated bias."""
+        if len(signals) < 2:
+            return False
+        signal_counts = {}
+        for s in signals:
+            sig = s.get("signal", "NEUTRAL")
+            signal_counts[sig] = signal_counts.get(sig, 0) + 1
+        # Bias if >70% agents agree
+        total = len(signals)
+        for count in signal_counts.values():
+            if count / total > 0.7:
+                self.biases.append(f"High agreement: {count}/{total} agents")
+                return True
+        return False
+    
+    def get_topology_modifications(self, context: Dict[str, Any]) -> List[Dict]:
+        """Return recommended topology changes based on analysis."""
+        mods = []
+        
+        unc = context.get("uncertainty_total", 0)
+        if unc > 0.6:
+            mods.append({
+                "action": SwitchAction.ADD_LOOP.value,
+                "target": "GroundingLoop",
+                "reason": f"Uncertainty {unc:.3f} > 0.6"
+            })
+        
+        bias = context.get("bias_detected", False)
+        if bias:
+            mods.append({
+                "action": SwitchAction.ADD_ROLE.value,
+                "target": "Critic",
+                "reason": "Bias detected in agent signals"
+            })
+        
+        oos = context.get("oos_fail_rate", 0)
+        if oos > 0.4:
+            mods.append({
+                "action": SwitchAction.TIGHTEN_POLICY.value,
+                "target": "all",
+                "reason": f"OOS fail {oos:.3f} > 0.4",
+                "factor": 0.5
+            })
+        
+        regime = context.get("regime", "NORMAL")
+        if regime in ["HIGH", "EXTREME"]:
+            mods.append({
+                "action": SwitchAction.REORDER_ROLES.value,
+                "target": "priority",
+                "reason": f"Regime {regime} - prioritizing stability",
+                "order": ["HighVolatilityAgent", "RiskManager", "FundamentalAgent"]
+            })
+        
+        return mods
+
+# ─── OAP Integration ─────────────────────────────────────────────────────────
+class OAPIntegrator:
+    """ATOM-R-028: Integrates OAP recommendations with topology changes."""
+    
+    def __init__(self):
+        self.current_ttc_depth = 3
+        self.oos_fail_rate = 0.0
+        self.entropy_avg = 0.5
+    
+    def analyze(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze OAP metrics and suggest topology changes."""
+        suggestions = []
+        
+        # Extract metrics from context
+        self.current_ttc_depth = context.get("current_ttc_depth", 3)
+        self.oos_fail_rate = context.get("oos_fail_rate", 0.0)
+        self.entropy_avg = context.get("entropy_avg", 0.5)
+        
+        # High OOS fail → tighten
+        if self.oos_fail_rate > 0.4:
+            suggestions.append({
+                "action": SwitchAction.TIGHTEN_POLICY.value,
+                "target": "all",
+                "reason": f"OOS fail {self.oos_fail_rate:.3f} exceeds threshold",
+                "factor": 0.5
+            })
+        
+        # High entropy → reduce complexity
+        if self.entropy_avg > 0.7:
+            suggestions.append({
+                "action": SwitchAction.TIGHTEN_POLICY.value,
+                "target": "all",
+                "reason": f"High entropy {self.entropy_avg:.3f} - reducing exploration",
+                "factor": 0.7
+            })
+        
         return {
-            "topology_hash": self.topology.hash[:8],
-            "roles_executed": len(self.results),
-            "messages_exchanged": len(self.messages),
-            "execution_log": self._execution_log,
+            "suggestions": suggestions,
+            "metrics": {
+                "oos_fail_rate": self.oos_fail_rate,
+                "entropy_avg": self.entropy_avg,
+                "ttc_depth": self.current_ttc_depth
+            }
         }
+    
+    def suggest_topology_change(self, context: Dict[str, Any]) -> Optional[TopologyChange]:
+        """OAPOptimizer.suggest_topology_change() - main entry point."""
+        analysis = self.analyze(context)
+        
+        if not analysis["suggestions"]:
+            return None
+        
+        suggestion = analysis["suggestions"][0]
+        action = SwitchAction(suggestion["action"])
+        
+        return TopologyChange.create(
+            action=action,
+            target=suggestion.get("target", "unknown"),
+            before={"roles": [{"n": r.name, "w": r.weight} for r in context.get("_roles", [])]},
+            after=suggestion,
+            reason=suggestion.get("reason", "OAP recommendation"),
+            triggered_by="OAPIntegrator"
+        )
+
+# ─── Dynamic Topology Executor ─────────────────────────────────────────────────
+class TopologyExecutor:
+    """ATOM-R-028: Executes topology with dynamic SwitchNode evaluation.
+    
+    After each step, evaluates switch conditions and applies topology changes
+    through TopologyUpdater. Full versioning and rollback support.
+    """
+    
+    def __init__(self, topology: Topology):
+        self.topology = topology
+        self.updater = TopologyUpdater(topology)
+        self.meta_integrator = MetaQuestioningIntegrator()
+        self.oap_integrator = OAPIntegrator()
+        self.execution_log: List[Dict] = []
+        self.change_count = 0
+    
+    async def run(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Async execution with dynamic topology updates."""
+        self.execution_log = []
+        self.change_count = 0
+        
+        # Step 1: Meta-Questioning
+        questions = self.meta_integrator.generate_questions(context)
+        context["_meta_questions"] = questions
+        
+        if self.meta_integrator.analyze_bias(context.get("signals", [])):
+            context["bias_detected"] = True
+            self._log_step("bias_detection", {"detected": True, "biases": self.meta_integrator.biases})
+        
+        # Step 2: OAP Analysis
+        oap_analysis = self.oap_integrator.analyze(context)
+        context.update(oap_analysis["metrics"])
+        
+        # Step 3: Evaluate SwitchNodes and apply changes
+        for switch in self.topology.switch_nodes:
+            if switch.action and switch.condition:
+                if ConditionEvaluator.evaluate(switch.condition, context):
+                    change = self._create_change_from_switch(switch, context)
+                    if change:
+                        self.topology = self.updater.apply_change(change)
+                        self.change_count += 1
+                        self._log_step("switch_applied", {
+                            "switch_id": switch.id,
+                            "condition": switch.condition,
+                            "action": switch.action.value,
+                            "new_topology_hash": self.topology.hash
+                        })
+        
+        # Step 4: Apply Meta-Questioning modifications
+        mods = self.meta_integrator.get_topology_modifications(context)
+        for mod in mods:
+            change = TopologyChange.create(
+                action=SwitchAction(mod["action"]),
+                target=mod["target"],
+                before={"roles": [r.name for r in self.topology.roles]},
+                after=mod,
+                reason=mod.get("reason", "Meta-Questioning"),
+                triggered_by="MetaQuestioning"
+            )
+            self.topology = self.updater.apply_change(change)
+            self.change_count += 1
+            self._log_step("meta_modification", mod)
+        
+        # Step 5: Execute topology (simplified)
+        results = await self._execute_topology(context)
+        
+        return {
+            "results": results,
+            "topology_hash": self.topology.hash,
+            "changes_applied": self.change_count,
+            "execution_log": self.execution_log,
+            "change_summary": self.updater.get_change_summary()
+        }
+    
+    def _create_change_from_switch(self, switch: SwitchNode, context: Dict) -> Optional[TopologyChange]:
+        """Create TopologyChange from SwitchNode evaluation."""
+        action = switch.action or SwitchAction.ADD_LOOP
+        target = switch.true_branch[0] if switch.true_branch else "unknown"
+        
+        return TopologyChange.create(
+            action=action,
+            target=target,
+            before={"roles": [{"n": r.name, "w": r.weight} for r in self.topology.roles]},
+            after={"added_branch": target, "metadata": switch.metadata},
+            reason=f"Switch {switch.id}: {switch.condition} = True",
+            triggered_by=switch.id
+        )
+    
+    async def _execute_topology(self, context: Dict) -> Dict:
+        """Execute the (possibly modified) topology."""
+        results = {}
+        registry = get_registry()
+        
+        for role in self.topology.roles:
+            agent = registry.get_agent(role.agent_type)
+            if agent:
+                try:
+                    if asyncio.iscoroutinefunction(agent.run):
+                        result = await agent.run(context)
+                    else:
+                        result = agent.run(context)
+                    results[role.name] = result
+                except Exception as e:
+                    results[role.name] = {"error": str(e)}
+        
+        return results
+    
+    def _log_step(self, event: str, data: Dict):
+        """Log execution step."""
+        self.execution_log.append({
+            "event": event,
+            "timestamp": datetime.now().isoformat(),
+            "data": data
+        })
+    
+    def get_change_history(self) -> List[Dict]:
+        """Return full change history."""
+        return [
+            {
+                "change_id": c.change_id,
+                "timestamp": c.timestamp,
+                "action": c.action.value,
+                "reason": c.reason,
+                "triggered_by": c.triggered_by
+            }
+            for c in self.updater.change_history
+        ]
 
 
-# Agent runner lookup (standalone function)
-def get_agent_runner(agent_type: str):
-    """Get the actual agent runner function for this agent_type."""
-    import importlib
-    AGENT_RUNNERS = {
-        "FundamentalAgent": ("agents._impl.fundamental_agent", "run_fundamental_agent"),
-        "TechnicalAgent": ("agents._impl.market_analyst", "run_market_analyst"),
-        "MacroAgent": ("agents._impl.macro_agent", "run_macro_agent"),
-        "QuantAgent": ("agents._impl.quant_agent", "run_quant_agent"),
-        "SentimentAgent": ("agents._impl.sentiment_agent", "run_sentiment_agent"),
-        "OptionsFlowAgent": ("agents._impl.options_flow_agent", "run_options_flow_agent"),
-        "BullResearcher": ("agents._impl.bull_researcher", "run_bull_researcher"),
-        "BearResearcher": ("agents._impl.bear_researcher", "run_bear_researcher"),
-        "AstroCouncilAgent": ("agents.astro_council_agent", "run_astro_council"),
-        "ElectoralAgent": ("agents._impl.electoral_agent", "run_electoral_agent"),
-        "SynthesisAgent": ("agents._impl.synthesis_agent", "SynthesisAgent"),
-    }
-    entry = AGENT_RUNNERS.get(agent_type)
-    if not entry:
-        return None
-    module_name, func_name = entry
-    try:
-        module = importlib.import_module(module_name)
-        return getattr(module, func_name)
-    except (ImportError, AttributeError):
-        return None
+    def run_sync(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Synchronous wrapper for testing."""
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(self.run(context))
