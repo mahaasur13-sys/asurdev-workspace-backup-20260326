@@ -242,3 +242,40 @@ def generate_html_report(result, output_path="data/karl_report.html"):
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f: f.write(html)
     return output_path
+def print_topology_viz(topology_dict: dict = None, session_id: str = None):
+    """Print topology visualization"""
+    if topology_dict is None:
+        print("[INFO] No topology provided. Use --topology flag in KARL mode.")
+        return
+    
+    try:
+        from mas_factory.topology import Topology
+        from mas_factory.visualizer import TopologyVisualizer
+        
+        topo = Topology.from_dict(topology_dict) if isinstance(topology_dict, dict) else topology_dict
+        viz = TopologyVisualizer(topo)
+        
+        print("\n" + "=" * 60)
+        print("TOPOLOGY VISUALIZATION")
+        print("=" * 60)
+        print(viz.to_ascii())
+        
+        print("\n[CADvisor] Mermaid diagram saved. Use --viz flag to see full output.")
+        
+    except ImportError:
+        print("[WARN] mas_factory not available")
+    except Exception as e:
+        print(f"[ERROR] Failed to visualize topology: {e}")
+
+async def visualize_current_topology(session_id: str = None):
+    """Load and visualize current topology from KARL system"""
+    try:
+        from mas_factory.architect import get_current_topology
+        
+        topo = get_current_topology()
+        if topo:
+            print_topology_viz(topo, session_id)
+        else:
+            print("[INFO] No active topology. Run a KARL session first.")
+    except ImportError:
+        print("[WARN] mas_factory not available")
