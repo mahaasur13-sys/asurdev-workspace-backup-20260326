@@ -366,3 +366,5 @@ python -m orchestration.sentinel_v5 "Analyze BTC" BTCUSDT SWING
 - [ ] Add Telegram bot for alerts
 - [ ] Build RAG index (FAISS/Chroma)
 - [ ] Add visualizations
+- [x] **ATOM-017: Full agent pools (MACRO + ASTRO + TECHNICAL)** — 8 agents running
+- [ ] DB Migration: SQLite → PostgreSQL + TimescaleDB + pgvector (see `knowledge/DB_ARCHITECTURE_PROMPT.md`)
